@@ -2,2007 +2,1373 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no,maximum-scale=1">
-<meta name="theme-color" content="#f2f2f7">
-
-<!-- МЕТАТЕГИ ДЛЯ ПРЕВРАЩЕНИЯ В NATIVE APP (iOS И ANDROID PWA) -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Factura">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="application-name" content="Factura">
-<meta name="msapplication-TileColor" content="#007aff">
-
-<title>Factura — Мессенджер</title>
-
-<!-- ВСТРОЕННЫЙ WEB MANIFEST ДЛЯ УСТАНОВКИ НА ТЕЛЕФОН БЕЗ ЛИШНИХ ФАЙЛОВ -->
-<link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22Factura%22%2C%22short_name%22%3A%22Factura%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f2f2f7%22%2C%22theme_color%22%3A%22%23f2f2f7%22%2C%22orientation%22%3A%22portrait%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%3Butf8%2C%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20512%20512%27%3E%3Crect%20width%3D%27512%27%20height%3D%27512%27%20rx%3D%27128%27%20fill%3D%27%23007aff%27%2F%3E%3Ctext%20x%3D%2750%25%27%20y%3D%2758%25%27%20dominant-baseline%3D%27middle%27%20text-anchor%3D%27middle%27%20font-family%3D%27sans-serif%27%20font-weight%3D%27900%27%20font-size%3D%27300%27%20fill%3D%27%23ffffff%27%3EF%3C%2Ftext%3E%3C%2Fsvg%3E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
-
-<!-- ИКОНКА ДЛЯ ДОМАШНЕГО ЭКРАНА IPHONE -->
-<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='128' fill='%23007aff'/><text x='50%' y='58%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-weight='900' font-size='300' fill='%23ffffff'>F</text></svg>">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#0e121b">
+<title>Factura Market — Маркетплейс цифровых товаров</title>
 
 <style>
 :root {
-  --bg-system: #f2f2f7;
-  --bg-card: #ffffff;
-  --bg-card-pressed: #e5e5ea;
-  --text-main: #000000;
-  --text-secondary: #8e8e93;
-  --line-color: #c6c6c8;
-  --accent-blue: #007aff;
-  --accent-purple: #af52de;
-  --accent-gold: #ff9500;
-  --accent-green: #34c759;
-  --accent-red: #ff3b30;
+  --bg: #0b0e14;
+  --panel: #131722;
+  --panel-card: #181d2a;
+  --panel-card-hover: #1f2536;
+  --border: #232a3d;
+  --border-light: #2c354d;
+  --text: #f0f3fa;
+  --text-muted: #8c97ad;
+  --accent: #5865f2; /* Discord / Telegram vibe */
+  --accent-cyan: #29b6f6;
+  --accent-tg: #229ed9;
+  --gold: #ffb703;
+  --green: #2ecc71;
+  --danger: #ef4444;
+  --warning: #f59e0b;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
   -webkit-tap-highlight-color: transparent;
   outline: none;
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  background: var(--bg-system);
-  color: var(--text-main);
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   min-height: 100vh;
-  user-select: none;
-  overflow-x: hidden;
+  line-height: 1.45;
+  padding-bottom: calc(30px + var(--safe-bottom));
 }
 
-button, input, textarea, select {
+button, input, select, textarea {
   font-family: inherit;
+  color: inherit;
 }
 button { cursor: pointer; }
 
-/* ЗУБЧАТАЯ СИНЯЯ ГАЛОЧКА */
-.badge-verified-custom {
+/* SVG ИКОНКА ОРИГИНАЛЬНОЙ ГАЛОЧКИ */
+.badge-factura-star {
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 19px;
-  height: 19px;
-  flex-shrink: 0;
+  width: 17px;
+  height: 17px;
   vertical-align: middle;
+  flex-shrink: 0;
 }
-.badge-verified-custom svg {
+.badge-factura-star svg {
   width: 100%;
   height: 100%;
   fill: #1877f2;
 }
 
-.star-badge-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 18px;
-  height: 18px;
-  background: linear-gradient(135deg, #ffb703, #fb8500);
-  border-radius: 50%;
-  color: #fff;
-  font-size: 11px;
-  font-weight: 900;
-  flex-shrink: 0;
-  vertical-align: middle;
-  box-shadow: 0 2px 5px rgba(251,133,0,0.35);
-}
-
-/* ================= БАННЕР УСТАНОВКИ ПРИЛОЖЕНИЯ ================= */
-.install-app-banner {
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 12px 14px;
-  margin: 8px 16px 12px 16px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-  border: 1px solid #e5e5ea;
-}
-.install-app-icon {
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #007aff, #5856d6);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  font-weight: 900;
-  flex-shrink: 0;
-}
-.install-app-btn {
-  background: var(--accent-blue);
-  color: #fff;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 12px;
-  font-size: 13px;
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-/* ================= АВТОРИЗАЦИЯ ================= */
-.auth-container {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  background: #f2f2f7;
-}
-.auth-card {
-  width: 100%;
-  max-width: 380px;
-  background: #ffffff;
-  border-radius: 26px;
-  padding: 32px 24px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
-  text-align: center;
-}
-.auth-brand-logo {
-  width: 68px;
-  height: 68px;
-  border-radius: 20px;
-  background: linear-gradient(135deg, #007aff, #5856d6);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 34px;
-  font-weight: 900;
-  margin: 0 auto 16px auto;
-  box-shadow: 0 8px 20px rgba(0,122,255,0.28);
-}
-.auth-card h1 {
-  font-size: 22px;
-  font-weight: 700;
-  margin: 0 0 6px 0;
-}
-.auth-card p {
-  font-size: 13px;
-  color: var(--text-secondary);
-  margin: 0 0 24px 0;
-}
-.auth-field {
-  margin-bottom: 12px;
-  text-align: left;
-}
-.auth-field label {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  margin-bottom: 5px;
-  display: block;
-  padding-left: 4px;
-}
-.auth-field input {
-  width: 100%;
-  padding: 13px 14px;
-  background: #f2f2f7;
-  border: 1px solid #e5e5ea;
-  border-radius: 14px;
-  outline: none;
-  font-size: 15px;
-}
-.auth-field input:focus {
-  border-color: var(--accent-blue);
-  background: #fff;
-}
-.btn-primary {
-  width: 100%;
-  padding: 14px;
-  background: var(--accent-blue);
-  color: #fff;
-  border: none;
-  border-radius: 14px;
-  font-size: 16px;
-  font-weight: 600;
-  margin-top: 10px;
-}
-.auth-switch {
-  margin-top: 20px;
-  font-size: 13px;
-  color: var(--text-secondary);
-}
-.auth-switch span {
-  color: var(--accent-blue);
-  font-weight: 600;
-  cursor: pointer;
-}
-
-/* ================= ОСНОВНОЙ ВЬЮПОРТ ПРИЛОЖЕНИЯ ================= */
-.app-viewport {
-  max-width: 480px;
-  margin: 0 auto;
-  min-height: 100vh;
-  background: var(--bg-system);
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 0 40px rgba(0,0,0,0.06);
-}
-
-.view-page {
-  flex: 1;
-  display: none;
-  flex-direction: column;
-  padding-bottom: calc(75px + var(--safe-bottom));
-}
-.view-page.active {
-  display: flex;
-}
-
-/* ================= ТАБ 1: ЧАТЫ ================= */
-.chats-header {
-  padding: calc(12px + var(--safe-top)) 16px 10px 16px;
-  background: rgba(242, 242, 247, 0.92);
-  backdrop-filter: blur(20px);
+/* ШАПКА САЙТА */
+.navbar {
   position: sticky;
   top: 0;
-  z-index: 50;
+  z-index: 100;
+  background: rgba(14, 18, 27, 0.94);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  padding: calc(10px + var(--safe-top)) 16px 10px 16px;
+}
+.nav-inner {
+  max-width: 1240px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
-.chats-header-title {
-  font-size: 30px;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-}
-.header-icon-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: #ffffff;
-  border: 1px solid #e5e5ea;
-  color: var(--accent-blue);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.chats-list {
-  padding: 4px 16px 12px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.chat-cell {
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 12px 14px;
-  display: flex;
-  align-items: center;
   gap: 12px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+.logo-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   cursor: pointer;
 }
-.chat-cell:active {
-  background: var(--bg-card-pressed);
-}
-.chat-avatar {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #007aff, #5856d6);
+.logo-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #007aff, #7928ca);
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 20px;
-  font-weight: 700;
-  flex-shrink: 0;
+  font-weight: 900;
+  box-shadow: 0 4px 14px rgba(0, 122, 255, 0.35);
 }
-.chat-body-meta {
-  flex: 1;
-  min-width: 0;
-}
-.chat-title-row {
+.logo-title {
+  font-size: 19px;
+  font-weight: 900;
+  letter-spacing: -0.4px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 3px;
+  gap: 6px;
 }
-.chat-title-left {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 16px;
-  font-weight: 600;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.chat-time {
-  font-size: 12px;
-  color: var(--text-secondary);
-}
-.chat-last-msg {
-  font-size: 13px;
-  color: var(--text-secondary);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* ================= ДИАЛОГ (ПОЛНОЭКРАННЫЙ) ================= */
-.screen-chat-dialog {
-  position: fixed;
-  inset: 0;
-  max-width: 480px;
-  margin: 0 auto;
-  background: #f2f2f7;
-  z-index: 200;
-  display: none;
-  flex-direction: column;
-}
-.dialog-header {
-  padding: calc(10px + var(--safe-top)) 14px 10px 14px;
-  background: #ffffff;
-  border-bottom: 1px solid #e5e5ea;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.dialog-back-btn {
-  background: none;
-  border: none;
-  color: var(--accent-blue);
-  font-size: 16px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 0;
-}
-.dialog-header-center {
-  text-align: center;
-  flex: 1;
-  min-width: 0;
-  padding: 0 10px;
-}
-.dialog-header-name {
-  font-size: 15px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-}
-.dialog-header-sub {
-  font-size: 11px;
-  color: var(--text-secondary);
-}
-.dialog-report-btn {
-  background: #fff0f0;
-  border: 1px solid #ffcdd2;
-  color: var(--accent-red);
-  padding: 5px 9px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.dialog-messages-wrap {
-  flex: 1;
-  overflow-y: auto;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.msg-bubble {
-  max-width: 82%;
-  padding: 10px 14px;
-  border-radius: 18px;
-  font-size: 14px;
-  line-height: 1.4;
-  word-break: break-word;
-}
-.msg-bubble.incoming {
-  align-self: flex-start;
-  background: #ffffff;
-  color: #000;
-  border-bottom-left-radius: 4px;
-}
-.msg-bubble.outgoing {
-  align-self: flex-end;
-  background: var(--accent-blue);
-  color: #fff;
-  border-bottom-right-radius: 4px;
-}
-.msg-time {
+.market-badge {
   font-size: 10px;
-  opacity: 0.65;
-  text-align: right;
-  margin-top: 4px;
-}
-
-.dialog-footer {
-  padding: 10px 14px calc(10px + var(--safe-bottom)) 14px;
-  background: #ffffff;
-  border-top: 1px solid #e5e5ea;
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-.dialog-footer input {
-  flex: 1;
-  padding: 10px 16px;
-  background: #f2f2f7;
-  border: none;
-  border-radius: 20px;
-  outline: none;
-  font-size: 14px;
-}
-.btn-dialog-send {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--accent-blue);
-  color: #fff;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-}
-
-/* ================= ТАБ 2: НАСТРОЙКИ (СТИЛЬ TELEGRAM IOS) ================= */
-.settings-top-hero {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: calc(18px + var(--safe-top)) 16px 14px 16px;
-}
-.hero-avatar-box {
-  width: 96px;
-  height: 96px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #ff9500, #ff2d55);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-size: 40px;
   font-weight: 800;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-  margin-bottom: 12px;
-}
-.hero-name-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  font-size: 22px;
-  font-weight: 700;
-  margin-bottom: 2px;
-}
-.hero-sub-phone {
-  font-size: 14px;
-  color: var(--text-secondary);
-}
-
-.btn-change-photo-link {
-  color: var(--accent-blue);
-  font-size: 14px;
-  font-weight: 600;
-  margin-top: 8px;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-/* ИНСЕТ-ГРУППЫ TELEGRAM */
-.ios-group-wrapper {
-  margin: 12px 16px 6px 16px;
-}
-.ios-group-title {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-secondary);
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: rgba(0, 122, 255, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
   text-transform: uppercase;
-  letter-spacing: -0.2px;
-  padding: 0 12px 6px 12px;
-}
-.ios-cells-card {
-  background: var(--bg-card);
-  border-radius: 14px;
-  overflow: hidden;
-}
-.ios-cell-row {
-  padding: 12px 16px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  cursor: pointer;
-  position: relative;
-  background: #ffffff;
-}
-.ios-cell-row:not(:last-child)::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  left: 56px;
-  height: 0.5px;
-  background: #e5e5ea;
-}
-.ios-cell-row:active {
-  background: var(--bg-card-pressed);
 }
 
-.ios-cell-icon {
-  width: 30px;
-  height: 30px;
-  border-radius: 8px;
+.nav-actions {
   display: flex;
   align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-size: 15px;
-  flex-shrink: 0;
+  gap: 10px;
 }
-.ios-cell-content {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-width: 0;
-}
-.ios-cell-title {
-  font-size: 16px;
-  color: var(--text-main);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.ios-cell-right {
+.balance-tag {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
   display: flex;
   align-items: center;
   gap: 6px;
-  color: var(--text-secondary);
-  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s;
 }
-.ios-chevron {
-  color: #c7c7cc;
-  font-size: 17px;
-  font-weight: 600;
+.balance-tag:hover {
+  border-color: var(--gold);
+}
+.balance-tag.frozen {
+  border-color: var(--danger);
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--danger);
 }
 
-/* ================= НИЖНИЙ НАВБАР (ТАББАР iOS) ================= */
-.ios-tab-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  max-width: 480px;
-  margin: 0 auto;
-  height: 60px;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(20px);
-  border-top: 0.5px solid rgba(0,0,0,0.18);
+.btn-nav-primary {
+  background: linear-gradient(135deg, #007aff, #5856d6);
+  border: none;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 13px;
   display: flex;
   align-items: center;
-  justify-content: space-around;
-  padding-bottom: var(--safe-bottom);
-  z-index: 100;
+  gap: 6px;
+  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.25);
+  transition: opacity 0.2s;
 }
-.tab-bar-item {
-  flex: 1;
+.btn-nav-primary:hover { opacity: 0.9; }
+
+.user-nav-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  object-fit: cover;
+  cursor: pointer;
+  background: #252b3d;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
-  color: var(--text-secondary);
-  cursor: pointer;
-  background: none;
-  border: none;
-  padding: 0;
-}
-.tab-bar-item.active {
-  color: var(--accent-blue);
-}
-.tab-bar-icon {
-  font-size: 21px;
-}
-.tab-bar-label {
-  font-size: 10px;
-  font-weight: 600;
+  font-weight: 800;
+  font-size: 15px;
 }
 
-/* ================= МОДАЛКИ СТРАНИЦ НАСТРОЕК ================= */
-.modal-screen {
-  position: fixed;
-  inset: 0;
-  max-width: 480px;
-  margin: 0 auto;
-  background: var(--bg-system);
-  z-index: 250;
-  display: none;
-  flex-direction: column;
-}
-.modal-screen.open {
-  display: flex;
-}
-.modal-nav-header {
-  padding: calc(10px + var(--safe-top)) 16px 10px 16px;
-  background: #ffffff;
-  border-bottom: 0.5px solid #e5e5ea;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.modal-nav-title {
-  font-size: 17px;
-  font-weight: 700;
-  text-align: center;
-  flex: 1;
-}
-.modal-nav-btn {
-  background: none;
-  border: none;
-  color: var(--accent-blue);
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  padding: 0;
-}
-.modal-body-scroll {
-  flex: 1;
-  overflow-y: auto;
-  padding: 16px;
-}
-
-/* ПОДАРКИ */
-.gifts-collection-card {
-  background: #ffffff;
-  border-radius: 14px;
-  padding: 14px;
-  margin-bottom: 12px;
-}
-.gifts-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-top: 10px;
-}
-.gift-card {
-  border: 1px solid #e5e5ea;
-  border-radius: 14px;
-  padding: 12px;
-  text-align: center;
-  background: #f9f9fb;
-}
-.gift-card-icon { font-size: 38px; margin-bottom: 4px; }
-.gift-card-name { font-size: 13px; font-weight: 700; }
-.gift-card-exp { font-size: 10px; color: var(--accent-gold); margin-bottom: 8px; }
-.btn-buy-gift {
-  width: 100%;
-  padding: 7px;
-  border-radius: 8px;
-  background: #007aff;
+/* БАННЕР ПРЕДУПРЕЖДЕНИЯ ДЛЯ ЗАБЛОКИРОВАННЫХ */
+.banned-notice {
+  background: #ef4444;
   color: #fff;
-  border: none;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.item-badge-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  background: #eef3ff;
-  border: 1px solid #d0e0ff;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 13px;
-  font-weight: 600;
-  margin-right: 6px;
-  margin-top: 6px;
-}
-
-.request-card {
-  background: #ffffff;
-  border-radius: 14px;
-  padding: 14px;
-  margin-bottom: 10px;
-  border: 1px solid #e5e5ea;
-}
-.request-card-title {
-  font-weight: 700;
+  padding: 12px 16px;
   font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+  display: none;
+}
+
+/* ГЛАВНЫЙ КОНТЕЙНЕР */
+.main-wrapper {
+  max-width: 1240px;
+  margin: 18px auto 0 auto;
+  padding: 0 16px;
+}
+
+/* ГЕРО-БАННЕР */
+.hero-promo {
+  background: linear-gradient(135deg, #161b29 0%, #1e1b38 50%, #132238 100%);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 26px 24px;
+  margin-bottom: 20px;
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   justify-content: space-between;
+  gap: 16px;
+  box-shadow: 0 12px 36px rgba(0,0,0,0.4);
+}
+.hero-text h1 {
+  font-size: 24px;
+  font-weight: 800;
   margin-bottom: 6px;
 }
-.btn-group-row {
+.hero-text p {
+  color: var(--text-muted);
+  font-size: 14px;
+  max-width: 580px;
+}
+.hero-btns {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.btn-hero {
+  padding: 11px 18px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 14px;
+  border: none;
+}
+.btn-hero.sell {
+  background: #2ecc71;
+  color: #0b0e14;
+}
+.btn-hero.security {
+  background: rgba(239, 68, 68, 0.18);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #f87171;
+}
+
+/* КАТЕГОРИИ И ФИЛЬТРЫ */
+.categories-bar {
   display: flex;
   gap: 8px;
-  margin-top: 10px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  margin-bottom: 16px;
 }
-.btn-action-small {
+.category-btn {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+.category-btn.active, .category-btn:hover {
+  background: var(--panel-card);
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.search-box-wrap {
+  margin-bottom: 20px;
+}
+.search-input {
+  width: 100%;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 12px 18px;
+  border-radius: 14px;
+  font-size: 14px;
+}
+.search-input:focus {
+  border-color: var(--accent);
+}
+
+/* СЕТКА ТОВАРОВ */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+.product-card {
+  background: var(--panel-card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s, border-color 0.2s;
+  cursor: pointer;
+  position: relative;
+}
+.product-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-light);
+  background: var(--panel-card-hover);
+}
+.product-image-box {
+  height: 130px;
+  background: #111520;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.product-image-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.category-tag-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+}
+.category-tag-badge.telegram { color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+.category-tag-badge.discord { color: #818cf8; border: 1px solid rgba(129, 140, 248, 0.3); }
+.category-tag-badge.games { color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.3); }
+.category-tag-badge.other { color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.3); }
+
+.product-content {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
   flex: 1;
-  padding: 8px;
+}
+.product-title {
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.product-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+}
+
+.seller-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+.seller-avatar-mini {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #2a3147;
+}
+
+.product-foot-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.product-price {
+  font-size: 18px;
+  font-weight: 900;
+  color: #fff;
+}
+.btn-buy-card {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  transition: opacity 0.2s;
+}
+.btn-buy-card:hover { opacity: 0.9; }
+
+/* ================= МОДАЛЬНЫЕ ОКНА ================= */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 7, 12, 0.75);
+  backdrop-filter: blur(8px);
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.modal-overlay.open { display: flex; }
+
+.modal-box {
+  width: 100%;
+  max-width: 540px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.8);
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+}
+.modal-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #111520;
+}
+.modal-title {
+  font-size: 17px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.modal-close-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 24px;
+  line-height: 1;
+}
+.modal-body {
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.form-group {
+  margin-bottom: 14px;
+}
+.form-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+.form-group input, .form-group textarea, .form-group select {
+  width: 100%;
+  background: var(--panel-card);
+  border: 1px solid var(--border);
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 14px;
+  color: var(--text);
+}
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+  border-color: var(--accent);
+}
+
+.btn-submit-action {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #007aff, #5856d6);
+  color: #fff;
+  font-weight: 800;
+  font-size: 15px;
+  margin-top: 8px;
+}
+
+/* ВЫБОР АВАТАРОК */
+.avatar-preset-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.avatar-preset-item {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s;
+}
+.avatar-preset-item:hover, .avatar-preset-item.selected {
+  transform: scale(1.08);
+  border-color: var(--accent-cyan);
+}
+
+/* СТИЛИ ПАНЕЛИ СЛУЖБЫ БЕЗОПАСНОСТИ */
+.security-badge {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 800;
+}
+.user-security-card {
+  background: var(--panel-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 12px;
+}
+.user-security-card.is-blocked {
+  border-color: var(--danger);
+  background: rgba(239, 68, 68, 0.05);
+}
+.btn-sec-action {
+  padding: 7px 12px;
   border-radius: 8px;
   font-size: 12px;
   font-weight: 700;
   border: none;
 }
-.btn-success { background: #34c759; color: #fff; }
-.btn-danger { background: #ff3b30; color: #fff; }
+.btn-sec-action.freeze { background: #f59e0b; color: #000; }
+.btn-sec-action.unfreeze { background: #10b981; color: #fff; }
+.btn-sec-action.ban { background: #ef4444; color: #fff; }
+.btn-sec-action.unban { background: #6366f1; color: #fff; }
 
-.admin-banner {
-  background: linear-gradient(135deg, #1c1c1e, #2c2c2e);
-  color: #fff;
-  border-radius: 16px;
-  padding: 16px;
-  margin-bottom: 16px;
+.owner-pill {
+  background: linear-gradient(135deg, #ffb703, #fb8500);
+  color: #000;
+  font-size: 10px;
+  font-weight: 900;
+  padding: 2px 6px;
+  border-radius: 6px;
 }
 
-/* МОДАЛКА ИНСТРУКЦИИ УСТАНОВКИ НА IPHONE */
-.ios-install-sheet {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  backdrop-filter: blur(5px);
-  z-index: 300;
-  display: none;
-  align-items: flex-end;
-  justify-content: center;
-}
-.ios-install-box {
-  background: #ffffff;
-  width: 100%;
-  max-width: 480px;
-  border-radius: 24px 24px 0 0;
-  padding: 24px 20px calc(24px + var(--safe-bottom)) 20px;
-  text-align: center;
-  box-shadow: 0 -10px 30px rgba(0,0,0,0.15);
-}
-.ios-install-step {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  text-align: left;
-  margin: 14px 0;
-  font-size: 14px;
-}
-.step-number {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: #007aff;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 13px;
-  flex-shrink: 0;
+@media(max-width: 600px) {
+  .hero-promo { padding: 18px 16px; }
+  .products-grid { grid-template-columns: 1fr; }
+  .logo-title span:last-child { display: none; }
 }
 </style>
 </head>
 <body>
 
-<!-- SVG ЗУБЧАТОЙ СИНЕЙ ГАЛОЧКИ -->
+<!-- SVG ОРИГИНАЛЬНАЯ ЗУБЧАТАЯ СИНЯЯ ГАЛОЧКА FACTURA -->
 <svg style="display:none;">
   <symbol id="icon-verified-star" viewBox="0 0 24 24">
     <path fill-rule="evenodd" clip-rule="evenodd" d="M12 1L14.7 3.2L18.1 3.2L19.2 6.4L22.2 7.8L21.7 11.2L23.4 14.2L21.3 16.9L21.3 20.3L18 21.2L16 23.9L12.7 22.8L9.5 24.3L7.7 21.4L4.3 20.9L4 17.5L1.7 15L3.1 11.9L2.3 8.5L5.4 6.8L6.2 3.5L9.6 3.2L12 1ZM10.5 16.2L17.2 9.5L15.8 8.1L10.5 13.4L8.2 11.1L6.8 12.5L10.5 16.2Z"/>
   </symbol>
 </svg>
 
-<!-- 1. ЭКРАН ВХОДА И РЕГИСТРАЦИИ -->
-<section id="authWrap" class="auth-container">
-  <div class="auth-card">
-    <div class="auth-brand-logo">F</div>
-    <h1 id="authTitle">Создать аккаунт</h1>
-    <p id="authSubtitle">Добро пожаловать в приложение Factura</p>
+<!-- УВЕДОМЛЕНИЕ О БЛОКИРОВКЕ (ЕСЛИ АККАУНТ ЗАБЛОКИРОВАН ЗА МОШЕННИЧЕСТВО) -->
+<div id="banNoticeHeader" class="banned-notice">
+  ⛔ ВАШ АККАУНТ ЗАБЛОКИРОВАН СЛУЖБОЙ БЕЗОПАСНОСТИ FACTURA ЗА МОШЕННИЧЕСТВО. ТОРГОВЫЕ ОПЕРАЦИИ ОГРАНИЧЕНЫ.
+</div>
 
-    <form id="authForm">
-      <div class="auth-field">
-        <label>Электронная почта</label>
-        <input id="authEmail" type="email" placeholder="name@example.com" required>
+<!-- ШАПКА САЙТА -->
+<header class="navbar">
+  <div class="nav-inner">
+    <div class="logo-box" onclick="filterCategory('all')">
+      <div class="logo-icon">F</div>
+      <div class="logo-title">
+        <span>Factura</span>
+        <span class="badge-factura-star"><svg><use href="#icon-verified-star"></use></svg></span>
+        <span class="market-badge">Market</span>
       </div>
-      <div class="auth-field">
-        <label>Пароль</label>
-        <input id="authPassword" type="password" placeholder="Минимум 8 символов" minlength="8" required>
-      </div>
-      <div class="auth-field" id="authConfirmBlock">
-        <label>Повторите пароль</label>
-        <input id="authConfirmPassword" type="password" placeholder="Повторите пароль">
-      </div>
-      <button class="btn-primary" id="authSubmitBtn" type="submit">Зарегистрироваться</button>
-    </form>
+    </div>
 
-    <div class="auth-switch">
-      <span id="authSwitchBtn">Уже есть аккаунт? Войти</span>
+    <div class="nav-actions">
+      <!-- БАЛАНС -->
+      <div class="balance-tag" id="userBalanceBtn" title="Нажмите для пополнения">
+        <span>💰</span>
+        <span id="navBalanceVal">0</span> ₽
+      </div>
+
+      <!-- КНОПКА ВЫСТАВИТЬ ТОВАР -->
+      <button class="btn-nav-primary" id="btnOpenCreateItem">
+        <span>+</span> <span>Продать</span>
+      </button>
+
+      <!-- ПАНЕЛЬ СЛУЖБЫ БЕЗОПАСНОСТИ (ОТОБРАЖАЕТСЯ ТОЛЬКО ДЛЯ SB / SHVED) -->
+      <button class="btn-nav-primary" id="btnOpenSecurityPanel" style="background: #dc2626; display:none;">
+        🛡️ СБ / Поддержка
+      </button>
+
+      <!-- АВАТАРКА ПРОФИЛЯ -->
+      <img id="navUserAvatar" class="user-nav-avatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop" alt="avatar">
     </div>
   </div>
-</section>
+</header>
 
-<!-- 2. ОСНОВНОЙ ВЬЮПОРТ ПРИЛОЖЕНИЯ -->
-<div id="appViewport" class="app-viewport" style="display:none;">
+<div class="main-wrapper">
 
-  <!-- ТАБ: ЧАТЫ -->
-  <main id="tabChatsView" class="view-page active">
-    <header class="chats-header">
-      <div class="chats-header-title">Чаты</div>
-      <button class="header-icon-btn" id="btnOpenCreateChat" title="Создать чат или канал">+</button>
-    </header>
-
-    <!-- БАННЕР БЫСТРОЙ УСТАНОВКИ ПРИЛОЖЕНИЯ (ЕСЛИ ОТКРЫТО В БРАУЗЕРЕ) -->
-    <div class="install-app-banner" id="pwaInstallBanner">
-      <div class="install-app-icon">F</div>
-      <div style="flex:1;min-width:0;">
-        <div style="font-weight:700;font-size:14px;">Установить Factura</div>
-        <div style="font-size:12px;color:var(--text-secondary);">Использовать как родное приложение</div>
-      </div>
-      <button class="install-app-btn" id="btnInstallPwa">Установить</button>
+  <!-- ГЕРО БАННЕР -->
+  <div class="hero-promo">
+    <div class="hero-text">
+      <h1>Маркетплейс цифровых товаров Factura</h1>
+      <p>Покупайте и продавайте аккаунты Telegram, Discord, игры, ключи и софт. Все сделки защищены гарантом и Службой Безопасности.</p>
     </div>
-
-    <div class="chats-list" id="chatsListContainer"></div>
-  </main>
-
-  <!-- ТАБ: НАСТРОЙКИ (СТИЛЬ В ТОЧНОСТИ КАК НА СКРИНШОТЕ TELEGRAM iOS) -->
-  <main id="tabSettingsView" class="view-page">
-    
-    <!-- ВЕРХНИЙ ХИРО-БЛОК ПОЛЬЗОВАТЕЛЯ -->
-    <div class="settings-top-hero">
-      <div class="hero-avatar-box" id="heroAvatar">U</div>
-      <div class="hero-name-row">
-        <span id="heroDisplayName">Rust</span>
-        <span id="heroVerifiedBadge" class="badge-verified-custom" style="display:none;">
-          <svg><use href="#icon-verified-star"></use></svg>
-        </span>
-        <span id="heroStarBadge" class="star-badge-icon" style="display:none;">★</span>
-      </div>
-      <div class="hero-sub-phone" id="heroUserTag">@roxdow</div>
-      <button class="btn-change-photo-link" id="btnHeroEditProfile">Изменить профиль</button>
-    </div>
-
-    <!-- 1. ПЕРВАЯ ГРУППА: АКТИВНЫЙ АККАУНТ И ДОБАВЛЕНИЕ (КАК НА СКРИНШОТЕ) -->
-    <div class="ios-group-wrapper">
-      <div class="ios-cells-card">
-        <div class="ios-cell-row">
-          <div class="ios-cell-icon" style="background:#000;">🕶️</div>
-          <div class="ios-cell-content">
-            <div class="ios-cell-title" id="accountRowName">великий winston</div>
-            <div class="ios-cell-right">
-              <span style="background:#007aff;color:#fff;font-size:11px;font-weight:700;padding:2px 7px;border-radius:10px;">
-                ⚡️ <span id="balanceRowVal">0</span>
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div class="ios-cell-row" id="btnAddAccountRow">
-          <div class="ios-cell-icon" style="background:#e5f1ff;color:#007aff;font-size:20px;font-weight:300;">+</div>
-          <div class="ios-cell-content">
-            <div class="ios-cell-title" style="color:#007aff;">Добавить аккаунт</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 2. ВТОРАЯ ГРУППА: СЕРВИСЫ И ФУНКЦИИ -->
-    <div class="ios-group-wrapper">
-      <div class="ios-cells-card">
-        
-        <!-- МОЙ ПРОФИЛЬ -->
-        <div class="ios-cell-row" id="cellOpenProfile">
-          <div class="ios-cell-icon" style="background:#ff3b30;">👤</div>
-          <div class="ios-cell-content">
-            <div class="ios-cell-title">Мой профиль</div>
-            <div class="ios-cell-right"><span class="ios-chevron">›</span></div>
-          </div>
-        </div>
-
-        <!-- ПОДПИСКА FACTURA -->
-        <div class="ios-cell-row" id="cellOpenSubscription">
-          <div class="ios-cell-icon" style="background:#af52de;">★</div>
-          <div class="ios-cell-content">
-            <div class="ios-cell-title">Подписка Factura</div>
-            <div class="ios-cell-right">
-              <span id="subStatusText" style="font-size:13px;color:#af52de;font-weight:600;">199 ₽</span>
-              <span class="ios-chevron">›</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- БАЛАНС ПЛАТФОРМЫ (МОЛНИИ ⚡️) -->
-        <div class="ios-cell-row" id="cellOpenBalance">
-          <div class="ios-cell-icon" style="background:#ff9500;">⚡️</div>
-          <div class="ios-cell-content">
-            <div class="ios-cell-title">Баланс молний</div>
-            <div class="ios-cell-right">
-              <span id="balanceTextRight" style="font-size:13px;color:#ff9500;font-weight:700;">0 ⚡️</span>
-              <span class="ios-chevron">›</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- НОВОГОДНИЕ ПОДАРКИ (🧑‍🎄, ☃️) -->
-        <div class="ios-cell-row" id="cellOpenGifts">
-          <div class="ios-cell-icon" style="background:#34c759;">🎁</div>
-          <div class="ios-cell-content">
-            <div class="ios-cell-title">Подарки до 10.01.2027</div>
-            <div class="ios-cell-right">
-              <span style="font-size:12px;">🧑‍🎄 ☃️</span>
-              <span class="ios-chevron">›</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- ПОДАТЬ ЗАЯВКУ НА ВЕРИФИКАЦИЮ -->
-        <div class="ios-cell-row" id="cellOpenApplyVerif">
-          <div class="ios-cell-icon" style="background:#007aff;">
-            <svg style="width:16px;height:16px;fill:#fff;"><use href="#icon-verified-star"></use></svg>
-          </div>
-          <div class="ios-cell-content">
-            <div class="ios-cell-title">Подать на верификацию</div>
-            <div class="ios-cell-right"><span class="ios-chevron">›</span></div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- 3. ТРЕТЬЯ ГРУППА: ПАНЕЛЬ МОДЕРАЦИИ (ДОСТУПНА МОДЕРАТОРАМ И @tg) -->
-    <div class="ios-group-wrapper" id="groupModeration" style="display:none;">
-      <div class="ios-group-title">Модерация платформы</div>
-      <div class="ios-cells-card">
-        <div class="ios-cell-row" id="cellOpenModeration">
-          <div class="ios-cell-icon" style="background:#ff3b30;">🚩</div>
-          <div class="ios-cell-content">
-            <div class="ios-cell-title">Рассмотрение жалоб</div>
-            <div class="ios-cell-right">
-              <span id="reportsCountBadge" style="background:#ff3b30;color:#fff;font-size:11px;font-weight:700;padding:2px 7px;border-radius:10px;">0</span>
-              <span class="ios-chevron">›</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 4. ЧЕТВЕРТАЯ ГРУППА: ПАНЕЛЬ ГЛАВНОГО АДМИНИСТРАТОРА (СТРОГО ДЛЯ @tg) -->
-    <div class="ios-group-wrapper" id="groupMainAdmin" style="display:none;">
-      <div class="ios-group-title">Панель Главного Администратора (@tg)</div>
-      <div class="ios-cells-card">
-        
-        <!-- ВЫДАЧА ВЕРИФИКАЦИИ -->
-        <div class="ios-cell-row" id="cellOpenVerifRequests">
-          <div class="ios-cell-icon" style="background:#5856d6;">☑️</div>
-          <div class="ios-cell-content">
-            <div class="ios-cell-title">Выдача верификации пользователям</div>
-            <div class="ios-cell-right"><span class="ios-chevron">›</span></div>
-          </div>
-        </div>
-
-        <!-- УПРАВЛЕНИЕ АДМИНА (МОЛНИИ, ПРЕМИУМ, ГАЛОЧКИ КАНАЛОВ, МОДЕРАТОРЫ) -->
-        <div class="ios-cell-row" id="cellOpenAdminControl">
-          <div class="ios-cell-icon" style="background:#1c1c1e;">👑</div>
-          <div class="ios-cell-content">
-            <div class="ios-cell-title">Управление привилегиями</div>
-            <div class="ios-cell-right"><span class="ios-chevron">›</span></div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- ВЫХОД С АККАУНТА -->
-    <div class="ios-group-wrapper">
-      <div class="ios-cells-card">
-        <div class="ios-cell-row" id="cellLogout">
-          <div class="ios-cell-icon" style="background:#8e8e93;">🚪</div>
-          <div class="ios-cell-content">
-            <div class="ios-cell-title" style="color:#ff3b30;">Выйти из аккаунта</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </main>
-
-  <!-- НИЖНИЙ ТАББАР (ТОЧНО КАК НА СКРИНШОТЕ TELEGRAM iOS) -->
-  <nav class="ios-tab-bar">
-    <button class="tab-bar-item" id="tabBtnContacts">
-      <div class="tab-bar-icon">👤</div>
-      <div class="tab-bar-label">Контакты</div>
-    </button>
-    <button class="tab-bar-item" id="tabBtnCalls">
-      <div class="tab-bar-icon">📞</div>
-      <div class="tab-bar-label">Звонки</div>
-    </button>
-    <button class="tab-bar-item active" id="tabBtnChats">
-      <div class="tab-bar-icon">💬</div>
-      <div class="tab-bar-label">Чаты</div>
-    </button>
-    <button class="tab-bar-item" id="tabBtnSettings">
-      <div class="tab-bar-icon">⚙️</div>
-      <div class="tab-bar-label">Настройки</div>
-    </button>
-  </nav>
-
-</div>
-
-<!-- ================= ДИАЛОГ ЧАТА ================= -->
-<div class="screen-chat-dialog" id="screenChatDialog">
-  <header class="dialog-header">
-    <button class="dialog-back-btn" id="btnBackFromChat">‹ Назад</button>
-    <div class="dialog-header-center">
-      <div class="dialog-header-name">
-        <span id="dialogChatTitle">Команда Factura</span>
-        <span id="dialogVerifiedStar" class="badge-verified-custom" style="display:none;">
-          <svg><use href="#icon-verified-star"></use></svg>
-        </span>
-      </div>
-      <div class="dialog-header-sub" id="dialogChatSub">канал</div>
-    </div>
-    <button class="dialog-report-btn" id="btnOpenReportModal">🚩 Пожаловаться</button>
-  </header>
-
-  <div class="dialog-messages-wrap" id="dialogMessagesList"></div>
-
-  <form class="dialog-footer" id="dialogSendForm">
-    <input id="dialogInputText" placeholder="Сообщение..." autocomplete="off">
-    <button class="btn-dialog-send" type="submit">➤</button>
-  </form>
-</div>
-
-<!-- ================= МОДАЛКИ СТРАНИЦ НАСТРОЕК ================= -->
-
-<!-- 1. МОДАЛКА: МОЙ ПРОФИЛЬ -->
-<div class="modal-screen" id="modalScreenProfile">
-  <header class="modal-nav-header">
-    <button class="modal-nav-btn" onclick="closeModalScreen('modalScreenProfile')">Закрыть</button>
-    <div class="modal-nav-title">Мой профиль</div>
-    <button class="modal-nav-btn" style="opacity:0;">Готово</button>
-  </header>
-  <div class="modal-body-scroll">
-    <div class="gifts-collection-card">
-      <div style="font-size:13px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;margin-bottom:6px;">Коллекция подарков в профиле:</div>
-      <div id="profileGiftsDisplay">
-        <span style="font-size:13px;color:var(--text-secondary);">У вас пока нет подарков</span>
-      </div>
-    </div>
-
-    <form id="formEditProfile" class="ios-cells-card" style="padding:14px;">
-      <div class="auth-field">
-        <label>Имя пользователя</label>
-        <input id="inputDisplayName" required>
-      </div>
-      <div class="auth-field">
-        <label>Юзернейм через @</label>
-        <input id="inputUsername" required>
-      </div>
-      <div class="auth-field">
-        <label>Дата рождения</label>
-        <input id="inputBirthDate" type="date">
-      </div>
-      <button class="btn-primary" type="submit">Сохранить изменения</button>
-    </form>
-  </div>
-</div>
-
-<!-- 2. МОДАЛКА: ПОДПИСКА FACTURA (199 РУБЛЕЙ) -->
-<div class="modal-screen" id="modalScreenSub">
-  <header class="modal-nav-header">
-    <button class="modal-nav-btn" onclick="closeModalScreen('modalScreenSub')">Закрыть</button>
-    <div class="modal-nav-title">Подписка Factura</div>
-    <button class="modal-nav-btn" style="opacity:0;">Готово</button>
-  </header>
-  <div class="modal-body-scroll">
-    <div class="ios-cells-card" style="padding:24px;text-align:center;">
-      <div style="font-size:54px;margin-bottom:12px;">★</div>
-      <h2 style="margin:0 0 8px 0;font-size:22px;">Factura Premium</h2>
-      <p style="font-size:14px;color:var(--text-secondary);line-height:1.4;margin:0 0 20px 0;">
-        Эксклюзивная золотая звёздочка ★ рядом с вашим именем в профиле и сообщениях, доступ к специальным возможностям платформы.
-      </p>
-      <div style="font-size:26px;font-weight:800;color:#af52de;margin-bottom:18px;">199 ₽ / месяц</div>
-      <button class="btn-primary" id="btnBuyPremiumAction" style="background:#af52de;">Оформить за 199 ₽</button>
-    </div>
-  </div>
-</div>
-
-<!-- 3. МОДАЛКА: БАЛАНС ПЛАТФОРМЫ (МОЛНИИ ⚡️) -->
-<div class="modal-screen" id="modalScreenBalance">
-  <header class="modal-nav-header">
-    <button class="modal-nav-btn" onclick="closeModalScreen('modalScreenBalance')">Закрыть</button>
-    <div class="modal-nav-title">Баланс молний</div>
-    <button class="modal-nav-btn" style="opacity:0;">Готово</button>
-  </header>
-  <div class="modal-body-scroll">
-    <div class="ios-cells-card" style="padding:20px;text-align:center;margin-bottom:14px;">
-      <div style="font-size:14px;color:var(--text-secondary);">Текущий баланс:</div>
-      <div style="font-size:36px;font-weight:800;color:#ff9500;margin:6px 0;">
-        ⚡️ <span id="balanceModalNum">0</span> молний
-      </div>
-      <div style="font-size:12px;color:var(--text-secondary);">Курс: 1 молния = 1 рубль</div>
-    </div>
-
-    <div class="ios-cells-card" style="padding:16px;">
-      <div style="font-size:13px;font-weight:700;margin-bottom:8px;">Пополнить баланс (от 200 ₽ — 200 ⚡️):</div>
-      <input type="number" id="inputTopupAmt" value="200" min="200" step="10" style="width:100%;padding:12px;border:1px solid #e5e5ea;border-radius:12px;margin-bottom:12px;font-size:16px;">
-      <button class="btn-primary" id="btnTopupSubmit" style="background:#ff9500;">Пополнить молнии ⚡️</button>
-    </div>
-  </div>
-</div>
-
-<!-- 4. МОДАЛКА: НОВОГОДНИЕ ПОДАРКИ (🧑‍🎄, ☃️) -->
-<div class="modal-screen" id="modalScreenGifts">
-  <header class="modal-nav-header">
-    <button class="modal-nav-btn" onclick="closeModalScreen('modalScreenGifts')">Закрыть</button>
-    <div class="modal-nav-title">Подарки Factura</div>
-    <button class="modal-nav-btn" style="opacity:0;">Готово</button>
-  </header>
-  <div class="modal-body-scroll">
-    <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">
-      Купленные подарки навсегда сохраняются в вашем профиле! Доступны для покупки только до <b>10.01.2027</b>.
-    </div>
-
-    <div class="gifts-grid">
-      <div class="gift-card">
-        <div class="gift-card-icon">🧑‍🎄</div>
-        <div class="gift-card-name">Санта Factura</div>
-        <div class="gift-card-exp">До 10.01.2027</div>
-        <div style="font-size:15px;font-weight:800;color:#ff9500;margin-bottom:8px;">100 ⚡️</div>
-        <button class="btn-buy-gift" onclick="purchaseGift('🧑‍🎄', 'Санта Factura', 100)">Купить</button>
-      </div>
-
-      <div class="gift-card">
-        <div class="gift-card-icon">☃️</div>
-        <div class="gift-card-name">Снеговик 2027</div>
-        <div class="gift-card-exp">До 10.01.2027</div>
-        <div style="font-size:15px;font-weight:800;color:#ff9500;margin-bottom:8px;">75 ⚡️</div>
-        <button class="btn-buy-gift" onclick="purchaseGift('☃️', 'Снеговик 2027', 75)">Купить</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- 5. МОДАЛКА: ПОДАТЬ НА ВЕРИФИКАЦИЮ (АНКЕТА) -->
-<div class="modal-screen" id="modalScreenApplyVerif">
-  <header class="modal-nav-header">
-    <button class="modal-nav-btn" onclick="closeModalScreen('modalScreenApplyVerif')">Закрыть</button>
-    <div class="modal-nav-title">Верификация</div>
-    <button class="modal-nav-btn" style="opacity:0;">Готово</button>
-  </header>
-  <div class="modal-body-scroll">
-    <form id="formApplyVerif" class="ios-cells-card" style="padding:16px;">
-      <p style="font-size:13px;color:var(--text-secondary);margin:0 0 14px 0;">
-        Заполните анкету для подтверждения личности и получения оригинальной синей зубчатой галочки:
-      </p>
-      <div class="auth-field">
-        <label>ФИО или название бренда</label>
-        <input id="verifFio" placeholder="Иванов Иван Иванович" required>
-      </div>
-      <div class="auth-field">
-        <label>Ссылка на деятельность или канал</label>
-        <input id="verifLink" placeholder="https://..." required>
-      </div>
-      <div class="auth-field">
-        <label>Цель получения верификации</label>
-        <textarea id="verifReason" rows="3" style="width:100%;padding:10px;border-radius:12px;border:1px solid #e5e5ea;" placeholder="Официальный аккаунт, публичная личность..." required></textarea>
-      </div>
-      <button class="btn-primary" type="submit">Отправить заявку</button>
-    </form>
-  </div>
-</div>
-
-<!-- 6. МОДАЛКА: ВЫДАЧА ВЕРИФИКАЦИИ (ГЛАВНЫЙ АДМИН @tg) -->
-<div class="modal-screen" id="modalScreenAdminVerif">
-  <header class="modal-nav-header">
-    <button class="modal-nav-btn" onclick="closeModalScreen('modalScreenAdminVerif')">Закрыть</button>
-    <div class="modal-nav-title">Заявки на галочку</div>
-    <button class="modal-nav-btn" style="opacity:0;">Готово</button>
-  </header>
-  <div class="modal-body-scroll" id="adminVerifRequestsContainer"></div>
-</div>
-
-<!-- 7. МОДАЛКА: УПРАВЛЕНИЕ АДМИНИСТРАТОРА (СТРОГО @tg) -->
-<div class="modal-screen" id="modalScreenAdminControl">
-  <header class="modal-nav-header">
-    <button class="modal-nav-btn" onclick="closeModalScreen('modalScreenAdminControl')">Закрыть</button>
-    <div class="modal-nav-title">Панель Администратора</div>
-    <button class="modal-nav-btn" style="opacity:0;">Готово</button>
-  </header>
-  <div class="modal-body-scroll">
-    <div class="admin-banner">
-      <div style="font-size:17px;font-weight:700;margin-bottom:4px;">Вы — Главный Администратор (@tg)</div>
-      <div style="font-size:12px;opacity:0.8;">Полный доступ к балансам, подпискам, галочкам каналов и модераторам.</div>
-    </div>
-
-    <!-- ВЫДАЧА МОЛНИЙ -->
-    <div class="ios-cells-card" style="padding:14px;margin-bottom:12px;">
-      <div style="font-size:13px;font-weight:700;margin-bottom:6px;">Выдать молнии ⚡️ (любое количество):</div>
-      <div style="display:flex;gap:8px;">
-        <input type="number" id="adminCustomLightning" value="1000" style="flex:1;padding:8px 12px;border:1px solid #e5e5ea;border-radius:10px;">
-        <button class="btn-action-small btn-success" id="btnAdminAddLightning">Начислить ⚡️</button>
-      </div>
-    </div>
-
-    <!-- ВЫДАЧА ПРЕМИУМА -->
-    <div class="ios-cells-card" style="padding:14px;margin-bottom:12px;">
-      <div style="font-size:13px;font-weight:700;margin-bottom:6px;">Выдать / снять Premium ★:</div>
-      <button class="btn-primary" id="btnAdminToggleSub" style="background:#af52de;padding:10px;font-size:14px;">
-        Переключить подписку себе
+    <div class="hero-btns">
+      <button class="btn-hero sell" onclick="document.getElementById('btnOpenCreateItem').click()">
+        + Выставить аккаунт / игру
+      </button>
+      <button class="btn-hero security" id="btnContactSupport">
+        🛡️ Служба безопасности
       </button>
     </div>
+  </div>
 
-    <!-- ГАЛОЧКА ДЛЯ КАНАЛА/ЧАТА -->
-    <div class="ios-cells-card" style="padding:14px;margin-bottom:12px;">
-      <div style="font-size:13px;font-weight:700;margin-bottom:6px;">Галочка для открытого канала/чата:</div>
-      <div style="display:flex;gap:8px;">
-        <button class="btn-action-small btn-success" id="btnAdminGiveChannelVerif">Выдать галочку</button>
-        <button class="btn-action-small btn-danger" id="btnAdminRemoveChannelVerif">Забрать галочку</button>
-      </div>
+  <!-- КАТЕГОРИИ -->
+  <div class="categories-bar">
+    <button class="category-btn active" data-cat="all" onclick="filterCategory('all')">Все товары</button>
+    <button class="category-btn" data-cat="telegram" onclick="filterCategory('telegram')">📱 Telegram аккаунты</button>
+    <button class="category-btn" data-cat="discord" onclick="filterCategory('discord')">🎮 Discord аккаунты / Nitro</button>
+    <button class="category-btn" data-cat="games" onclick="filterCategory('games')">🕹️ Игры & Ключи</button>
+    <button class="category-btn" data-cat="other" onclick="filterCategory('other')">📦 Прочее</button>
+  </div>
+
+  <!-- ПОИСК -->
+  <div class="search-box-wrap">
+    <input type="text" id="searchInput" class="search-input" placeholder="🔍 Поиск по названию, игре, Telegram юзернейму...">
+  </div>
+
+  <!-- СЕТКА ТОВАРОВ -->
+  <div class="products-grid" id="productsGrid"></div>
+
+</div>
+
+<!-- ================= 1. МОДАЛКА ВХОДА / СМЕНЫ АККАУНТА ================= -->
+<div class="modal-overlay" id="authModal">
+  <div class="modal-box" style="max-width: 400px;">
+    <div class="modal-header">
+      <div class="modal-title">Вход в Factura Market</div>
+      <button class="modal-close-btn" onclick="closeModal('authModal')">&times;</button>
     </div>
-
-    <!-- НАЗНАЧЕНИЕ МОДЕРАТОРА -->
-    <div class="ios-cells-card" style="padding:14px;">
-      <div style="font-size:13px;font-weight:700;margin-bottom:6px;">Назначить пользователя модератором:</div>
-      <div style="display:flex;gap:8px;">
-        <input id="adminNewModTag" placeholder="@username" style="flex:1;padding:8px 12px;border:1px solid #e5e5ea;border-radius:10px;">
-        <button class="btn-action-small btn-success" id="btnAdminAddMod">Назначить</button>
+    <div class="modal-body">
+      <form id="authForm">
+        <div class="form-group">
+          <label>Никнейм или Логин</label>
+          <input type="text" id="authLogin" placeholder="Shved или ваш ник" required>
+        </div>
+        <div class="form-group">
+          <label>Пароль</label>
+          <input type="password" id="authPass" placeholder="Пароль" required>
+        </div>
+        <button type="submit" class="btn-submit-action">Войти в аккаунт</button>
+      </form>
+      <div style="font-size: 12px; color: var(--text-muted); margin-top: 14px; text-align: center;">
+        💡 Владелец сайта: ник <b>Shved</b>, пароль <b>shved2007</b><br>(Имеет полный доступ к Службе Безопасности)
       </div>
     </div>
   </div>
 </div>
 
-<!-- 8. МОДАЛКА: МОДЕРАЦИЯ ЖАЛОБ -->
-<div class="modal-screen" id="modalScreenModeration">
-  <header class="modal-nav-header">
-    <button class="modal-nav-btn" onclick="closeModalScreen('modalScreenModeration')">Закрыть</button>
-    <div class="modal-nav-title">Жалобы пользователей</div>
-    <button class="modal-nav-btn" style="opacity:0;">Готово</button>
-  </header>
-  <div class="modal-body-scroll" id="moderationListContainer"></div>
-</div>
-
-<!-- 9. МОДАЛКА: СОЗДАТЬ ЧАТ ИЛИ КАНАЛ -->
-<div class="modal-screen" id="modalScreenCreateChat">
-  <header class="modal-nav-header">
-    <button class="modal-nav-btn" onclick="closeModalScreen('modalScreenCreateChat')">Отмена</button>
-    <div class="modal-nav-title">Новый диалог</div>
-    <button class="modal-nav-btn" style="opacity:0;">Создать</button>
-  </header>
-  <div class="modal-body-scroll">
-    <form id="formCreateNewChat" class="ios-cells-card" style="padding:16px;">
-      <div class="auth-field">
-        <label>Тип</label>
-        <select id="selectNewChatType" style="width:100%;padding:10px;border-radius:12px;border:1px solid #e5e5ea;background:#f2f2f7;">
-          <option value="chat">Групповой чат</option>
-          <option value="channel">Публичный канал</option>
-        </select>
-      </div>
-      <div class="auth-field">
-        <label>Название</label>
-        <input id="inputNewChatTitle" placeholder="Например: Новости IT" required>
-      </div>
-      <div class="auth-field">
-        <label>Первое сообщение</label>
-        <textarea id="inputNewChatFirstMsg" rows="3" style="width:100%;padding:10px;border-radius:12px;border:1px solid #e5e5ea;" placeholder="Приветствуем подписчиков..."></textarea>
-      </div>
-      <button class="btn-primary" type="submit">Создать</button>
-    </form>
+<!-- ================= 2. МОДАЛКА ВЫСТАВЛЕНИЯ ТОВАРА ================= -->
+<div class="modal-overlay" id="createItemModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title">📦 Выставить товар на продажу</div>
+      <button class="modal-close-btn" onclick="closeModal('createItemModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <form id="createItemForm">
+        <div class="form-group">
+          <label>Категория</label>
+          <select id="itemCategory" required>
+            <option value="telegram">Telegram аккаунт (отлёжка, сессии, каналы)</option>
+            <option value="discord">Discord аккаунт (токены, значки, Nitro)</option>
+            <option value="games">Игра / Ключ / Steam / Epic</option>
+            <option value="other">Цифровой товар / Софт</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Название товара</label>
+          <input type="text" id="itemTitle" placeholder="Например: Telegram аккаунт 2018 года с Premium" required>
+        </div>
+        <div class="form-group">
+          <label>Цена (в рублях)</label>
+          <input type="number" id="itemPrice" min="1" placeholder="500" required>
+        </div>
+        <div class="form-group">
+          <label>Ссылка на картинку товара (необязательно)</label>
+          <input type="url" id="itemImgUrl" placeholder="https://...">
+        </div>
+        <div class="form-group">
+          <label>Описание и данные для покупателя</label>
+          <textarea id="itemDesc" rows="3" placeholder="Укажите происхождение, отлёжку, доступ к почте..." required></textarea>
+        </div>
+        <div class="form-group">
+          <label>Секретные данные (выдаются покупателю после оплаты)</label>
+          <textarea id="itemSecret" rows="2" placeholder="Логин:пароль / токен / tdata / ключ активации" required></textarea>
+        </div>
+        <button type="submit" class="btn-submit-action">Опубликовать в маркетплейсе</button>
+      </form>
+    </div>
   </div>
 </div>
 
-<!-- 10. МОДАЛКА: ПОДАТЬ ЖАЛОБУ -->
-<div class="modal-screen" id="modalScreenSendReport">
-  <header class="modal-nav-header">
-    <button class="modal-nav-btn" onclick="closeModalScreen('modalScreenSendReport')">Отмена</button>
-    <div class="modal-nav-title">🚩 Подать жалобу</div>
-    <button class="modal-nav-btn" style="opacity:0;">Готово</button>
-  </header>
-  <div class="modal-body-scroll">
-    <form id="formSendReport" class="ios-cells-card" style="padding:16px;">
-      <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;" id="reportTargetLabel">Жалоба на чат</div>
-      <div class="auth-field">
-        <label>Причина жалобы</label>
-        <select id="selectReportReason" style="width:100%;padding:10px;border-radius:12px;border:1px solid #e5e5ea;background:#f2f2f7;">
-          <option value="Мошенничество">Мошенничество</option>
-          <option value="Оскорбления">Оскорбления</option>
-          <option value="Порнография">Порнография</option>
-          <option value="Спам">Спам и реклама</option>
-        </select>
+<!-- ================= 3. МОДАЛКА ПРОФИЛЯ И СМЕНЫ АВАТАРКИ ================= -->
+<div class="modal-overlay" id="profileModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title">👤 Мой профиль и аватарка</div>
+      <button class="modal-close-btn" onclick="closeModal('profileModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:18px;">
+        <img id="profileBigAvatar" style="width:70px;height:70px;border-radius:50%;object-fit:cover;border:2px solid var(--accent);" src="" alt="">
+        <div>
+          <div style="font-size:18px;font-weight:800;display:flex;align-items:center;gap:6px;">
+            <span id="profileUsername">Username</span>
+            <span id="profileRoleBadge"></span>
+          </div>
+          <div style="font-size:13px;color:var(--text-muted);margin-top:2px;">
+            Баланс: <b style="color:var(--gold);"><span id="profileBalanceText">0</span> ₽</b>
+            <span id="profileFrozenStatus" style="color:var(--danger);display:none;font-weight:700;">(ЗАМОРОЖЕН)</span>
+          </div>
+        </div>
       </div>
-      <div class="auth-field">
-        <label>Подробности нарушения</label>
-        <textarea id="textReportDetails" rows="4" style="width:100%;padding:10px;border-radius:12px;border:1px solid #e5e5ea;" placeholder="Опишите нарушение..." required></textarea>
+
+      <div class="form-group">
+        <label>Выберите готовую аватарку:</label>
+        <div class="avatar-preset-grid" id="avatarPresetGrid"></div>
       </div>
-      <button class="btn-primary" style="background:#ff3b30;" type="submit">Отправить жалобу</button>
-    </form>
+
+      <div class="form-group">
+        <label>Или вставьте любую ссылку на аватарку (URL):</label>
+        <div style="display:flex;gap:8px;">
+          <input type="url" id="customAvatarUrlInput" placeholder="https://example.com/avatar.jpg">
+          <button type="button" class="btn-buy-card" id="btnApplyCustomAvatar">Применить</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Или загрузите файл с устройства:</label>
+        <input type="file" id="avatarFileInput" accept="image/*">
+      </div>
+
+      <div style="display:flex;gap:10px;margin-top:20px;">
+        <button class="btn-submit-action" style="background:#232a3d;" onclick="openModal('authModal');closeModal('profileModal');">Сменить пользователя</button>
+        <button class="btn-submit-action" style="background:#ef4444;" onclick="logoutUser()">Выйти</button>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- 11. ИНСТРУКЦИЯ ПО УСТАНОВКЕ НА IPHONE (SHEET) -->
-<div class="ios-install-sheet" id="iosInstallSheet">
-  <div class="ios-install-box">
-    <div style="font-size:20px;font-weight:800;margin-bottom:6px;">Установка на iPhone</div>
-    <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">
-      Установите Factura на главный экран, чтобы открывать без рамок Safari:
+<!-- ================= 4. МОДАЛКА ПОПОЛНЕНИЯ БАЛАНСА ================= -->
+<div class="modal-overlay" id="topupModal">
+  <div class="modal-box" style="max-width: 420px;">
+    <div class="modal-header">
+      <div class="modal-title">💰 Пополнение кошелька Factura</div>
+      <button class="modal-close-btn" onclick="closeModal('topupModal')">&times;</button>
     </div>
+    <div class="modal-body">
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:14px;">
+        Средства моментально зачисляются на внутренний счёт для покупок аккаунтов и игр.
+      </div>
+      <div class="form-group">
+        <label>Сумма пополнения (₽)</label>
+        <input type="number" id="topupAmountInput" value="1000" min="100" step="100">
+      </div>
+      <button class="btn-submit-action" id="btnConfirmTopup" style="background:#10b981;">Пополнить баланс</button>
+    </div>
+  </div>
+</div>
 
-    <div class="ios-install-step">
-      <div class="step-number">1</div>
-      <div>Нажмите иконку <b>«Поделиться»</b> (квадрат со стрелкой вверх внизу экрана Safari)</div>
+<!-- ================= 5. МОДАЛКА ПРОСМОТРА И ПОКУПКИ ТОВАРА ================= -->
+<div class="modal-overlay" id="buyModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title">🛒 Покупка товара</div>
+      <button class="modal-close-btn" onclick="closeModal('buyModal')">&times;</button>
     </div>
-    <div class="ios-install-step">
-      <div class="step-number">2</div>
-      <div>Пролистайте меню вниз и выберите <b>«На экран „Домой“»</b> ➕</div>
+    <div class="modal-body">
+      <div id="buyModalContent"></div>
     </div>
-    <div class="ios-install-step">
-      <div class="step-number">3</div>
-      <div>В правом верхнем углу нажмите <b>«Добавить»</b></div>
-    </div>
+  </div>
+</div>
 
-    <button class="btn-primary" style="margin-top:16px;" onclick="document.getElementById('iosInstallSheet').style.display='none'">
-      Понятно
-    </button>
+<!-- ================= 6. ПАНЕЛЬ СЛУЖБЫ БЕЗОПАСНОСТИ И ПОДДЕРЖКИ ================= -->
+<div class="modal-overlay" id="securityModal">
+  <div class="modal-box" style="max-width: 760px;">
+    <div class="modal-header">
+      <div class="modal-title" style="color:#f87171;">
+        🛡️ Служба Безопасности Factura (Контроль мошенничества)
+      </div>
+      <button class="modal-close-btn" onclick="closeModal('securityModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div style="background:#161c28;border:1px solid #28334a;border-radius:12px;padding:12px;margin-bottom:16px;font-size:13px;">
+        Права Службы Безопасности: заморозка средств подозрительных продавцов, блокировка аккаунтов за скам и мошенничество, снятие товаров с продажи.
+      </div>
+
+      <div style="font-size:14px;font-weight:800;text-transform:uppercase;margin-bottom:10px;color:var(--text-muted);">
+        Пользователи платформы:
+      </div>
+
+      <div id="securityUsersList"></div>
+    </div>
   </div>
 </div>
 
 <script>
 (function() {
-  // ЗВУКОВОЙ ДВИЖОК NATIVE APP (БЕЗ ВНЕШНИХ ФАЙЛОВ)
-  var audioCtx = null;
-  function playHapticBeep(freq, type, duration) {
-    try {
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      var osc = audioCtx.createOscillator();
-      var gain = audioCtx.createGain();
-      osc.type = type || 'sine';
-      osc.frequency.setValueAtTime(freq || 600, audioCtx.currentTime);
-      gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + (duration || 0.08));
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start();
-      osc.stop(audioCtx.currentTime + (duration || 0.08));
-    } catch(e) {}
-    if (navigator.vibrate) {
-      try { navigator.vibrate(10); } catch(e) {}
-    }
-  }
 
-  // PWA УСТАНОВКА
-  var deferredPrompt = null;
-  var isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
-  var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  // ПРЕДУСТАНОВЛЕННЫЕ АВАТАРКИ ДЛЯ ВЫБОРА
+  var PRESET_AVATARS = [
+    'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop',
+    'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150&h=150&fit=crop',
+    'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop',
+    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop',
+    'https://images.unsplash.com/photo-1628157582853-a796fa650a6a?w=150&h=150&fit=crop',
+    'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150&h=150&fit=crop',
+    'https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=150&h=150&fit=crop',
+    'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop',
+    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop',
+    'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&h=150&fit=crop'
+  ];
 
-  if (isStandalone) {
-    var banner = document.getElementById('pwaInstallBanner');
-    if (banner) banner.style.display = 'none';
-  }
-
-  window.addEventListener('beforeinstallprompt', function(e) {
-    e.preventDefault();
-    deferredPrompt = e;
-  });
-
-  document.getElementById('btnInstallPwa').addEventListener('click', function() {
-    if (isIos) {
-      document.getElementById('iosInstallSheet').style.display = 'flex';
-    } else if (deferredPrompt) {
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then(function() {
-        deferredPrompt = null;
-      });
-    } else {
-      alert('Чтобы установить приложение: нажмите меню браузера (три точки) ➔ «Установить приложение» или «Добавить на главный экран».');
-    }
-  });
-
-  // СОСТОЯНИЕ ПРИЛОЖЕНИЯ
-  var currentUser = null;
-  var activeChatId = 1;
-
-  var chats = [
+  // БАЗА ДАННЫХ ПО УМОЛЧАНИЮ
+  var defaultUsers = [
     {
-      id: 1,
-      name: 'Команда Factura',
-      type: 'channel',
-      initials: 'F',
-      color: 'linear-gradient(135deg, #007aff, #5856d6)',
-      hasVerifiedBadge: true,
-      messages: [
-        {
-          id: 1,
-          text: '🎉 Добро пожаловать в Factura!\n\nВаше приложение готово к работе на телефоне.\n\nВам доступны:\n• Настройки в стиле Telegram iOS\n• Баланс молний ⚡️\n• Подарки 🧑‍🎄 ☃️ до 10.01.2027\n• Подача на верификацию\n• Создание чатов и каналов!\n\nГлавный администратор приложения: @tg',
-          time: '12:00',
-          mine: false
-        }
-      ]
+      username: 'Shved',
+      pass: 'shved2007',
+      role: 'owner', // Владелец сайта + Служба безопасности
+      balance: 15000,
+      isFrozen: false,
+      isBlocked: false,
+      avatar: 'https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=150&h=150&fit=crop'
+    },
+    {
+      username: 'Security_Support',
+      pass: 'security123',
+      role: 'security',
+      balance: 5000,
+      isFrozen: false,
+      isBlocked: false,
+      avatar: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150&h=150&fit=crop'
+    },
+    {
+      username: 'Alex_Gamer',
+      pass: 'user1234',
+      role: 'user',
+      balance: 3200,
+      isFrozen: false,
+      isBlocked: false,
+      avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop'
+    },
+    {
+      username: 'Scam_Trader',
+      pass: 'scam1234',
+      role: 'user',
+      balance: 850,
+      isFrozen: true,
+      isBlocked: true,
+      avatar: 'https://images.unsplash.com/photo-1628157582853-a796fa650a6a?w=150&h=150&fit=crop'
     }
   ];
 
-  var verifRequests = [];
-  var reportsList = [];
-  var moderatorsList = ['@tg', '@admin'];
-
-  function loadSavedState() {
-    try {
-      var s = localStorage.getItem('factura_v9_app_state');
-      if (s) {
-        var p = JSON.parse(s);
-        if (p.currentUser) currentUser = p.currentUser;
-        if (p.chats && p.chats.length) chats = p.chats;
-        if (p.verifRequests) verifRequests = p.verifRequests;
-        if (p.reportsList) reportsList = p.reportsList;
-        if (p.moderatorsList) moderatorsList = p.moderatorsList;
-      }
-    } catch(e) {}
-  }
-
-  function saveCurrentState() {
-    try {
-      localStorage.setItem('factura_v9_app_state', JSON.stringify({
-        currentUser: currentUser,
-        chats: chats,
-        verifRequests: verifRequests,
-        reportsList: reportsList,
-        moderatorsList: moderatorsList
-      }));
-    } catch(e) {}
-  }
-
-  loadSavedState();
-
-  // АВТОРИЗАЦИЯ
-  var isRegister = true;
-  var authWrap = document.getElementById('authWrap');
-  var appViewport = document.getElementById('appViewport');
-  var authForm = document.getElementById('authForm');
-  var authEmail = document.getElementById('authEmail');
-  var authPassword = document.getElementById('authPassword');
-  var authConfirmPassword = document.getElementById('authConfirmPassword');
-  var authConfirmBlock = document.getElementById('authConfirmBlock');
-  var authTitle = document.getElementById('authTitle');
-  var authSubmitBtn = document.getElementById('authSubmitBtn');
-  var authSwitchBtn = document.getElementById('authSwitchBtn');
-
-  authSwitchBtn.addEventListener('click', function() {
-    isRegister = !isRegister;
-    authConfirmBlock.style.display = isRegister ? 'block' : 'none';
-    authTitle.textContent = isRegister ? 'Создать аккаунт' : 'Вход в Factura';
-    authSubmitBtn.textContent = isRegister ? 'Зарегистрироваться' : 'Войти';
-    authSwitchBtn.textContent = isRegister ? 'Уже есть аккаунт? Войти' : 'Впервые в Factura? Создать аккаунт';
-  });
-
-  authForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-    var email = authEmail.value.trim().toLowerCase();
-    var pass = authPassword.value;
-
-    if (pass.length < 8) return alert('Пароль минимум 8 символов!');
-    if (isRegister && pass !== authConfirmPassword.value) return alert('Пароли не совпадают!');
-
-    var base = email.split('@')[0];
-    
-    // СТРОГО: Только @tg является главным администратором!
-    var isTgMainAdmin = (email.indexOf('tg@') === 0 || email === 'tg@factura.ru' || base === 'tg');
-    var assignedUsername = isTgMainAdmin ? '@tg' : ('@' + base.replace(/[^a-z0-9_]/g, ''));
-
-    currentUser = {
-      email: email,
-      displayName: isTgMainAdmin ? 'Rust (Admin)' : (base.charAt(0).toUpperCase() + base.slice(1)),
-      username: assignedUsername,
-      birthDate: '',
-      hasSubscription: isTgMainAdmin,
-      hasVerifiedBadge: isTgMainAdmin,
-      balanceLightning: isTgMainAdmin ? 9999 : 250,
-      gifts: [],
-      isMainAdmin: isTgMainAdmin,
-      isModerator: isTgMainAdmin || moderatorsList.includes(assignedUsername)
-    };
-
-    saveCurrentState();
-    launchMainApp();
-  });
-
-  function launchMainApp() {
-    if (!currentUser) return;
-
-    if (currentUser.username === '@tg') {
-      currentUser.isMainAdmin = true;
-      currentUser.isModerator = true;
-    } else if (moderatorsList.includes(currentUser.username)) {
-      currentUser.isModerator = true;
+  var defaultProducts = [
+    {
+      id: 1,
+      category: 'telegram',
+      title: 'Telegram аккаунт 2018 года (Отлёжка 6 лет, RU +7)',
+      price: 1250,
+      seller: 'Shved',
+      desc: 'Чистый аккаунт без спамблока. Идеален для ведения крупных каналов и ботов. Сессия TData + код.',
+      secret: 'TData-Session-Pack: https://factura.storage/sessions/tg-shved-ru7.zip',
+      img: 'https://images.unsplash.com/photo-1614680376593-902f749f7ffc?w=400&h=250&fit=crop'
+    },
+    {
+      id: 2,
+      category: 'discord',
+      title: 'Discord Full Access + Nitro 1 Год + 2017 Early Supporter',
+      price: 2490,
+      seller: 'Alex_Gamer',
+      desc: 'Редкий дискорд аккаунт со значком Early Supporter и активным годовым Nitro.',
+      secret: 'Login: discord_vintage@factura.gg | Pass: Vintage99381! | Token: mfa.kZ93kld...',
+      img: 'https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?w=400&h=250&fit=crop'
+    },
+    {
+      id: 3,
+      category: 'games',
+      title: 'Steam Аккаунт CS2 Prime + 150+ Игр (GTA V, Rust, Cyberpunk)',
+      price: 3400,
+      seller: 'Shved',
+      desc: 'Личный Steam аккаунт, родная почта, чеки первой покупки. Без VAC банов.',
+      secret: 'SteamLogin: rust_shved_pro | Pass: MasterPass2026! | Mail: shved_mail@inbox.ru',
+      img: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&h=250&fit=crop'
+    },
+    {
+      id: 4,
+      category: 'telegram',
+      title: 'Telegram Premium на 12 месяцев (Активация подарком)',
+      price: 1890,
+      seller: 'Alex_Gamer',
+      desc: 'Официальный гифт код без захода на ваш аккаунт. Моментальная активация.',
+      secret: 'Gift-Link: https://t.me/giftcode/factura-premium-1y-942859201',
+      img: 'https://images.unsplash.com/photo-1614680376408-81e91ffe3db7?w=400&h=250&fit=crop'
     }
+  ];
 
-    authWrap.style.display = 'none';
-    appViewport.style.display = 'flex';
+  // СОСТОЯНИЕ В LOCALSTORAGE
+  var users = defaultUsers;
+  var products = defaultProducts;
+  var currentUsername = 'Shved'; // По умолчанию заходим владельцем Shved
+  var activeCategory = 'all';
 
-    updateUserSettingsUI();
-    renderChatsList();
-    renderVerifRequestsList();
-    renderModerationReports();
+  function loadStorage() {
+    try {
+      var su = localStorage.getItem('factura_market_users');
+      var sp = localStorage.getItem('factura_market_products');
+      var sc = localStorage.getItem('factura_market_current');
+      if (su) users = JSON.parse(su);
+      if (sp) products = JSON.parse(sp);
+      if (sc) currentUsername = sc;
+    } catch(e) {}
   }
 
-  // ОБНОВЛЕНИЕ ДАННЫХ В НАСТРОЙКАХ
-  function updateUserSettingsUI() {
-    if (!currentUser) return;
+  function saveStorage() {
+    try {
+      localStorage.setItem('factura_market_users', JSON.stringify(users));
+      localStorage.setItem('factura_market_products', JSON.stringify(products));
+      localStorage.setItem('factura_market_current', currentUsername);
+    } catch(e) {}
+  }
 
-    var initial = currentUser.displayName.charAt(0).toUpperCase();
-    document.getElementById('heroAvatar').textContent = initial;
-    document.getElementById('heroDisplayName').textContent = currentUser.displayName;
-    document.getElementById('heroUserTag').textContent = currentUser.username;
-    document.getElementById('accountRowName').textContent = currentUser.displayName;
+  loadStorage();
 
-    document.getElementById('balanceRowVal').textContent = currentUser.balanceLightning;
-    document.getElementById('balanceTextRight').textContent = currentUser.balanceLightning + ' ⚡️';
-    document.getElementById('balanceModalNum').textContent = currentUser.balanceLightning;
+  function getCurrentUser() {
+    var u = users.find(function(x) { return x.username.toLowerCase() === currentUsername.toLowerCase(); });
+    if (!u) {
+      u = users[0];
+      currentUsername = u.username;
+    }
+    return u;
+  }
 
-    document.getElementById('heroVerifiedBadge').style.display = currentUser.hasVerifiedBadge ? 'inline-flex' : 'none';
-    document.getElementById('heroStarBadge').style.display = currentUser.hasSubscription ? 'inline-flex' : 'none';
-    document.getElementById('subStatusText').textContent = currentUser.hasSubscription ? 'Активна ★' : '199 ₽';
+  // ОБНОВЛЕНИЕ ИНТЕРФЕЙСА
+  function updateUI() {
+    var user = getCurrentUser();
 
-    document.getElementById('inputDisplayName').value = currentUser.displayName;
-    document.getElementById('inputUsername').value = currentUser.username;
-    document.getElementById('inputBirthDate').value = currentUser.birthDate || '';
+    document.getElementById('navBalanceVal').textContent = user.balance;
+    document.getElementById('navUserAvatar').src = user.avatar;
 
-    // Отображение подарков
-    var gContainer = document.getElementById('profileGiftsDisplay');
-    gContainer.innerHTML = '';
-    if (currentUser.gifts && currentUser.gifts.length > 0) {
-      currentUser.gifts.forEach(function(g) {
-        var p = document.createElement('span');
-        p.className = 'item-badge-pill';
-        p.innerHTML = g.icon + ' ' + g.name;
-        gContainer.appendChild(p);
-      });
+    var banNotice = document.getElementById('banNoticeHeader');
+    var balanceBtn = document.getElementById('userBalanceBtn');
+    if (user.isBlocked) {
+      banNotice.style.display = 'block';
+      balanceBtn.classList.add('frozen');
+    } else if (user.isFrozen) {
+      banNotice.style.display = 'block';
+      banNotice.textContent = '⚠️ ВАШ КОШЕЛЕК ЗАМОРОЖЕН СЛУЖБОЙ БЕЗОПАСНОСТИ FACTURA.';
+      balanceBtn.classList.add('frozen');
     } else {
-      gContainer.innerHTML = '<span style="font-size:13px;color:var(--text-secondary);">У вас пока нет подарков</span>';
+      banNotice.style.display = 'none';
+      balanceBtn.classList.remove('frozen');
     }
 
-    // Панель Главного Администратора: ТОЛЬКО @tg!
-    var isTgAdmin = (currentUser.username === '@tg');
-    document.getElementById('groupMainAdmin').style.display = isTgAdmin ? 'block' : 'none';
+    // Проверка прав для кнопки Службы Безопасности
+    var isStaff = (user.role === 'owner' || user.role === 'security' || user.username === 'Shved');
+    document.getElementById('btnOpenSecurityPanel').style.display = isStaff ? 'flex' : 'none';
 
-    // Панель модератора: модераторам и @tg
-    var canModerate = isTgAdmin || currentUser.isModerator;
-    document.getElementById('groupModeration').style.display = canModerate ? 'block' : 'none';
-    document.getElementById('reportsCountBadge').textContent = reportsList.length;
+    renderProducts();
+    renderSecurityUsers();
   }
 
-  // СПИСОК ЧАТОВ
-  function renderChatsList() {
-    var cont = document.getElementById('chatsListContainer');
-    cont.innerHTML = '';
+  // РЕНДЕР ТОВАРОВ
+  function renderProducts() {
+    var grid = document.getElementById('productsGrid');
+    grid.innerHTML = '';
+    var search = document.getElementById('searchInput').value.trim().toLowerCase();
 
-    chats.forEach(function(chat) {
-      var row = document.createElement('div');
-      row.className = 'chat-cell';
-      var last = chat.messages.length ? chat.messages[chat.messages.length - 1].text : 'Нет сообщений';
-
-      row.innerHTML = 
-        '<div class="chat-avatar" style="background:' + chat.color + '">' + chat.initials + '</div>' +
-        '<div class="chat-body-meta">' +
-          '<div class="chat-title-row">' +
-            '<div class="chat-title-left">' +
-              '<span>' + chat.name + '</span>' +
-              (chat.hasVerifiedBadge ? '<span class="badge-verified-custom"><svg><use href="#icon-verified-star"></use></svg></span>' : '') +
-            '</div>' +
-            '<span class="chat-time">12:00</span>' +
-          '</div>' +
-          '<div class="chat-last-msg">' + last + '</div>' +
-        '</div>';
-
-      row.addEventListener('click', function() {
-        playHapticBeep(450, 'sine', 0.05);
-        openChatDialog(chat.id);
-      });
-      cont.appendChild(row);
-    });
-  }
-
-  // ОТКРЫТИЕ ДИАЛОГА
-  function openChatDialog(id) {
-    activeChatId = id;
-    var chat = chats.find(function(c) { return c.id === id; });
-    if (!chat) return;
-
-    document.getElementById('dialogChatTitle').textContent = chat.name;
-    document.getElementById('dialogChatSub').textContent = chat.type === 'channel' ? 'публичный канал' : 'чат';
-    document.getElementById('dialogVerifiedStar').style.display = chat.hasVerifiedBadge ? 'inline-flex' : 'none';
-
-    renderDialogMessages(chat);
-    document.getElementById('screenChatDialog').style.display = 'flex';
-  }
-
-  function renderDialogMessages(chat) {
-    var wrap = document.getElementById('dialogMessagesList');
-    wrap.innerHTML = '';
-
-    chat.messages.forEach(function(m) {
-      var b = document.createElement('div');
-      b.className = 'msg-bubble ' + (m.mine ? 'outgoing' : 'incoming');
-      b.innerHTML = m.text.replace(/\n/g, '<br>') + '<div class="msg-time">' + m.time + '</div>';
-      wrap.appendChild(b);
-    });
-    wrap.scrollTop = wrap.scrollHeight;
-  }
-
-  document.getElementById('btnBackFromChat').addEventListener('click', function() {
-    playHapticBeep(350, 'sine', 0.04);
-    document.getElementById('screenChatDialog').style.display = 'none';
-  });
-
-  document.getElementById('dialogSendForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    var inp = document.getElementById('dialogInputText');
-    var txt = inp.value.trim();
-    if (!txt) return;
-
-    var chat = chats.find(function(c) { return c.id === activeChatId; });
-    if (!chat) return;
-
-    playHapticBeep(750, 'triangle', 0.09);
-
-    var now = new Date();
-    var t = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
-
-    chat.messages.push({
-      id: Date.now(),
-      text: txt,
-      time: t,
-      mine: true
+    var filtered = products.filter(function(p) {
+      var matchCat = (activeCategory === 'all' || p.category === activeCategory);
+      var matchSearch = (p.title.toLowerCase().indexOf(search) !== -1 || p.desc.toLowerCase().indexOf(search) !== -1);
+      return matchCat && matchSearch;
     });
 
-    inp.value = '';
-    renderDialogMessages(chat);
-    renderChatsList();
-    saveCurrentState();
-  });
-
-  // ПЕРЕКЛЮЧЕНИЕ ТАБОВ
-  var tabBtnChats = document.getElementById('tabBtnChats');
-  var tabBtnSettings = document.getElementById('tabBtnSettings');
-  var tabChatsView = document.getElementById('tabChatsView');
-  var tabSettingsView = document.getElementById('tabSettingsView');
-
-  function switchTab(name) {
-    playHapticBeep(520, 'sine', 0.05);
-    tabBtnChats.classList.remove('active');
-    tabBtnSettings.classList.remove('active');
-    tabChatsView.classList.remove('active');
-    tabSettingsView.classList.remove('active');
-
-    if (name === 'chats') {
-      tabBtnChats.classList.add('active');
-      tabChatsView.classList.add('active');
-    } else if (name === 'settings') {
-      tabBtnSettings.classList.add('active');
-      tabSettingsView.classList.add('active');
-      updateUserSettingsUI();
-    }
-  }
-
-  tabBtnChats.addEventListener('click', function() { switchTab('chats'); });
-  tabBtnSettings.addEventListener('click', function() { switchTab('settings'); });
-  document.getElementById('tabBtnContacts').addEventListener('click', function() {
-    playHapticBeep(300, 'sine', 0.04);
-    alert('Раздел «Контакты»');
-  });
-  document.getElementById('tabBtnCalls').addEventListener('click', function() {
-    playHapticBeep(300, 'sine', 0.04);
-    alert('Журнал звонков пуст');
-  });
-
-  // МОДАЛКИ
-  window.openModalScreen = function(id) {
-    playHapticBeep(550, 'sine', 0.05);
-    document.getElementById(id).classList.add('open');
-  };
-  window.closeModalScreen = function(id) {
-    playHapticBeep(380, 'sine', 0.04);
-    document.getElementById(id).classList.remove('open');
-    updateUserSettingsUI();
-  };
-
-  document.getElementById('cellOpenProfile').addEventListener('click', function() { openModalScreen('modalScreenProfile'); });
-  document.getElementById('btnHeroEditProfile').addEventListener('click', function() { openModalScreen('modalScreenProfile'); });
-  document.getElementById('cellOpenSubscription').addEventListener('click', function() { openModalScreen('modalScreenSub'); });
-  document.getElementById('cellOpenBalance').addEventListener('click', function() { openModalScreen('modalScreenBalance'); });
-  document.getElementById('cellOpenGifts').addEventListener('click', function() { openModalScreen('modalScreenGifts'); });
-  document.getElementById('cellOpenApplyVerif').addEventListener('click', function() { openModalScreen('modalScreenApplyVerif'); });
-
-  document.getElementById('cellOpenVerifRequests').addEventListener('click', function() { openModalScreen('modalScreenAdminVerif'); });
-  document.getElementById('cellOpenAdminControl').addEventListener('click', function() { openModalScreen('modalScreenAdminControl'); });
-  document.getElementById('cellOpenModeration').addEventListener('click', function() { openModalScreen('modalScreenModeration'); });
-
-  document.getElementById('btnOpenCreateChat').addEventListener('click', function() { openModalScreen('modalScreenCreateChat'); });
-  document.getElementById('btnAddAccountRow').addEventListener('click', function() { alert('Добавление второго аккаунта'); });
-
-  // 1. СОХРАНЕНИЕ ПРОФИЛЯ
-  document.getElementById('formEditProfile').addEventListener('submit', function(e) {
-    e.preventDefault();
-    var name = document.getElementById('inputDisplayName').value.trim();
-    var tag = document.getElementById('inputUsername').value.trim();
-    if (!tag.startsWith('@')) tag = '@' + tag;
-
-    currentUser.displayName = name;
-    currentUser.username = tag;
-    currentUser.birthDate = document.getElementById('inputBirthDate').value;
-
-    saveCurrentState();
-    closeModalScreen('modalScreenProfile');
-    alert('Профиль успешно обновлен!');
-  });
-
-  // 2. ПОДПИСКА FACTURA (199 РУБЛЕЙ)
-  document.getElementById('btnBuyPremiumAction').addEventListener('click', function() {
-    if (currentUser.hasSubscription) return alert('У вас уже есть подписка Factura!');
-    if (confirm('Оформить подписку Factura за 199 ₽/мес?')) {
-      currentUser.hasSubscription = true;
-      saveCurrentState();
-      closeModalScreen('modalScreenSub');
-      alert('Поздравляем! Вам присвоена эксклюзивная звёздочка ★ Factura Premium!');
-    }
-  });
-
-  // 3. ПОПОЛНЕНИЕ МОЛНИЙ
-  document.getElementById('btnTopupSubmit').addEventListener('click', function() {
-    var val = parseInt(document.getElementById('inputTopupAmt').value, 10);
-    if (!val || val < 200) return alert('Минимальная сумма пополнения — от 200 ₽ (200 ⚡️)!');
-    currentUser.balanceLightning += val;
-    saveCurrentState();
-    closeModalScreen('modalScreenBalance');
-    alert('Баланс успешно пополнен на +' + val + ' ⚡️ молний!');
-  });
-
-  // 4. ПОКУПКА ПОДАРКОВ (ДО 10.01.2027)
-  window.purchaseGift = function(icon, name, price) {
-    var now = new Date();
-    if (now > new Date('2027-01-10T23:59:59')) {
-      return alert('Срок новогодней акции завершён (до 10.01.2027)!');
-    }
-    if (currentUser.balanceLightning < price) {
-      return alert('Недостаточно молний ⚡️! Пополните баланс на ' + price + ' ⚡️.');
-    }
-    currentUser.balanceLightning -= price;
-    if (!currentUser.gifts) currentUser.gifts = [];
-    currentUser.gifts.push({ icon: icon, name: name });
-
-    saveCurrentState();
-    updateUserSettingsUI();
-    alert('Подарок ' + icon + ' «' + name + '» навсегда закреплен в вашем профиле!');
-  };
-
-  // 5. АНКЕТА НА ВЕРИФИКАЦИЮ
-  document.getElementById('formApplyVerif').addEventListener('submit', function(e) {
-    e.preventDefault();
-    verifRequests.push({
-      id: Date.now(),
-      username: currentUser.username,
-      displayName: currentUser.displayName,
-      fio: document.getElementById('verifFio').value,
-      link: document.getElementById('verifLink').value,
-      reason: document.getElementById('verifReason').value,
-      time: new Date().toLocaleDateString()
-    });
-    saveCurrentState();
-    closeModalScreen('modalScreenApplyVerif');
-    document.getElementById('formApplyVerif').reset();
-    renderVerifRequestsList();
-    alert('Анкета верификации отправлена на рассмотрение главному администратору @tg!');
-  });
-
-  // 6. ВЫДАЧА ВЕРИФИКАЦИИ (@tg)
-  function renderVerifRequestsList() {
-    var box = document.getElementById('adminVerifRequestsContainer');
-    box.innerHTML = '';
-    if (!verifRequests.length) {
-      box.innerHTML = '<div style="color:var(--text-secondary);text-align:center;padding:30px;">Нет активных заявок</div>';
+    if (filtered.length === 0) {
+      grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">Товаров в данной категории пока нет. Вы можете стать первым продавцом!</div>';
       return;
     }
 
-    verifRequests.forEach(function(req, idx) {
+    filtered.forEach(function(p) {
       var card = document.createElement('div');
-      card.className = 'request-card';
+      card.className = 'product-card';
+
+      var catClass = 'other';
+      var catName = 'Товар';
+      if (p.category === 'telegram') { catClass = 'telegram'; catName = 'Telegram'; }
+      else if (p.category === 'discord') { catClass = 'discord'; catName = 'Discord'; }
+      else if (p.category === 'games') { catClass = 'games'; catName = 'Игры'; }
+
+      var sellerUser = users.find(function(u) { return u.username === p.seller; }) || { avatar: PRESET_AVATARS[0] };
+
       card.innerHTML = 
-        '<div class="request-card-title">' +
-          '<span>' + req.displayName + ' (' + req.username + ')</span>' +
-          '<span style="font-size:12px;color:var(--text-secondary);">' + req.time + '</span>' +
+        '<div class="product-image-box">' +
+          '<span class="category-tag-badge ' + catClass + '">' + catName + '</span>' +
+          '<img src="' + (p.img || PRESET_AVATARS[0]) + '" alt="">' +
         '</div>' +
-        '<div style="font-size:13px;"><b>ФИО:</b> ' + req.fio + '</div>' +
-        '<div style="font-size:13px;"><b>Ссылка:</b> ' + req.link + '</div>' +
-        '<div style="font-size:13px;color:var(--text-secondary);margin-top:4px;"><b>Причина:</b> ' + req.reason + '</div>' +
-        '<div class="btn-group-row">' +
-          '<button class="btn-action-small btn-success" onclick="approveVerifReq(' + idx + ')">Одобрить галочку</button>' +
-          '<button class="btn-action-small btn-danger" onclick="rejectVerifReq(' + idx + ')">Отклонить</button>' +
+        '<div class="product-content">' +
+          '<div class="product-title">' + p.title + '</div>' +
+          '<div class="product-desc">' + p.desc + '</div>' +
+          '<div class="seller-line">' +
+            '<img class="seller-avatar-mini" src="' + sellerUser.avatar + '">' +
+            '<span>Продавец: <b>' + p.seller + '</b></span>' +
+          '</div>' +
+          '<div class="product-foot-row">' +
+            '<div class="product-price">' + p.price + ' ₽</div>' +
+            '<button class="btn-buy-card" onclick="openBuyModal(' + p.id + ')">Купить</button>' +
+          '</div>' +
         '</div>';
+
+      grid.appendChild(card);
+    });
+  }
+
+  // ФИЛЬТРАЦИЯ
+  window.filterCategory = function(cat) {
+    activeCategory = cat;
+    document.querySelectorAll('.category-btn').forEach(function(b) {
+      b.classList.toggle('active', b.getAttribute('data-cat') === cat);
+    });
+    renderProducts();
+  };
+  document.getElementById('searchInput').addEventListener('input', renderProducts);
+
+  // МОДАЛКИ
+  window.openModal = function(id) {
+    document.getElementById(id).classList.add('open');
+  };
+  window.closeModal = function(id) {
+    document.getElementById(id).classList.remove('open');
+  };
+
+  // ПОКУПКА ТОВАРА
+  window.openBuyModal = function(id) {
+    var p = products.find(function(x) { return x.id === id; });
+    if (!p) return;
+
+    var cur = getCurrentUser();
+    var content = document.getElementById('buyModalContent');
+
+    content.innerHTML = 
+      '<div style="font-size:17px;font-weight:800;margin-bottom:8px;">' + p.title + '</div>' +
+      '<div style="font-size:13px;color:var(--text-muted);margin-bottom:14px;">' + p.desc + '</div>' +
+      '<div style="background:var(--panel-card);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:14px;">' +
+        '<div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span>Цена:</span><b>' + p.price + ' ₽</b></div>' +
+        '<div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span>Ваш баланс:</span><b>' + cur.balance + ' ₽</b></div>' +
+        '<div style="display:flex;justify-content:space-between;"><span>Продавец:</span><b>' + p.seller + '</b></div>' +
+      '</div>' +
+      '<button class="btn-submit-action" id="btnConfirmPurchase" style="background:#2ecc71;color:#0b0e14;">Оплатить и получить данные</button>';
+
+    openModal('buyModal');
+
+    document.getElementById('btnConfirmPurchase').onclick = function() {
+      if (cur.isBlocked) return alert('Ваш аккаунт заблокирован Службой Безопасности!');
+      if (cur.isFrozen) return alert('Ваш кошелек заморожен, оплата невозможна!');
+
+      if (cur.balance < p.price) {
+        alert('Недостаточно средств на балансе! Пополните баланс.');
+        closeModal('buyModal');
+        openModal('topupModal');
+        return;
+      }
+
+      cur.balance -= p.price;
+      var seller = users.find(function(u) { return u.username === p.seller; });
+      if (seller) seller.balance += p.price;
+
+      saveStorage();
+      updateUI();
+
+      content.innerHTML = 
+        '<div style="text-align:center;padding:10px;">' +
+          '<div style="font-size:42px;margin-bottom:8px;">🎉</div>' +
+          '<div style="font-size:18px;font-weight:800;color:#2ecc71;margin-bottom:8px;">Оплата прошла успешно!</div>' +
+          '<div style="font-size:13px;color:var(--text-muted);margin-bottom:14px;">Данные вашего товара:</div>' +
+          '<div style="background:#0e121b;border:1px solid #2ecc71;padding:12px;border-radius:10px;font-family:monospace;word-break:break-all;user-select:all;margin-bottom:16px;">' +
+            p.secret +
+          '</div>' +
+          '<button class="btn-submit-action" onclick="closeModal(\'buyModal\')">Закрыть</button>' +
+        '</div>';
+    };
+  };
+
+  // ВЫСТАВИТЬ ТОВАР
+  document.getElementById('btnOpenCreateItem').addEventListener('click', function() {
+    var cur = getCurrentUser();
+    if (cur.isBlocked) return alert('Ваш аккаунт заблокирован Службой Безопасности за мошенничество. Вы не можете выставлять товары.');
+    openModal('createItemModal');
+  });
+
+  document.getElementById('createItemForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var cur = getCurrentUser();
+    if (cur.isBlocked) return alert('Действие запрещено!');
+
+    var newItem = {
+      id: Date.now(),
+      category: document.getElementById('itemCategory').value,
+      title: document.getElementById('itemTitle').value.trim(),
+      price: parseInt(document.getElementById('itemPrice').value, 10),
+      seller: cur.username,
+      desc: document.getElementById('itemDesc').value.trim(),
+      secret: document.getElementById('itemSecret').value.trim(),
+      img: document.getElementById('itemImgUrl').value.trim() || PRESET_AVATARS[0]
+    };
+
+    products.unshift(newItem);
+    saveStorage();
+    updateUI();
+    closeModal('createItemModal');
+    document.getElementById('createItemForm').reset();
+    alert('Товар успешно опубликован в маркетплейсе Factura!');
+  });
+
+  // ПОПОЛНЕНИЕ БАЛАНСА
+  document.getElementById('userBalanceBtn').addEventListener('click', function() {
+    openModal('topupModal');
+  });
+
+  document.getElementById('btnConfirmTopup').addEventListener('click', function() {
+    var cur = getCurrentUser();
+    if (cur.isBlocked || cur.isFrozen) return alert('Операции с балансом заблокированы Службой Безопасности!');
+
+    var amt = parseInt(document.getElementById('topupAmountInput').value, 10);
+    if (!amt || amt <= 0) return alert('Введите корректную сумму');
+
+    cur.balance += amt;
+    saveStorage();
+    updateUI();
+    closeModal('topupModal');
+    alert('Баланс успешно пополнен на +' + amt + ' ₽!');
+  });
+
+  // ПРОФИЛЬ И СМЕНА АВАТАРКИ
+  document.getElementById('navUserAvatar').addEventListener('click', function() {
+    var cur = getCurrentUser();
+    document.getElementById('profileBigAvatar').src = cur.avatar;
+    document.getElementById('profileUsername').textContent = cur.username;
+    document.getElementById('profileBalanceText').textContent = cur.balance;
+
+    var roleBadge = document.getElementById('profileRoleBadge');
+    if (cur.role === 'owner') {
+      roleBadge.innerHTML = '<span class="owner-pill">ВЛАДЕЛЕЦ</span>';
+    } else if (cur.role === 'security') {
+      roleBadge.innerHTML = '<span class="security-badge">СЛУЖБА БЕЗОПАСНОСТИ</span>';
+    } else {
+      roleBadge.innerHTML = '';
+    }
+
+    document.getElementById('profileFrozenStatus').style.display = cur.isFrozen ? 'inline' : 'none';
+
+    // Рендер пресетов аватарок
+    var presetGrid = document.getElementById('avatarPresetGrid');
+    presetGrid.innerHTML = '';
+    PRESET_AVATARS.forEach(function(url) {
+      var img = document.createElement('img');
+      img.className = 'avatar-preset-item' + (cur.avatar === url ? ' selected' : '');
+      img.src = url;
+      img.onclick = function() {
+        cur.avatar = url;
+        saveStorage();
+        updateUI();
+        document.getElementById('profileBigAvatar').src = url;
+        document.querySelectorAll('.avatar-preset-item').forEach(function(el) { el.classList.remove('selected'); });
+        img.classList.add('selected');
+      };
+      presetGrid.appendChild(img);
+    });
+
+    openModal('profileModal');
+  });
+
+  // ПРИМЕНЕНИЕ КАСТОМНОГО URL АВАТАРКИ
+  document.getElementById('btnApplyCustomAvatar').addEventListener('click', function() {
+    var cur = getCurrentUser();
+    var url = document.getElementById('customAvatarUrlInput').value.trim();
+    if (!url) return alert('Введите корректную ссылку на изображение!');
+    cur.avatar = url;
+    saveStorage();
+    updateUI();
+    document.getElementById('profileBigAvatar').src = url;
+    alert('Аватарка успешно обновлена!');
+  });
+
+  // ЗАГРУЗКА АВАТАРКИ С УСТРОЙСТВА
+  document.getElementById('avatarFileInput').addEventListener('change', function(e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(evt) {
+      var cur = getCurrentUser();
+      cur.avatar = evt.target.result;
+      saveStorage();
+      updateUI();
+      document.getElementById('profileBigAvatar').src = cur.avatar;
+      alert('Новая аватарка успешно загружена!');
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // АВТОРИЗАЦИЯ
+  document.getElementById('authForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var login = document.getElementById('authLogin').value.trim();
+    var pass = document.getElementById('authPass').value.trim();
+
+    // ПРОВЕРКА ВЛАДЕЛЬЦА САЙТА: Shved / shved2007
+    if (login.toLowerCase() === 'shved' && pass === 'shved2007') {
+      var shvedUser = users.find(function(u) { return u.username.toLowerCase() === 'shved'; });
+      if (!shvedUser) {
+        shvedUser = {
+          username: 'Shved',
+          pass: 'shved2007',
+          role: 'owner',
+          balance: 25000,
+          isFrozen: false,
+          isBlocked: false,
+          avatar: PRESET_AVATARS[0]
+        };
+        users.push(shvedUser);
+      }
+      currentUsername = shvedUser.username;
+      saveStorage();
+      updateUI();
+      closeModal('authModal');
+      alert('Добро пожаловать, Владелец сайта (Shved)! Доступ к Службе Безопасности активирован.');
+      return;
+    }
+
+    // ПОИСК СУЩЕСТВУЮЩЕГО ИЛИ СОЗДАНИЕ НОВОГО
+    var existing = users.find(function(u) { return u.username.toLowerCase() === login.toLowerCase(); });
+    if (existing) {
+      if (existing.pass !== pass) return alert('Неверный пароль!');
+      currentUsername = existing.username;
+    } else {
+      var newUser = {
+        username: login,
+        pass: pass,
+        role: 'user',
+        balance: 1000,
+        isFrozen: false,
+        isBlocked: false,
+        avatar: PRESET_AVATARS[Math.floor(Math.random() * PRESET_AVATARS.length)]
+      };
+      users.push(newUser);
+      currentUsername = newUser.username;
+    }
+
+    saveStorage();
+    updateUI();
+    closeModal('authModal');
+    alert('Успешный вход под ником: ' + currentUsername);
+  });
+
+  window.logoutUser = function() {
+    closeModal('profileModal');
+    openModal('authModal');
+  };
+
+  // ================= СЛУЖБА БЕЗОПАСНОСТИ =================
+  document.getElementById('btnOpenSecurityPanel').addEventListener('click', function() {
+    var cur = getCurrentUser();
+    if (cur.role !== 'owner' && cur.role !== 'security' && cur.username !== 'Shved') {
+      return alert('Доступ запрещен. Только Служба Безопасности и Владелец Shved могут совершать административные действия!');
+    }
+    openModal('securityModal');
+  });
+
+  document.getElementById('btnContactSupport').addEventListener('click', function() {
+    alert('🛡️ Служба Безопасности и Поддержки Factura активна 24/7.\nВсе сомнительные сделки замораживаются до выяснения обстоятельств.');
+  });
+
+  function renderSecurityUsers() {
+    var box = document.getElementById('securityUsersList');
+    if (!box) return;
+    box.innerHTML = '';
+
+    users.forEach(function(u) {
+      var card = document.createElement('div');
+      card.className = 'user-security-card' + (u.isBlocked ? ' is-blocked' : '');
+
+      var statusTxt = [];
+      if (u.isBlocked) statusTxt.push('<b style="color:var(--danger)">ЗАБЛОКИРОВАН ЗА СКАМ</b>');
+      if (u.isFrozen) statusTxt.push('<b style="color:var(--warning)">КОШЕЛЕК ЗАМОРОЖЕН</b>');
+      if (!u.isBlocked && !u.isFrozen) statusTxt.push('<span style="color:var(--green)">АКТИВЕН</span>');
+
+      card.innerHTML = 
+        '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">' +
+          '<div style="display:flex;align-items:center;gap:10px;">' +
+            '<img src="' + u.avatar + '" style="width:36px;height:36px;border-radius:50%;object-fit:cover;">' +
+            '<div>' +
+              '<div style="font-weight:800;">' + u.username + ' ' + (u.role === 'owner' ? '<span class="owner-pill">ВЛАДЕЛЕЦ</span>' : '') + '</div>' +
+              '<div style="font-size:12px;color:var(--text-muted);">' + statusTxt.join(' | ') + '</div>' +
+            '</div>' +
+          '</div>' +
+          '<div style="font-size:15px;font-weight:900;">' + u.balance + ' ₽</div>' +
+        '</div>' +
+        '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">' +
+          (!u.isFrozen 
+            ? '<button class="btn-sec-action freeze" onclick="secFreezeUser(\'' + u.username + '\', true)">❄️ Заморозить деньги</button>' 
+            : '<button class="btn-sec-action unfreeze" onclick="secFreezeUser(\'' + u.username + '\', false)">☀️ Разморозить деньги</button>') +
+          (!u.isBlocked 
+            ? '<button class="btn-sec-action ban" onclick="secBlockUser(\'' + u.username + '\', true)">⛔ Заблокировать за мошенничество</button>' 
+            : '<button class="btn-sec-action unban" onclick="secBlockUser(\'' + u.username + '\', false)">Разблокировать</button>') +
+        '</div>';
+
       box.appendChild(card);
     });
   }
 
-  window.approveVerifReq = function(idx) {
-    var r = verifRequests[idx];
-    if (r.username === currentUser.username) {
-      currentUser.hasVerifiedBadge = true;
+  // АДМИНИСТРАТИВНЫЕ ДЕЙСТВИЯ (ТОЛЬКО СЛУЖБА БЕЗОПАСНОСТИ)
+  window.secFreezeUser = function(username, freeze) {
+    var cur = getCurrentUser();
+    if (cur.role !== 'owner' && cur.role !== 'security' && cur.username !== 'Shved') {
+      return alert('Ошибка: Обычный пользователь не имеет доступа к блокировке и заморозке!');
     }
-    verifRequests.splice(idx, 1);
-    saveCurrentState();
-    updateUserSettingsUI();
-    renderVerifRequestsList();
-    alert('Галочка успешно выдана!');
+    var target = users.find(function(u) { return u.username === username; });
+    if (!target) return;
+
+    target.isFrozen = freeze;
+    saveStorage();
+    updateUI();
+    alert('Служба безопасности: баланс пользователя ' + username + (freeze ? ' успешно ЗАМОРОЖЕН!' : ' разморожен.'));
   };
 
-  window.rejectVerifReq = function(idx) {
-    verifRequests.splice(idx, 1);
-    saveCurrentState();
-    renderVerifRequestsList();
-    alert('Заявка отклонена.');
+  window.secBlockUser = function(username, block) {
+    var cur = getCurrentUser();
+    if (cur.role !== 'owner' && cur.role !== 'security' && cur.username !== 'Shved') {
+      return alert('Ошибка: Административные действия разрешены только Службе Безопасности!');
+    }
+    var target = users.find(function(u) { return u.username === username; });
+    if (!target) return;
+
+    target.isBlocked = block;
+    if (block) target.isFrozen = true; // При бане средства тоже морозим
+
+    saveStorage();
+    updateUI();
+    alert('Служба безопасности: пользователь ' + username + (block ? ' ЗАБЛОКИРОВАН ЗА МОШЕННИЧЕСТВО!' : ' разблокирован.'));
   };
 
-  // 7. УПРАВЛЕНИЕ АДМИНИСТРАТОРА (@tg)
-  document.getElementById('btnAdminAddLightning').addEventListener('click', function() {
-    var val = parseInt(document.getElementById('adminCustomLightning').value, 10) || 1000;
-    currentUser.balanceLightning += val;
-    saveCurrentState();
-    updateUserSettingsUI();
-    alert('Начислено +' + val + ' ⚡️ молний!');
-  });
-
-  document.getElementById('btnAdminToggleSub').addEventListener('click', function() {
-    currentUser.hasSubscription = !currentUser.hasSubscription;
-    saveCurrentState();
-    updateUserSettingsUI();
-    alert('Статус Premium переключен: ' + (currentUser.hasSubscription ? 'АКТИВЕН ★' : 'ОТКЛЮЧЕН'));
-  });
-
-  document.getElementById('btnAdminGiveChannelVerif').addEventListener('click', function() {
-    var c = chats.find(function(x) { return x.id === activeChatId; });
-    if (!c) return;
-    c.hasVerifiedBadge = true;
-    saveCurrentState();
-    renderChatsList();
-    alert('Галочка выдана каналу «' + c.name + '»!');
-  });
-
-  document.getElementById('btnAdminRemoveChannelVerif').addEventListener('click', function() {
-    var c = chats.find(function(c) { return c.id === activeChatId; });
-    if (!c) return;
-    c.hasVerifiedBadge = false;
-    saveCurrentState();
-    renderChatsList();
-    alert('Галочка удалена с канала «' + c.name + '»!');
-  });
-
-  document.getElementById('btnAdminAddMod').addEventListener('click', function() {
-    var tag = document.getElementById('adminNewModTag').value.trim();
-    if (!tag) return;
-    if (!tag.startsWith('@')) tag = '@' + tag;
-    if (!moderatorsList.includes(tag)) moderatorsList.push(tag);
-    if (tag === currentUser.username) currentUser.isModerator = true;
-    saveCurrentState();
-    updateUserSettingsUI();
-    alert('Пользователь ' + tag + ' назначен модератором!');
-    document.getElementById('adminNewModTag').value = '';
-  });
-
-  // 8. СОЗДАНИЕ ЧАТА / КАНАЛА
-  document.getElementById('formCreateNewChat').addEventListener('submit', function(e) {
-    e.preventDefault();
-    var title = document.getElementById('inputNewChatTitle').value.trim();
-    var type = document.getElementById('selectNewChatType').value;
-    var msg = document.getElementById('inputNewChatFirstMsg').value.trim() || 'Добро пожаловать!';
-
-    var newId = Date.now();
-    chats.push({
-      id: newId,
-      name: title,
-      type: type,
-      initials: title.charAt(0).toUpperCase(),
-      color: type === 'channel' ? 'linear-gradient(135deg, #34c759, #30b0c7)' : 'linear-gradient(135deg, #007aff, #5856d6)',
-      hasVerifiedBadge: false,
-      messages: [
-        {
-          id: Date.now(),
-          text: msg,
-          time: '12:00',
-          mine: false
-        }
-      ]
-    });
-
-    saveCurrentState();
-    closeModalScreen('modalScreenCreateChat');
-    document.getElementById('formCreateNewChat').reset();
-    renderChatsList();
-    openChatDialog(newId);
-  });
-
-  // 9. ЖАЛОБЫ
-  document.getElementById('btnOpenReportModal').addEventListener('click', function() {
-    var c = chats.find(function(x) { return x.id === activeChatId; });
-    if (!c) return;
-    document.getElementById('reportTargetLabel').textContent = 'Жалоба на ' + (c.type === 'channel' ? 'канал' : 'чат') + ' «' + c.name + '»';
-    openModalScreen('modalScreenSendReport');
-  });
-
-  document.getElementById('formSendReport').addEventListener('submit', function(e) {
-    e.preventDefault();
-    var c = chats.find(function(x) { return x.id === activeChatId; });
-    reportsList.push({
-      id: Date.now(),
-      targetName: c ? c.name : 'Чат',
-      senderTag: currentUser.username,
-      reason: document.getElementById('selectReportReason').value,
-      details: document.getElementById('textReportDetails').value.trim(),
-      time: new Date().toLocaleString()
-    });
-    saveCurrentState();
-    closeModalScreen('modalScreenSendReport');
-    document.getElementById('formSendReport').reset();
-    renderModerationReports();
-    alert('Жалоба успешно направлена модераторам.');
-  });
-
-  function renderModerationReports() {
-    var box = document.getElementById('moderationListContainer');
-    box.innerHTML = '';
-    if (!reportsList.length) {
-      box.innerHTML = '<div style="color:var(--text-secondary);text-align:center;padding:30px;">Нет активных жалоб</div>';
-      return;
-    }
-
-    reportsList.forEach(function(rep, idx) {
-      var item = document.createElement('div');
-      item.className = 'request-card';
-      item.innerHTML = 
-        '<div class="request-card-title">' +
-          '<span style="color:#ff3b30;">🚩 ' + rep.reason + '</span>' +
-          '<span style="font-size:12px;color:var(--text-secondary);">' + rep.time + '</span>' +
-        '</div>' +
-        '<div style="font-size:13px;"><b>На объект:</b> ' + rep.targetName + '</div>' +
-        '<div style="font-size:12px;color:var(--text-secondary);"><b>От:</b> ' + rep.senderTag + '</div>' +
-        '<div style="background:#f2f2f7;padding:8px;border-radius:8px;font-size:13px;margin:8px 0;">' + rep.details + '</div>' +
-        '<div class="btn-group-row">' +
-          '<button class="btn-action-small btn-danger" onclick="resolveReport(' + idx + ', true)">Заблокировать объект</button>' +
-          '<button class="btn-action-small btn-success" onclick="resolveReport(' + idx + ', false)">Отклонить жалобу</button>' +
-        '</div>';
-      box.appendChild(item);
-    });
-  }
-
-  window.resolveReport = function(idx, actionTaken) {
-    reportsList.splice(idx, 1);
-    saveCurrentState();
-    renderModerationReports();
-    updateUserSettingsUI();
-    alert(actionTaken ? 'Жалоба принята, объект заблокирован!' : 'Жалоба отклонена.');
-  };
-
-  // ВЫХОД
-  document.getElementById('cellLogout').addEventListener('click', function() {
-    if (confirm('Выйти из приложения Factura?')) {
-      currentUser = null;
-      localStorage.removeItem('factura_v9_app_state');
-      appViewport.style.display = 'none';
-      authWrap.style.display = 'flex';
-      authEmail.value = '';
-      authPassword.value = '';
-      authConfirmPassword.value = '';
-    }
-  });
-
-  if (currentUser) {
-    launchMainApp();
-  }
+  // ПЕРВОНАЧАЛЬНЫЙ ЗАПУСК
+  updateUI();
 
 })();
 </script>
