@@ -7,7 +7,20 @@
 <title>Factura — мессенджер</title>
 
 <style>
-:root{--bg:#10131c;--panel:#171b26;--line:#292f3e;--text:#f3f5fa;--muted:#929bad;--accent:#8b7cff;--accent2:#47d7b0;--danger:#ff7085}
+:root{
+  --bg:#10131c;
+  --panel:#171b26;
+  --panel2:#1d2232;
+  --line:#292f3e;
+  --text:#f3f5fa;
+  --muted:#929bad;
+  --accent:#8b7cff;
+  --accent2:#47d7b0;
+  --gold:#ffb703;
+  --danger:#ff7085;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;padding:0;background:#10131c;color:#f3f5fa;font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;min-height:100vh;overflow-x:hidden}
 button,input{font:inherit}
@@ -32,7 +45,7 @@ h1{font-size:22px;margin:0 0 6px}
 .error{color:var(--danger);font-size:13px;min-height:18px;margin-top:8px}
 
 /* ИНТЕРФЕЙС МЕССЕНДЖЕРА */
-.app-shell{height:100vh;max-width:1200px;margin:auto;display:grid;grid-template-columns:320px 1fr;background:var(--panel);border-left:1px solid var(--line);border-right:1px solid var(--line)}
+.app-shell{height:100vh;max-width:1200px;margin:auto;display:grid;grid-template-columns:340px 1fr;background:var(--panel);border-left:1px solid var(--line);border-right:1px solid var(--line)}
 .sidebar{border-right:1px solid var(--line);display:flex;flex-direction:column;min-width:0;background:#171b26}
 .side-head{padding:18px 16px 12px;border-bottom:1px solid var(--line)}
 .side-brand{display:flex;align-items:center;justify-content:space-between}
@@ -42,35 +55,189 @@ h1{font-size:22px;margin:0 0 6px}
 .search{margin-top:14px;width:100%;border:1px solid var(--line);background:#10141e;color:#fff;padding:10px 12px;border-radius:10px;outline:none}
 .section-label{padding:14px 16px 6px;color:var(--muted);font-size:11px;font-weight:800;letter-spacing:1px}
 .chat-list{overflow-y:auto;flex:1}
-.chat-row{display:flex;align-items:center;gap:11px;padding:12px 16px;cursor:pointer;border-left:3px solid transparent}
+.chat-row{display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;border-left:3px solid transparent;position:relative}
 .chat-row:hover,.chat-row.active{background:#222838}
 .chat-row.active{border-left-color:var(--accent)}
-.avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;color:#fff;font-weight:800}
+.avatar{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;color:#fff;font-weight:800;position:relative}
 .chat-meta{min-width:0;flex:1}
+.chat-title-line{display:flex;align-items:center;gap:6px;margin-bottom:2px}
 .chat-name{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.preview{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.preview{font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .time{font-size:11px;color:var(--muted);align-self:flex-start}
-.side-foot{padding:14px 16px;border-top:1px solid var(--line);display:flex;align-items:center;gap:10px;background:#141721}
+
+/* ИКОНКА ОФИЦИАЛЬНОЙ ГАЛОЧКИ VK-STYLE ДЛЯ КОМАНДЫ FACTURA */
+.badge-factura-team{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:18px;
+  height:18px;
+  background:linear-gradient(135deg, #3f8ae0 0%, #1e63d4 100%);
+  border-radius:50%;
+  color:#ffffff;
+  box-shadow:0 2px 6px rgba(30,99,212,0.4);
+  flex-shrink:0;
+}
+.badge-factura-team svg{width:10px;height:10px}
+
+/* ИКОНКА ЗОЛОТОЙ ЗВЁЗДОЧКИ (ПОДПИСКА FACTURA PLUS) */
+.star-badge-icon{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:18px;
+  height:18px;
+  background:linear-gradient(135deg, #ffb703 0%, #fb8500 100%);
+  border-radius:50%;
+  color:#10131c;
+  box-shadow:0 2px 8px rgba(255,183,3,0.4);
+  font-size:11px;
+  font-weight:900;
+  flex-shrink:0;
+}
+
+/* НИЖНЯЯ ПАНЕЛЬ ПРОФИЛЯ */
+.side-foot{padding:12px 14px;border-top:1px solid var(--line);display:flex;align-items:center;gap:10px;background:#141721;cursor:pointer;transition:background 0.2s}
+.side-foot:hover{background:#1c2130}
 .user-info{flex:1;min-width:0}
-.user-email{font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis}
-.logout{border:1px solid var(--line);background:transparent;color:var(--muted);padding:6px 10px;border-radius:8px}
+.user-info .display-name{font-weight:700;font-size:14px;display:flex;align-items:center;gap:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-info .user-tag{font-size:12px;color:var(--accent);overflow:hidden;text-overflow:ellipsis}
+.btn-settings-gear{
+  border:1px solid var(--line);
+  background:transparent;
+  color:var(--text);
+  width:36px;
+  height:36px;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:17px;
+}
 
 .main{display:flex;flex-direction:column;min-width:0;background:#151823}
 .empty{margin:auto;text-align:center;color:var(--muted);padding:24px}
 .empty-icon{font-size:42px;margin-bottom:10px}
 .conversation-head{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;background:#171b26}
-.conversation-head .avatar{width:38px;height:38px}
-.head-name{font-weight:700}
+.conversation-head .avatar{width:40px;height:40px}
+.head-name{font-weight:700;display:flex;align-items:center;gap:6px}
 .online{font-size:12px;color:var(--accent2)}
-.messages{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:10px}
-.date-chip{align-self:center;background:#252b39;color:var(--muted);padding:4px 10px;border-radius:16px;font-size:11px;margin-bottom:4px}
-.message{max-width:min(78%,560px);padding:10px 14px;border-radius:16px;background:#252b39;align-self:flex-start;word-break:break-word}
+.messages{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:12px}
+.date-chip{align-self:center;background:#252b39;color:var(--muted);padding:4px 12px;border-radius:16px;font-size:11px;margin-bottom:4px}
+.message{max-width:min(80%,580px);padding:12px 16px;border-radius:16px;background:#252b39;align-self:flex-start;word-break:break-word;box-shadow:0 2px 6px rgba(0,0,0,0.2)}
 .message.mine{align-self:flex-end;background:#6559c7}
-.message-time{font-size:10px;color:#c3c1d7;text-align:right;margin-top:4px}
+.message-time{font-size:10px;color:#c3c1d7;text-align:right;margin-top:5px}
 .composer{padding:12px 16px;border-top:1px solid var(--line);display:flex;gap:10px;align-items:center;background:#171b26}
 .composer input{flex:1;min-width:0;border:1px solid var(--line);background:#10141e;color:#fff;padding:12px 16px;border-radius:20px;outline:none}
 .send{width:42px;height:42px;border:0;border-radius:50%;background:var(--accent);color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center}
 .top-mobile{display:none}
+
+/* МОДАЛЬНОЕ ОКНО ПРОФИЛЯ И НАСТРОЕК */
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.7);
+  backdrop-filter:blur(4px);
+  z-index:200;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+}
+.modal-overlay.open{display:flex}
+.modal-box{
+  width:100%;
+  max-width:440px;
+  background:#171b26;
+  border:1px solid var(--line);
+  border-radius:24px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  max-height:92vh;
+  box-shadow:0 24px 60px rgba(0,0,0,0.7);
+}
+.modal-header{
+  padding:16px 20px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.modal-title{font-size:18px;font-weight:800}
+.modal-close-btn{background:none;border:0;color:var(--muted);font-size:22px;line-height:1}
+.modal-body{padding:20px;overflow-y:auto}
+
+/* БАННЕР ПОДПИСКИ FACTURA */
+.premium-card{
+  background:linear-gradient(135deg,#241838 0%,#3d1f3b 50%,#261942 100%);
+  border:1px solid #7c3aed;
+  border-radius:18px;
+  padding:16px;
+  margin-bottom:20px;
+  box-shadow:0 8px 24px rgba(124,58,237,0.25);
+}
+.premium-badge{
+  font-size:10px;
+  font-weight:800;
+  background:linear-gradient(135deg,#ffb703,#fb8500);
+  color:#000;
+  padding:3px 8px;
+  border-radius:8px;
+  text-transform:uppercase;
+  display:inline-block;
+  margin-bottom:8px;
+}
+.premium-title{font-size:16px;font-weight:800;display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.premium-sub{font-size:12px;color:#d1c4e9;margin-bottom:12px;line-height:1.4}
+.premium-btn{
+  background:linear-gradient(90deg,#ffb703,#fb8500);
+  color:#10131c;
+  border:0;
+  width:100%;
+  padding:11px;
+  border-radius:12px;
+  font-weight:800;
+  font-size:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+}
+.premium-btn.active{
+  background:#2e7d32;
+  color:#fff;
+  cursor:default;
+}
+
+.profile-avatar-block{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  margin-bottom:20px;
+}
+.profile-avatar-large{
+  width:70px;
+  height:70px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),#47d7b0);
+  display:grid;
+  place-items:center;
+  font-size:28px;
+  font-weight:900;
+  position:relative;
+}
+
+.danger-btn{
+  width:100%;
+  border:1px solid var(--danger);
+  background:rgba(255,112,133,0.08);
+  color:var(--danger);
+  font-weight:700;
+  padding:12px;
+  border-radius:12px;
+  margin-top:14px;
+}
 
 @media(max-width:700px){
   .app-shell{display:block;height:100dvh;border:0}
@@ -80,9 +247,9 @@ h1{font-size:22px;margin:0 0 6px}
   .app-shell.chat-open .main{display:flex}
   .top-mobile{display:inline-block}
   .back{border:0;background:none;color:var(--accent);font-size:24px;padding:0 8px 0 0}
-  .side-head{padding-top:calc(14px + env(safe-area-inset-top))}
-  .conversation-head{padding-top:calc(12px + env(safe-area-inset-top))}
-  .composer{padding-bottom:calc(12px + env(safe-area-inset-bottom))}
+  .side-head{padding-top:calc(14px + var(--safe-top))}
+  .conversation-head{padding-top:calc(12px + var(--safe-top))}
+  .composer{padding-bottom:calc(12px + var(--safe-bottom))}
 }
 </style>
 </head>
@@ -134,20 +301,25 @@ h1{font-size:22px;margin:0 0 6px}
           <div class="brand-mark">F</div>
           <div class="brand-name">Factura</div>
         </div>
-        <span style="color:var(--muted);font-size:12px;font-weight:700;">CHATS</span>
+        <span style="color:var(--muted);font-size:12px;font-weight:800;letter-spacing:1px;">CHATS</span>
       </div>
       <input class="search" id="searchInput" placeholder="⌕  Поиск чатов...">
     </div>
+    
     <div class="section-label">СООБЩЕНИЯ</div>
     <div class="chat-list" id="chatList"></div>
     
-    <div class="side-foot">
-      <div class="avatar" id="myAvatar" style="width:36px;height:36px;background:linear-gradient(135deg,#8b7cff,#47d7b0)">U</div>
+    <!-- НИЖНЯЯ ПАНЕЛЬ ПРОФИЛЯ -->
+    <div class="side-foot" id="profileFooter" title="Нажмите, чтобы открыть профиль и настройки">
+      <div class="avatar" id="myAvatar" style="width:40px;height:40px;background:linear-gradient(135deg,#8b7cff,#47d7b0)">U</div>
       <div class="user-info">
-        <div class="chat-name">Мой профиль</div>
-        <div class="user-email" id="myEmail">user@mail.com</div>
+        <div class="display-name">
+          <span id="myDisplayName">Пользователь</span>
+          <span id="myStarBadge" style="display:none;" class="star-badge-icon" title="Подписка Factura">★</span>
+        </div>
+        <div class="user-tag" id="myUsername">@username</div>
       </div>
-      <button class="logout" id="logoutBtn">Выйти</button>
+      <button class="btn-settings-gear" id="openSettingsBtn" type="button" aria-label="Настройки">⚙</button>
     </div>
   </aside>
 
@@ -155,16 +327,24 @@ h1{font-size:22px;margin:0 0 6px}
     <div class="empty" id="emptyPlaceholder">
       <div class="empty-icon">✉️</div>
       <div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px;">Добро пожаловать в Factura</div>
-      <div>Выберите любой диалог слева, чтобы начать переписку.</div>
+      <div>Выберите диалог команды Factura слева, чтобы открыть уведомления.</div>
     </div>
 
     <div id="activeChatContainer" style="display:none;flex-direction:column;height:100%;width:100%;">
       <header class="conversation-head">
         <button class="back top-mobile" id="backBtn">‹</button>
-        <div class="avatar" id="chatHeaderAvatar">F</div>
+        <div class="avatar" id="chatHeaderAvatar" style="background:linear-gradient(135deg,#8b7cff,#b06cff)">F</div>
         <div>
-          <div class="head-name" id="chatHeaderName">Имя чата</div>
-          <div class="online">● В сети</div>
+          <div class="head-name" id="chatHeaderName">
+            <span>Команда Factura</span>
+            <!-- ОФИЦИАЛЬНАЯ ГАЛОЧКА КОМАНДЫ FACTURA -->
+            <span class="badge-factura-team" title="Официальный верифицированный аккаунт Factura">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>
+              </svg>
+            </span>
+          </div>
+          <div class="online">Служба уведомлений • онлайн</div>
         </div>
       </header>
 
@@ -173,59 +353,96 @@ h1{font-size:22px;margin:0 0 6px}
       </div>
 
       <form class="composer" id="msgForm">
-        <input id="msgInput" placeholder="Напишите сообщение..." autocomplete="off">
+        <input id="msgInput" placeholder="Напишите ответное сообщение..." autocomplete="off">
         <button class="send" type="submit">➤</button>
       </form>
     </div>
   </main>
 </div>
 
-<!-- ЧИСТЫЙ JAVASCRIPT БЕЗ ВНЕШНИХ БИБЛИОТЕК (100% ГАРАНТИЯ ЗАПУСКА НА ЛЮБОМ ТЕЛЕФОНЕ) -->
+<!-- 3. МОДАЛЬНОЕ ОКНО: ПРОФИЛЬ, НАСТРОЙКИ, ПОДПИСКА -->
+<div class="modal-overlay" id="profileModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title">Настройки профиля</div>
+      <button class="modal-close-btn" id="closeProfileBtn">&times;</button>
+    </div>
+    
+    <div class="modal-body">
+      <!-- БАННЕР ПОДПИСКИ FACTURA (199 РУБЛЕЙ) -->
+      <div class="premium-card">
+        <span class="premium-badge">ПРЕМИУМ</span>
+        <div class="premium-title">
+          <span>Подписка Factura</span>
+          <span class="star-badge-icon">★</span>
+        </div>
+        <div class="premium-sub">
+          Получите фирменную золотую звёздочку ★ рядом с именем, повышенный приоритет и эксклюзивные возможности в мессенджере.
+        </div>
+        <button class="premium-btn" id="buySubscriptionBtn">
+          Купить за 199 ₽
+        </button>
+      </div>
+
+      <!-- АВАТАР И СТАТУС -->
+      <div class="profile-avatar-block">
+        <div class="profile-avatar-large" id="modalLargeAvatar">U</div>
+        <div>
+          <div style="font-weight:800;font-size:16px;display:flex;align-items:center;gap:6px;">
+            <span id="modalHeaderName">Имя пользователя</span>
+            <span id="modalStarBadge" style="display:none;" class="star-badge-icon">★</span>
+          </div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px;" id="modalEmailText">email@example.com</div>
+        </div>
+      </div>
+
+      <!-- ФОРМА РЕДАКТИРОВАНИЯ ПРОФИЛЯ -->
+      <form id="profileEditForm">
+        <div class="field">
+          <label for="editDisplayName">Отображаемое имя</label>
+          <input id="editDisplayName" type="text" placeholder="Ваше имя" required>
+        </div>
+
+        <div class="field">
+          <label for="editUsername">Юзернейм (через @)</label>
+          <input id="editUsername" type="text" placeholder="@username" required>
+        </div>
+
+        <div class="field">
+          <label for="editBirthDate">Дата рождения</label>
+          <input id="editBirthDate" type="date">
+        </div>
+
+        <button class="primary" type="submit" style="margin-top:10px;">Сохранить изменения</button>
+      </form>
+
+      <!-- ВЫХОД С АККАУНТА -->
+      <button class="danger-btn" id="logoutModalBtn" type="button">
+        Выйти с аккаунта
+      </button>
+    </div>
+  </div>
+</div>
+
 <script>
 (function() {
   var isRegister = true;
   var currentUser = null;
-  var activeChatId = null;
+  var activeChatId = 1; // По умолчанию сразу открываем единственный официальный чат Factura
 
-  var chats = [
-    {
-      id: 1,
-      name: 'Команда Factura',
-      initials: 'F',
-      color: 'linear-gradient(135deg,#8b7cff,#b06cff)',
-      last: 'Добро пожаловать в Factura 👋',
-      time: 'сейчас',
-      messages: [
-        { id: 1, text: 'Привет! Добро пожаловать в Factura 👋', time: '10:00', mine: false },
-        { id: 2, text: 'Вы успешно вошли. Напишите ответное сообщение в поле внизу!', time: '10:01', mine: false }
-      ]
-    },
-    {
-      id: 2,
-      name: 'Алексей (Разработка)',
-      initials: 'А',
-      color: 'linear-gradient(135deg,#32b9a6,#3778c2)',
-      last: 'Дизайн готов, тестируем функционал',
-      time: '10:15',
-      messages: [
-        { id: 3, text: 'Привет! Как тебе дизайн мессенджера Factura?', time: '10:14', mine: false },
-        { id: 4, text: 'Всё работает быстро и плавно!', time: '10:15', mine: true }
-      ]
-    },
-    {
-      id: 3,
-      name: 'Дизайн-бюро',
-      initials: 'Д',
-      color: 'linear-gradient(135deg,#f39b58,#df5c87)',
-      last: 'Макеты согласованы',
-      time: 'вчера',
-      messages: [
-        { id: 5, text: 'Макеты тёмной темы согласованы и загружены.', time: '18:40', mine: false }
-      ]
-    }
-  ];
+  // ЕДИНСТВЕННЫЙ ОФИЦИАЛЬНЫЙ ЧАТ FACTURA (ВСЕ ФЕЙКОВЫЕ ЧАТЫ ПОЛНОСТЬЮ УДАЛЕНЫ)
+  var facturaChat = {
+    id: 1,
+    name: 'Команда Factura',
+    initials: 'F',
+    color: 'linear-gradient(135deg,#8b7cff,#b06cff)',
+    isOfficial: true,
+    last: 'Добро пожаловать в Factura! Ваш аккаунт успешно зарегистрирован.',
+    time: 'сейчас',
+    messages: []
+  };
 
-  // DOM элементы
+  // DOM элементы авторизации
   var authWrap = document.getElementById('authWrap');
   var appShell = document.getElementById('appShell');
   var authTitle = document.getElementById('authTitle');
@@ -240,22 +457,60 @@ h1{font-size:22px;margin:0 0 6px}
   var toggleAuthBtn = document.getElementById('toggleAuthBtn');
   var errorMsg = document.getElementById('errorMsg');
 
+  // DOM элементы мессенджера
   var chatList = document.getElementById('chatList');
   var searchInput = document.getElementById('searchInput');
   var myAvatar = document.getElementById('myAvatar');
-  var myEmail = document.getElementById('myEmail');
-  var logoutBtn = document.getElementById('logoutBtn');
+  var myDisplayName = document.getElementById('myDisplayName');
+  var myUsername = document.getElementById('myUsername');
+  var myStarBadge = document.getElementById('myStarBadge');
 
   var emptyPlaceholder = document.getElementById('emptyPlaceholder');
   var activeChatContainer = document.getElementById('activeChatContainer');
-  var chatHeaderAvatar = document.getElementById('chatHeaderAvatar');
-  var chatHeaderName = document.getElementById('chatHeaderName');
   var messagesList = document.getElementById('messagesList');
   var msgForm = document.getElementById('msgForm');
   var msgInput = document.getElementById('msgInput');
   var backBtn = document.getElementById('backBtn');
 
-  // Переключение Вход / Регистрация
+  // DOM элементы модалки профиля
+  var profileFooter = document.getElementById('profileFooter');
+  var openSettingsBtn = document.getElementById('openSettingsBtn');
+  var profileModal = document.getElementById('profileModal');
+  var closeProfileBtn = document.getElementById('closeProfileBtn');
+  var modalLargeAvatar = document.getElementById('modalLargeAvatar');
+  var modalHeaderName = document.getElementById('modalHeaderName');
+  var modalStarBadge = document.getElementById('modalStarBadge');
+  var modalEmailText = document.getElementById('modalEmailText');
+  var profileEditForm = document.getElementById('profileEditForm');
+  var editDisplayName = document.getElementById('editDisplayName');
+  var editUsername = document.getElementById('editUsername');
+  var editBirthDate = document.getElementById('editBirthDate');
+  var buySubscriptionBtn = document.getElementById('buySubscriptionBtn');
+  var logoutModalBtn = document.getElementById('logoutModalBtn');
+
+  // Локальное хранилище данных
+  function loadSavedState() {
+    try {
+      var saved = localStorage.getItem('factura_user_state_v1');
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch(e) {}
+    return null;
+  }
+
+  function saveUserState() {
+    try {
+      if (currentUser) {
+        localStorage.setItem('factura_user_state_v1', JSON.stringify({
+          currentUser: currentUser,
+          messages: facturaChat.messages
+        }));
+      }
+    } catch(e) {}
+  }
+
+  // Переключение Регистрация / Вход
   toggleAuthBtn.addEventListener('click', function() {
     isRegister = !isRegister;
     errorMsg.textContent = '';
@@ -298,126 +553,243 @@ h1{font-size:22px;margin:0 0 6px}
       return;
     }
 
-    // Успешный вход
-    currentUser = { email: email };
-    myEmail.textContent = email;
-    myAvatar.textContent = email.charAt(0).toUpperCase();
+    var baseName = email.split('@')[0];
+    var formattedName = baseName.charAt(0).toUpperCase() + baseName.slice(1);
+    var defaultUsername = '@' + baseName.toLowerCase().replace(/[^a-z0-9_]/g, '');
 
+    // Создание пользователя
+    currentUser = {
+      email: email,
+      displayName: formattedName,
+      username: defaultUsername,
+      birthDate: '',
+      hasSubscription: false
+    };
+
+    var now = new Date();
+    var timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+
+    // Сообщение только от Factura о регистрации
+    facturaChat.messages = [
+      {
+        id: 1,
+        text: '🎉 Добро пожаловать в Factura!\n\nВаш аккаунт (' + email + ') успешно зарегистрирован в системе.\n\nВам доступен профиль для настройки имени, юзернейма через @, даты рождения и подключения подписки Factura ⭐.',
+        time: timeStr,
+        mine: false
+      }
+    ];
+
+    saveUserState();
+    loginUser();
+  });
+
+  function loginUser() {
+    updateProfileUI();
     authWrap.style.display = 'none';
     appShell.style.display = 'grid';
     renderChats();
-  });
+    openChat();
+  }
 
-  // Выход
-  logoutBtn.addEventListener('click', function() {
-    currentUser = null;
-    activeChatId = null;
-    appShell.style.display = 'none';
-    authWrap.style.display = 'flex';
-    emailInput.value = '';
-    passInput.value = '';
-    confirmInput.value = '';
-    errorMsg.textContent = '';
-  });
+  // Обновление интерфейса профиля
+  function updateProfileUI() {
+    if (!currentUser) return;
 
-  // Рендер списка чатов
+    var initial = currentUser.displayName.charAt(0).toUpperCase();
+    myAvatar.textContent = initial;
+    modalLargeAvatar.textContent = initial;
+
+    myDisplayName.textContent = currentUser.displayName;
+    modalHeaderName.textContent = currentUser.displayName;
+    myUsername.textContent = currentUser.username;
+    modalEmailText.textContent = currentUser.email;
+
+    editDisplayName.value = currentUser.displayName;
+    editUsername.value = currentUser.username;
+    editBirthDate.value = currentUser.birthDate || '';
+
+    // Значок звездочки при наличии подписки
+    if (currentUser.hasSubscription) {
+      myStarBadge.style.display = 'inline-flex';
+      modalStarBadge.style.display = 'inline-flex';
+      buySubscriptionBtn.textContent = '✓ Подписка Factura активна';
+      buySubscriptionBtn.className = 'premium-btn active';
+    } else {
+      myStarBadge.style.display = 'none';
+      modalStarBadge.style.display = 'none';
+      buySubscriptionBtn.textContent = 'Купить за 199 ₽';
+      buySubscriptionBtn.className = 'premium-btn';
+    }
+  }
+
+  // Рендер списка чатов (только Команда Factura)
   function renderChats() {
     chatList.innerHTML = '';
     var query = searchInput.value.trim().toLowerCase();
-    var filtered = chats.filter(function(c) {
-      return c.name.toLowerCase().indexOf(query) !== -1;
-    });
 
-    if (filtered.length === 0) {
+    if (query && facturaChat.name.toLowerCase().indexOf(query) === -1) {
       chatList.innerHTML = '<div class="empty" style="padding:15px;font-size:13px;">Ничего не найдено</div>';
       return;
     }
 
-    filtered.forEach(function(chat) {
-      var row = document.createElement('div');
-      row.className = 'chat-row' + (activeChatId === chat.id ? ' active' : '');
-      row.innerHTML = 
-        '<div class="avatar" style="background:' + chat.color + '">' + chat.initials + '</div>' +
-        '<div class="chat-meta">' +
-          '<div class="chat-name">' + chat.name + '</div>' +
-          '<div class="preview">' + chat.last + '</div>' +
+    var row = document.createElement('div');
+    row.className = 'chat-row active';
+    row.innerHTML = 
+      '<div class="avatar" style="background:' + facturaChat.color + '">' + facturaChat.initials + '</div>' +
+      '<div class="chat-meta">' +
+        '<div class="chat-title-line">' +
+          '<span class="chat-name">' + facturaChat.name + '</span>' +
+          '<span class="badge-factura-team">' +
+            '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>' +
+          '</span>' +
         '</div>' +
-        '<span class="time">' + chat.time + '</span>';
+        '<div class="preview">' + facturaChat.last + '</div>' +
+      '</div>' +
+      '<span class="time">' + facturaChat.time + '</span>';
 
-      row.addEventListener('click', function() {
-        openChat(chat.id);
-      });
-      chatList.appendChild(row);
-    });
+    row.addEventListener('click', openChat);
+    chatList.appendChild(row);
   }
 
   searchInput.addEventListener('input', renderChats);
 
-  // Открыть чат
-  function openChat(id) {
-    activeChatId = id;
-    var chat = chats.find(function(c) { return c.id === id; });
-    if (!chat) return;
-
+  function openChat() {
     emptyPlaceholder.style.display = 'none';
     activeChatContainer.style.display = 'flex';
     appShell.classList.add('chat-open');
-
-    chatHeaderAvatar.style.background = chat.color;
-    chatHeaderAvatar.textContent = chat.initials;
-    chatHeaderName.textContent = chat.name;
-
-    renderMessages(chat);
-    renderChats();
-    msgInput.focus();
+    renderMessages();
   }
 
-  // Кнопка назад на мобилках
   backBtn.addEventListener('click', function() {
-    activeChatId = null;
     appShell.classList.remove('chat-open');
-    renderChats();
   });
 
-  // Отрисовка сообщений
-  function renderMessages(chat) {
+  function renderMessages() {
     messagesList.innerHTML = '<div class="date-chip">Сегодня</div>';
-    chat.messages.forEach(function(m) {
+    facturaChat.messages.forEach(function(m) {
       var d = document.createElement('div');
       d.className = 'message' + (m.mine ? ' mine' : '');
-      d.innerHTML = m.text + '<div class="message-time">' + m.time + '</div>';
+      d.innerHTML = m.text.replace(/\n/g, '<br>') + '<div class="message-time">' + m.time + '</div>';
       messagesList.appendChild(d);
     });
     messagesList.scrollTop = messagesList.scrollHeight;
   }
 
-  // Отправка сообщения
+  // Отправка сообщений
   msgForm.addEventListener('submit', function(e) {
     e.preventDefault();
     var text = msgInput.value.trim();
-    if (!text || activeChatId === null) return;
-
-    var chat = chats.find(function(c) { return c.id === activeChatId; });
-    if (!chat) return;
+    if (!text) return;
 
     var now = new Date();
-    var hours = String(now.getHours()).padStart(2, '0');
-    var minutes = String(now.getMinutes()).padStart(2, '0');
-    var timeStr = hours + ':' + minutes;
+    var timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
 
-    chat.messages.push({
+    facturaChat.messages.push({
       id: Date.now(),
       text: text,
       time: timeStr,
       mine: true
     });
-    chat.last = text;
-    chat.time = timeStr;
+    facturaChat.last = text;
+    facturaChat.time = timeStr;
 
     msgInput.value = '';
-    renderMessages(chat);
+    renderMessages();
     renderChats();
+    saveUserState();
   });
+
+  // Открытие модалки профиля
+  profileFooter.addEventListener('click', function(e) {
+    profileModal.classList.add('open');
+  });
+  openSettingsBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    profileModal.classList.add('open');
+  });
+  closeProfileBtn.addEventListener('click', function() {
+    profileModal.classList.remove('open');
+  });
+  profileModal.addEventListener('click', function(e) {
+    if (e.target === profileModal) profileModal.classList.remove('open');
+  });
+
+  // Сохранение изменений профиля (Имя, юзернейм с @, дата рождения)
+  profileEditForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (!currentUser) return;
+
+    var newName = editDisplayName.value.trim();
+    var newTag = editUsername.value.trim();
+    var newBirth = editBirthDate.value;
+
+    if (!newName) {
+      alert('Пожалуйста, укажите имя!');
+      return;
+    }
+
+    // Автоматическая подстановка @
+    if (newTag && !newTag.startsWith('@')) {
+      newTag = '@' + newTag;
+    }
+
+    currentUser.displayName = newName;
+    currentUser.username = newTag || '@username';
+    currentUser.birthDate = newBirth;
+
+    saveUserState();
+    updateProfileUI();
+    profileModal.classList.remove('open');
+    alert('Профиль успешно обновлен!');
+  });
+
+  // Покупка подписки Factura (199р)
+  buySubscriptionBtn.addEventListener('click', function() {
+    if (!currentUser) return;
+    if (currentUser.hasSubscription) {
+      alert('У вас уже оформлена подписка Factura! Спасибо за поддержку ⭐');
+      return;
+    }
+
+    var confirmBuy = confirm('Оформить подписку «Factura» за 199 ₽?\n\nВы получите золотую звёздочку ★ рядом с именем.');
+    if (confirmBuy) {
+      currentUser.hasSubscription = true;
+      saveUserState();
+      updateProfileUI();
+      alert('Поздравляем! Подписка Factura за 199 ₽ успешно подключена ⭐');
+    }
+  });
+
+  // Выход из аккаунта
+  logoutModalBtn.addEventListener('click', function() {
+    if (confirm('Вы уверены, что хотите выйти из аккаунта Factura?')) {
+      currentUser = null;
+      try {
+        localStorage.removeItem('factura_user_state_v1');
+      } catch(e) {}
+
+      profileModal.classList.remove('open');
+      appShell.style.display = 'none';
+      appShell.classList.remove('chat-open');
+      authWrap.style.display = 'flex';
+
+      emailInput.value = '';
+      passInput.value = '';
+      confirmInput.value = '';
+      errorMsg.textContent = '';
+    }
+  });
+
+  // Автозагрузка сессии, если пользователь уже входил
+  var savedData = loadSavedState();
+  if (savedData && savedData.currentUser) {
+    currentUser = savedData.currentUser;
+    if (Array.isArray(savedData.messages) && savedData.messages.length > 0) {
+      facturaChat.messages = savedData.messages;
+      facturaChat.last = savedData.messages[savedData.messages.length - 1].text;
+    }
+    loginUser();
+  }
 
 })();
 </script>
