@@ -1,711 +1,1248 @@
 <!doctype html>
-<html lang="ru" style="background:#10131c;">
+<html lang="ru">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#10131c">
-<title>Factura — Мессенджер нового поколения</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#f2f2f7">
+<title>Factura</title>
 
 <style>
-:root{
-  --bg:#10131c;
-  --panel:#171b26;
-  --panel2:#1f2433;
-  --line:#292f3e;
-  --text:#f3f5fa;
-  --muted:#929bad;
-  --accent:#8b7cff;
-  --accent2:#47d7b0;
-  --gold:#ffb703;
-  --lightning:#ffb703;
-  --danger:#ff7085;
-  --vk-badge:#1877f2;
+:root {
+  --bg-system: #f2f2f7;
+  --bg-card: #ffffff;
+  --bg-card-pressed: #e5e5ea;
+  --text-main: #000000;
+  --text-secondary: #8e8e93;
+  --line-color: #c6c6c8;
+  --accent-blue: #007aff;
+  --accent-purple: #af52de;
+  --accent-gold: #ff9500;
+  --accent-green: #34c759;
+  --accent-red: #ff3b30;
+  --accent-teal: #30b0c7;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;padding:0;background:#10131c;color:#f3f5fa;font:14px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;min-height:100vh;overflow-x:hidden}
-button,input,textarea,select{font:inherit}
-button{cursor:pointer}
 
-/* ОРИГИНАЛЬНАЯ ЗУБЧАТАЯ СИНЯЯ ГАЛОЧКА (ТОЧНО ПО СКРИНШОТУ) */
-.badge-factura-verified{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  width:18px;
-  height:18px;
-  flex-shrink:0;
-  vertical-align:middle;
-}
-.badge-factura-verified svg{
-  width:100%;
-  height:100%;
-  display:block;
-  fill:#1877f2;
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* ЗВЁЗДОЧКА FACTURA PREMIUM */
-.star-badge-icon{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  width:18px;
-  height:18px;
-  background:linear-gradient(135deg, #ffb703 0%, #fb8500 100%);
-  border-radius:50%;
-  color:#10131c;
-  box-shadow:0 2px 6px rgba(255,183,3,0.4);
-  font-size:11px;
-  font-weight:900;
-  flex-shrink:0;
-  vertical-align:middle;
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg-system);
+  color: var(--text-main);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  min-height: 100vh;
+  user-select: none;
 }
 
-/* ЭКРАН ВХОДА */
-.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(ellipse at 20% 20%,#27224d 0,transparent 45%),radial-gradient(ellipse at 80% 80%,#123d3b 0,transparent 40%),#10131c}
-.auth-card{width:100%;max-width:400px;padding:30px 24px;background:#171b26;border:1px solid var(--line);border-radius:24px;box-shadow:0 24px 60px rgba(0,0,0,0.6)}
-.brand{display:flex;align-items:center;gap:12px;margin-bottom:24px}
-.brand-mark{height:44px;width:44px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#b06cff);display:grid;place-items:center;font-weight:900;font-size:22px;color:#fff}
-.brand-name{font-size:22px;font-weight:800;letter-spacing:-.5px}
-.brand-caption{font-size:12px;color:var(--muted)}
-h1{font-size:22px;margin:0 0 6px}
-.sub{color:var(--muted);margin:0 0 20px;font-size:13px}
-.field{margin-bottom:14px}
-.field label{display:block;color:#c8ceda;font-size:13px;margin-bottom:6px}
-.field input,.field textarea,.field select{width:100%;border:1px solid var(--line);background:#10141e;color:#fff;padding:11px 13px;border-radius:12px;outline:none}
-.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(139,124,255,0.2)}
-.primary{border:0;background:linear-gradient(100deg,var(--accent),#a172ff);color:#fff;font-weight:700;border-radius:12px;padding:12px 16px;width:100%;margin-top:6px}
-.switch{text-align:center;color:var(--muted);font-size:13px;margin-top:16px}
-.link{color:#b5aaff;background:none;border:0;padding:0;font-weight:700}
-.error{color:var(--danger);font-size:13px;min-height:18px;margin-top:8px}
+button, input, textarea, select {
+  font-family: inherit;
+}
+button { cursor: pointer; }
 
-/* ОСНОВНОЙ КАРКАС */
-.app-shell{height:100vh;max-width:1240px;margin:auto;display:grid;grid-template-columns:350px 1fr;background:var(--panel);border-left:1px solid var(--line);border-right:1px solid var(--line)}
-.sidebar{border-right:1px solid var(--line);display:flex;flex-direction:column;min-width:0;background:#171b26}
-.side-head{padding:16px 16px 12px;border-bottom:1px solid var(--line)}
-.side-brand{display:flex;align-items:center;justify-content:space-between}
-.small-brand{display:flex;gap:10px;align-items:center}
-.small-brand .brand-mark{width:36px;height:36px;border-radius:11px;font-size:17px}
-.small-brand .brand-name{font-size:18px}
-.head-action-btns{display:flex;gap:6px}
-.icon-btn{width:34px;height:34px;border-radius:10px;background:#10141e;border:1px solid var(--line);color:var(--text);display:flex;align-items:center;justify-content:center;font-size:16px}
-.icon-btn:hover{background:#222838;border-color:var(--accent)}
-
-.balance-chip-mini{
-  display:inline-flex;
-  align-items:center;
-  gap:5px;
-  background:#10141e;
-  border:1px solid var(--line);
-  padding:4px 10px;
-  border-radius:14px;
-  font-size:12px;
-  font-weight:800;
-  color:#ffb703;
-  cursor:pointer;
+/* SVG ОРИГИНАЛЬНАЯ ЗУБЧАТАЯ СИНЯЯ ГАЛОЧКА */
+.badge-verified-custom {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 19px;
+  height: 19px;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+.badge-verified-custom svg {
+  width: 100%;
+  height: 100%;
+  fill: #1877f2;
 }
 
-.search{margin-top:12px;width:100%;border:1px solid var(--line);background:#10141e;color:#fff;padding:9px 12px;border-radius:10px;outline:none}
+.star-badge-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  background: linear-gradient(135deg, #ffb703, #fb8500);
+  border-radius: 50%;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 900;
+  flex-shrink: 0;
+  vertical-align: middle;
+  box-shadow: 0 2px 5px rgba(251,133,0,0.35);
+}
 
-.section-label{padding:12px 16px 6px;color:var(--muted);font-size:11px;font-weight:800;letter-spacing:1px;display:flex;justify-content:space-between;align-items:center}
+/* ================= АВТОРИЗАЦИЯ ================= */
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: #f2f2f7;
+}
+.auth-card {
+  width: 100%;
+  max-width: 380px;
+  background: #ffffff;
+  border-radius: 26px;
+  padding: 32px 24px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+  text-align: center;
+}
+.auth-brand-logo {
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #007aff, #5856d6);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 800;
+  margin: 0 auto 16px auto;
+  box-shadow: 0 8px 20px rgba(0,122,255,0.28);
+}
+.auth-card h1 {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 0 6px 0;
+}
+.auth-card p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0 0 24px 0;
+}
+.auth-field {
+  margin-bottom: 12px;
+  text-align: left;
+}
+.auth-field label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 5px;
+  display: block;
+  padding-left: 4px;
+}
+.auth-field input {
+  width: 100%;
+  padding: 13px 14px;
+  background: #f2f2f7;
+  border: 1px solid #e5e5ea;
+  border-radius: 14px;
+  outline: none;
+  font-size: 15px;
+}
+.auth-field input:focus {
+  border-color: var(--accent-blue);
+  background: #fff;
+}
+.btn-primary {
+  width: 100%;
+  padding: 14px;
+  background: var(--accent-blue);
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 10px;
+}
+.auth-switch {
+  margin-top: 20px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.auth-switch span {
+  color: var(--accent-blue);
+  font-weight: 600;
+  cursor: pointer;
+}
 
-.chat-list{overflow-y:auto;flex:1}
-.chat-row{display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;border-left:3px solid transparent;position:relative}
-.chat-row:hover,.chat-row.active{background:#222838}
-.chat-row.active{border-left-color:var(--accent)}
-.avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;color:#fff;font-weight:800;font-size:16px;position:relative}
-.chat-meta{min-width:0;flex:1}
-.chat-title-line{display:flex;align-items:center;gap:6px;margin-bottom:2px}
-.chat-name{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.chat-type-badge{font-size:9px;font-weight:800;padding:2px 5px;border-radius:6px;text-transform:uppercase;background:#2d3345;color:#bac4d6}
-.chat-type-badge.channel{background:#294336;color:#57dfa0}
-.preview{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.time{font-size:11px;color:var(--muted);align-self:flex-start}
+/* ================= ОСНОВНОЙ КАРКАС ПРИЛОЖЕНИЯ ================= */
+.app-viewport {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: var(--bg-system);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 40px rgba(0,0,0,0.06);
+}
 
-/* НИЖНИЙ ПРОФИЛЬ */
-.side-foot{padding:12px 14px;border-top:1px solid var(--line);display:flex;align-items:center;gap:10px;background:#141721;cursor:pointer}
-.side-foot:hover{background:#1c2130}
-.user-info{flex:1;min-width:0}
-.user-info .display-name{font-weight:700;font-size:14px;display:flex;align-items:center;gap:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.user-info .user-tag{font-size:12px;color:var(--accent);overflow:hidden;text-overflow:ellipsis}
+.view-page {
+  flex: 1;
+  display: none;
+  flex-direction: column;
+  padding-bottom: calc(75px + var(--safe-bottom));
+}
+.view-page.active {
+  display: flex;
+}
 
-/* ОСНОВНОЙ ЧАТ */
-.main{display:flex;flex-direction:column;min-width:0;background:#151823}
-.empty{margin:auto;text-align:center;color:var(--muted);padding:24px}
-.empty-icon{font-size:42px;margin-bottom:10px}
-.conversation-head{padding:12px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;background:#171b26}
-.conversation-head .avatar{width:38px;height:38px}
-.head-name{font-weight:700;display:flex;align-items:center;gap:6px}
-.online{font-size:11px;color:var(--accent2)}
-.messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
-.date-chip{align-self:center;background:#252b39;color:var(--muted);padding:3px 10px;border-radius:14px;font-size:11px}
-.message{max-width:min(82%,580px);padding:10px 14px;border-radius:16px;background:#252b39;align-self:flex-start;word-break:break-word;position:relative}
-.message.mine{align-self:flex-end;background:#6559c7}
-.message-time{font-size:10px;color:#c3c1d7;text-align:right;margin-top:4px}
-.composer{padding:12px 16px;border-top:1px solid var(--line);display:flex;gap:10px;align-items:center;background:#171b26}
-.composer input{flex:1;min-width:0;border:1px solid var(--line);background:#10141e;color:#fff;padding:11px 16px;border-radius:20px;outline:none}
-.send{width:40px;height:40px;border:0;border-radius:50%;background:var(--accent);color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center}
-.top-mobile{display:none}
+/* ================= ТАБ 1: ЧАТЫ ================= */
+.chats-header {
+  padding: calc(12px + var(--safe-top)) 16px 10px 16px;
+  background: rgba(242, 242, 247, 0.92);
+  backdrop-filter: blur(20px);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.chats-header-title {
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+.header-icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid #e5e5ea;
+  color: var(--accent-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: bold;
+}
 
-/* МОДАЛЬНЫЕ ОКНА */
-.modal-overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.75);
-  backdrop-filter:blur(5px);
-  z-index:200;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:14px;
+.chats-list {
+  padding: 8px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
-.modal-overlay.open{display:flex}
-.modal-box{
-  width:100%;
-  max-width:580px;
-  background:#171b26;
-  border:1px solid var(--line);
-  border-radius:24px;
-  overflow:hidden;
-  display:flex;
-  flex-direction:column;
-  max-height:92vh;
-  box-shadow:0 24px 60px rgba(0,0,0,0.8);
+.chat-cell {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+  cursor: pointer;
 }
-.modal-header{
-  padding:14px 18px;
-  border-bottom:1px solid var(--line);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  background:#141721;
+.chat-cell:active {
+  background: var(--bg-card-pressed);
 }
-.modal-title{font-size:17px;font-weight:800;display:flex;align-items:center;gap:8px}
-.modal-close-btn{background:none;border:0;color:var(--muted);font-size:24px;line-height:1}
+.chat-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #007aff, #5856d6);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.chat-body-meta {
+  flex: 1;
+  min-width: 0;
+}
+.chat-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 3px;
+}
+.chat-title-left {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 16px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.chat-time {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.chat-last-msg {
+  font-size: 13px;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
-/* ВКЛАДКИ НАСТРОЕК */
-.settings-tabs{
-  display:flex;
-  border-bottom:1px solid var(--line);
-  background:#12151e;
-  overflow-x:auto;
-  flex-shrink:0;
+/* ================= ДИАЛОГ (ПОЛНОЭКРАННЫЙ) ================= */
+.screen-chat-dialog {
+  position: fixed;
+  inset: 0;
+  max-width: 480px;
+  margin: 0 auto;
+  background: #f2f2f7;
+  z-index: 200;
+  display: none;
+  flex-direction: column;
 }
-.tab-btn{
-  background:none;
-  border:0;
-  color:var(--muted);
-  padding:12px 14px;
-  font-size:12px;
-  font-weight:700;
-  white-space:nowrap;
-  border-bottom:2px solid transparent;
+.dialog-header {
+  padding: calc(10px + var(--safe-top)) 14px 10px 14px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e5ea;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
-.tab-btn.active{
-  color:var(--text);
-  border-bottom-color:var(--accent);
-  background:#181c28;
+.dialog-back-btn {
+  background: none;
+  border: none;
+  color: var(--accent-blue);
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
 }
-.modal-body{padding:18px;overflow-y:auto;flex:1}
+.dialog-header-center {
+  text-align: center;
+  flex: 1;
+  min-width: 0;
+  padding: 0 10px;
+}
+.dialog-header-name {
+  font-size: 15px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.dialog-header-sub {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+.dialog-report-btn {
+  background: #fff0f0;
+  border: 1px solid #ffcdd2;
+  color: var(--accent-red);
+  padding: 5px 9px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
 
-/* БАННЕР ПОДАРКОВ И ПРОФИЛЬ */
-.gifts-container{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-top:8px;
-  margin-bottom:16px;
+.dialog-messages-wrap {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
-.gift-badge-item{
-  background:#202534;
-  border:1px solid var(--line);
-  padding:6px 12px;
-  border-radius:12px;
-  font-size:14px;
-  font-weight:700;
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
+.msg-bubble {
+  max-width: 82%;
+  padding: 10px 14px;
+  border-radius: 18px;
+  font-size: 14px;
+  line-height: 1.4;
+  word-break: break-word;
+  position: relative;
 }
-.gift-shop-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  margin-bottom:16px;
+.msg-bubble.incoming {
+  align-self: flex-start;
+  background: #ffffff;
+  color: #000;
+  border-bottom-left-radius: 4px;
 }
-.gift-shop-card{
-  border:1px solid var(--line);
-  background:#12151e;
-  border-radius:14px;
-  padding:14px;
-  text-align:center;
+.msg-bubble.outgoing {
+  align-self: flex-end;
+  background: var(--accent-blue);
+  color: #fff;
+  border-bottom-right-radius: 4px;
 }
-.gift-shop-card .gift-icon{font-size:36px;margin-bottom:6px}
-.gift-shop-card .gift-name{font-weight:800;font-size:14px;margin-bottom:2px}
-.gift-shop-card .gift-deadline{font-size:11px;color:#ffb703;margin-bottom:10px}
+.msg-time {
+  font-size: 10px;
+  opacity: 0.65;
+  text-align: right;
+  margin-top: 4px;
+}
 
-/* КАРТОЧКИ СПИСКОВ */
-.list-card-item{
-  background:#12151e;
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:12px 14px;
-  margin-bottom:10px;
+.dialog-footer {
+  padding: 10px 14px calc(10px + var(--safe-bottom)) 14px;
+  background: #ffffff;
+  border-top: 1px solid #e5e5ea;
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
-.list-card-title{font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
-.action-pill-btn{
-  background:#262c3d;
-  color:#fff;
-  border:1px solid var(--line);
-  padding:6px 12px;
-  border-radius:8px;
-  font-size:12px;
-  font-weight:700;
+.dialog-footer input {
+  flex: 1;
+  padding: 10px 16px;
+  background: #f2f2f7;
+  border: none;
+  border-radius: 20px;
+  outline: none;
+  font-size: 14px;
 }
-.action-pill-btn.success{background:#166534;border-color:#22c55e}
-.action-pill-btn.danger{background:#991b1b;border-color:#ef4444}
+.btn-dialog-send {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--accent-blue);
+  color: #fff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
 
-@media(max-width:700px){
-  .app-shell{display:block;height:100dvh;border:0}
-  .sidebar{height:100%;border:0}
-  .main{height:100%;display:none}
-  .app-shell.chat-open .sidebar{display:none}
-  .app-shell.chat-open .main{display:flex}
-  .top-mobile{display:inline-block}
-  .back{border:0;background:none;color:var(--accent);font-size:24px;padding:0 8px 0 0}
-  .side-head{padding-top:calc(12px + var(--safe-top))}
-  .conversation-head{padding-top:calc(10px + var(--safe-top))}
-  .composer{padding-bottom:calc(10px + var(--safe-bottom))}
+/* ================= ТАБ 2: НАСТРОЙКИ (СТИЛЬ TELEGRAM IOS) ================= */
+.settings-top-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: calc(18px + var(--safe-top)) 16px 14px 16px;
+}
+.hero-avatar-box {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff9500, #ff2d55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 40px;
+  font-weight: 800;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  margin-bottom: 12px;
+}
+.hero-name-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+.hero-sub-phone {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.btn-change-photo-link {
+  color: var(--accent-blue);
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* ИНСЕТ-ГРУППЫ (КАК В iOS TELEGRAM) */
+.ios-group-wrapper {
+  margin: 12px 16px 6px 16px;
+}
+.ios-group-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: -0.2px;
+  padding: 0 12px 6px 12px;
+}
+.ios-cells-card {
+  background: var(--bg-card);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.ios-cell-row {
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  position: relative;
+  background: #ffffff;
+}
+.ios-cell-row:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 56px;
+  height: 0.5px;
+  background: #e5e5ea;
+}
+.ios-cell-row:active {
+  background: var(--bg-card-pressed);
+}
+
+.ios-cell-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+.ios-cell-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 0;
+}
+.ios-cell-title {
+  font-size: 16px;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ios-cell-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+  font-size: 15px;
+}
+.ios-chevron {
+  color: #c7c7cc;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+/* ================= НИЖНИЙ НАВБАР (ТАББАР iOS) ================= */
+.ios-tab-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-width: 480px;
+  margin: 0 auto;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(20px);
+  border-top: 0.5px solid rgba(0,0,0,0.18);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding-bottom: var(--safe-bottom);
+  z-index: 100;
+}
+.tab-bar-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+.tab-bar-item.active {
+  color: var(--accent-blue);
+}
+.tab-bar-icon {
+  font-size: 21px;
+}
+.tab-bar-label {
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* ================= МОДАЛКИ ЭКРАНОВ НАСТРОЕК ================= */
+.modal-screen {
+  position: fixed;
+  inset: 0;
+  max-width: 480px;
+  margin: 0 auto;
+  background: var(--bg-system);
+  z-index: 250;
+  display: none;
+  flex-direction: column;
+}
+.modal-screen.open {
+  display: flex;
+}
+.modal-nav-header {
+  padding: calc(10px + var(--safe-top)) 16px 10px 16px;
+  background: #ffffff;
+  border-bottom: 0.5px solid #e5e5ea;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.modal-nav-title {
+  font-size: 17px;
+  font-weight: 700;
+  text-align: center;
+  flex: 1;
+}
+.modal-nav-btn {
+  background: none;
+  border: none;
+  color: var(--accent-blue);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+.modal-body-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+/* БАННЕР ПОДАРКОВ */
+.gifts-collection-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 12px;
+}
+.gifts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+}
+.gift-card {
+  border: 1px solid #e5e5ea;
+  border-radius: 14px;
+  padding: 12px;
+  text-align: center;
+  background: #f9f9fb;
+}
+.gift-card-icon { font-size: 38px; margin-bottom: 4px; }
+.gift-card-name { font-size: 13px; font-weight: 700; }
+.gift-card-exp { font-size: 10px; color: var(--accent-gold); margin-bottom: 8px; }
+.btn-buy-gift {
+  width: 100%;
+  padding: 7px;
+  border-radius: 8px;
+  background: #007aff;
+  color: #fff;
+  border: none;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.item-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #eef3ff;
+  border: 1px solid #d0e0ff;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-right: 6px;
+  margin-top: 6px;
+}
+
+.request-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 10px;
+  border: 1px solid #e5e5ea;
+}
+.request-card-title {
+  font-weight: 700;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.btn-group-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.btn-action-small {
+  flex: 1;
+  padding: 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  border: none;
+}
+.btn-success { background: #34c759; color: #fff; }
+.btn-danger { background: #ff3b30; color: #fff; }
+
+.admin-banner {
+  background: linear-gradient(135deg, #1c1c1e, #2c2c2e);
+  color: #fff;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 16px;
 }
 </style>
 </head>
 <body>
 
-<!-- SVG ШАБЛОН ОРИГИНАЛЬНОЙ ЗУБЧАТОЙ СИНЕЙ ГАЛОЧКИ -->
+<!-- SVG ЗУБЧАТОЙ СИНЕЙ ГАЛОЧКИ -->
 <svg style="display:none;">
   <symbol id="icon-verified-star" viewBox="0 0 24 24">
-    <!-- Точная 8-лучевая зубчатая звезда как на скриншоте -->
     <path fill-rule="evenodd" clip-rule="evenodd" d="M12 1L14.7 3.2L18.1 3.2L19.2 6.4L22.2 7.8L21.7 11.2L23.4 14.2L21.3 16.9L21.3 20.3L18 21.2L16 23.9L12.7 22.8L9.5 24.3L7.7 21.4L4.3 20.9L4 17.5L1.7 15L3.1 11.9L2.3 8.5L5.4 6.8L6.2 3.5L9.6 3.2L12 1ZM10.5 16.2L17.2 9.5L15.8 8.1L10.5 13.4L8.2 11.1L6.8 12.5L10.5 16.2Z"/>
   </symbol>
 </svg>
 
 <!-- 1. ЭКРАН ВХОДА И РЕГИСТРАЦИИ -->
-<section id="authWrap" class="auth-wrap">
+<section id="authWrap" class="auth-container">
   <div class="auth-card">
-    <div class="brand">
-      <div class="brand-mark">F</div>
-      <div>
-        <div class="brand-name">Factura</div>
-        <div class="brand-caption">Мессенджер нового поколения</div>
-      </div>
-    </div>
+    <div class="auth-brand-logo">F</div>
     <h1 id="authTitle">Создать аккаунт</h1>
-    <p id="authSub" class="sub">Зарегистрируйтесь по почте и паролю, чтобы начать общение.</p>
-    
+    <p id="authSubtitle">Добро пожаловать в мессенджер Factura</p>
+
     <form id="authForm">
-      <div class="field">
-        <label for="emailInput">Электронная почта</label>
-        <input id="emailInput" type="email" placeholder="name@example.com" autocomplete="email" required>
+      <div class="auth-field">
+        <label>Электронная почта</label>
+        <input id="authEmail" type="email" placeholder="name@example.com" required>
       </div>
-      <div class="field">
-        <label for="passInput">Пароль</label>
-        <input id="passInput" type="password" placeholder="Не менее 8 символов" minlength="8" required>
+      <div class="auth-field">
+        <label>Пароль</label>
+        <input id="authPassword" type="password" placeholder="Минимум 8 символов" minlength="8" required>
       </div>
-      <div class="field" id="confirmField">
-        <label for="confirmInput">Повторите пароль</label>
-        <input id="confirmInput" type="password" placeholder="Введите пароль ещё раз">
+      <div class="auth-field" id="authConfirmBlock">
+        <label>Повторите пароль</label>
+        <input id="authConfirmPassword" type="password" placeholder="Повторите пароль">
       </div>
-      <button class="primary" id="submitBtn" type="submit">Зарегистрироваться</button>
-      <div class="error" id="errorMsg"></div>
+      <button class="btn-primary" id="authSubmitBtn" type="submit">Зарегистрироваться</button>
     </form>
 
-    <div class="switch">
-      <span id="switchText">Уже есть аккаунт?</span>
-      <button class="link" id="toggleAuthBtn" type="button">Войти</button>
+    <div class="auth-switch">
+      <span id="authSwitchBtn">Уже есть аккаунт? Войти</span>
     </div>
   </div>
 </section>
 
-<!-- 2. ОСНОВНОЙ ИНТЕРФЕЙС МЕССЕНДЖЕРА -->
-<div id="appShell" class="app-shell" style="display:none;">
-  <aside class="sidebar">
-    <div class="side-head">
-      <div class="side-brand">
-        <div class="small-brand">
-          <div class="brand-mark">F</div>
-          <div class="brand-name">Factura</div>
-        </div>
-        <div class="head-action-btns">
-          <!-- БАЛАНС МОЛНИЙ -->
-          <div class="balance-chip-mini" id="openTopupBtn" title="Баланс молний. Нажмите для пополнения">
-            <span>⚡️</span><span id="myBalanceDisplay">0</span>
-          </div>
-          <!-- СОЗДАТЬ ЧАТ / КАНАЛ -->
-          <button class="icon-btn" id="openCreateChatModalBtn" title="Создать чат или канал">+</button>
-        </div>
-      </div>
-      <input class="search" id="searchInput" placeholder="⌕  Поиск чатов и каналов...">
-    </div>
-    
-    <div class="section-label">
-      <span>ДИАЛОГИ И КАНАЛЫ</span>
-      <span id="roleLabelBadge" style="font-size:10px;color:var(--accent);font-weight:800;">USER</span>
-    </div>
-    
-    <div class="chat-list" id="chatList"></div>
-    
-    <!-- НИЖНЯЯ ПАНЕЛЬ ПРОФИЛЯ -->
-    <div class="side-foot" id="profileFooter" title="Открыть настройки профиля">
-      <div class="avatar" id="myAvatar" style="width:40px;height:40px;background:linear-gradient(135deg,#8b7cff,#47d7b0)">U</div>
-      <div class="user-info">
-        <div class="display-name">
-          <span id="myDisplayName">Пользователь</span>
-          <span id="myVerifiedBadge" style="display:none;" class="badge-factura-verified" title="Верифицирован">
-            <svg><use href="#icon-verified-star"></use></svg>
-          </span>
-          <span id="myStarBadge" style="display:none;" class="star-badge-icon" title="Подписка Factura">★</span>
-        </div>
-        <div class="user-tag" id="myUsername">@username</div>
-      </div>
-      <button class="icon-btn" id="openSettingsBtn" type="button" aria-label="Настройки">⚙</button>
-    </div>
-  </aside>
+<!-- 2. ОСНОВНОЙ ВЬЮПОРТ ПРИЛОЖЕНИЯ -->
+<div id="appViewport" class="app-viewport" style="display:none;">
 
-  <main class="main" id="chatMain">
-    <div class="empty" id="emptyPlaceholder">
-      <div class="empty-icon">✉️</div>
-      <div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px;">Добро пожаловать в Factura</div>
-      <div>Выберите чат или канал слева для общения.</div>
-    </div>
+  <!-- ТАБ: ЧАТЫ -->
+  <main id="tabChatsView" class="view-page active">
+    <header class="chats-header">
+      <div class="chats-header-title">Чаты</div>
+      <button class="header-icon-btn" id="btnOpenCreateChat" title="Создать чат или канал">+</button>
+    </header>
 
-    <div id="activeChatContainer" style="display:none;flex-direction:column;height:100%;width:100%;">
-      <header class="conversation-head">
-        <button class="back top-mobile" id="backBtn">‹</button>
-        <div class="avatar" id="chatHeaderAvatar" style="background:linear-gradient(135deg,#8b7cff,#b06cff)">F</div>
-        <div style="flex:1;">
-          <div class="head-name" id="chatHeaderName">
-            <span id="chatTitleSpan">Команда Factura</span>
-            <span id="chatHeaderVerified" class="badge-factura-verified" style="display:none;">
-              <svg><use href="#icon-verified-star"></use></svg>
-            </span>
-          </div>
-          <div class="online" id="chatHeaderSub">Официальный канал</div>
-        </div>
-
-        <!-- КНОПКА ПОЖАЛОВАТЬСЯ НА ЧАТ / КАНАЛ / СОБЕСЕДНИКА -->
-        <button class="action-pill-btn danger" id="openReportModalBtn" style="font-size:11px;padding:5px 9px;">
-          🚩 Пожаловаться
-        </button>
-      </header>
-
-      <div class="messages" id="messagesList">
-        <div class="date-chip">Сегодня</div>
-      </div>
-
-      <form class="composer" id="msgForm">
-        <input id="msgInput" placeholder="Напишите сообщение..." autocomplete="off">
-        <button class="send" type="submit">➤</button>
-      </form>
-    </div>
+    <div class="chats-list" id="chatsListContainer"></div>
   </main>
-</div>
 
-<!-- ================= 3. ОКНО НАСТРОЕК (СО ВСЕМИ 11 ВКЛАДКАМИ) ================= -->
-<div class="modal-overlay" id="settingsModal">
-  <div class="modal-box">
-    <div class="modal-header">
-      <div class="modal-title">
-        <span>⚙️</span>
-        <span>Настройки и сервисы Factura</span>
+  <!-- ТАБ: НАСТРОЙКИ (СТИЛЬ В ТОЧНОСТИ КАК НА СКРИНШОТЕ TELEGRAM iOS) -->
+  <main id="tabSettingsView" class="view-page">
+    
+    <!-- ВЕРХНИЙ ХИРО-БЛОК ПОЛЬЗОВАТЕЛЯ -->
+    <div class="settings-top-hero">
+      <div class="hero-avatar-box" id="heroAvatar">U</div>
+      <div class="hero-name-row">
+        <span id="heroDisplayName">Rust</span>
+        <span id="heroVerifiedBadge" class="badge-verified-custom" style="display:none;">
+          <svg><use href="#icon-verified-star"></use></svg>
+        </span>
+        <span id="heroStarBadge" class="star-badge-icon" style="display:none;">★</span>
       </div>
-      <button class="modal-close-btn" id="closeSettingsModalBtn">&times;</button>
+      <div class="hero-sub-phone" id="heroUserTag">@roxdow</div>
+      <button class="btn-change-photo-link" id="btnHeroEditProfile">Изменить профиль</button>
     </div>
 
-    <!-- НАВИГАЦИОННЫЕ ВКЛАДКИ -->
-    <div class="settings-tabs">
-      <button class="tab-btn active" data-tab="tabProfile">1. Профиль</button>
-      <button class="tab-btn" data-tab="tabSub">2. Подписка</button>
-      <button class="tab-btn" data-tab="tabBalance">3. Баланс ⚡️</button>
-      <button class="tab-btn" data-tab="tabGifts">4. Подарки</button>
-      <button class="tab-btn" data-tab="tabApplyVerif">5. Подать верификацию</button>
-      <button class="tab-btn" data-tab="tabAdminVerif" id="tabAdminVerifBtn">6. Выдача верификации</button>
-      <button class="tab-btn" data-tab="tabAdminManage" id="tabAdminManageBtn">7. Админ: Управление</button>
-      <button class="tab-btn" data-tab="tabModeration" id="tabModerationBtn">8. Модерация жалоб</button>
-    </div>
-
-    <div class="modal-body">
-      
-      <!-- ВКЛАДКА 1: ПРОФИЛЬ -->
-      <div id="tabProfile" class="tab-content">
-        <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
-          <div class="avatar" id="modalUserAvatar" style="width:60px;height:60px;font-size:24px;background:linear-gradient(135deg,var(--accent),#47d7b0)">U</div>
-          <div>
-            <div style="font-weight:800;font-size:16px;display:flex;align-items:center;gap:6px;">
-              <span id="modalProfileName">Имя</span>
-              <span id="modalProfileVerified" class="badge-factura-verified" style="display:none;">
-                <svg><use href="#icon-verified-star"></use></svg>
+    <!-- 1. ПЕРВАЯ ГРУППА: АКТИВНЫЙ АККАУНТ И ДОБАВЛЕНИЕ (КАК НА СКРИНШОТЕ) -->
+    <div class="ios-group-wrapper">
+      <div class="ios-cells-card">
+        <div class="ios-cell-row">
+          <div class="ios-cell-icon" style="background:#000;">🕶️</div>
+          <div class="ios-cell-content">
+            <div class="ios-cell-title" id="accountRowName">великий winston</div>
+            <div class="ios-cell-right">
+              <span style="background:#007aff;color:#fff;font-size:11px;font-weight:700;padding:2px 7px;border-radius:10px;">
+                ⚡️ <span id="balanceRowVal">0</span>
               </span>
-              <span id="modalProfileStar" class="star-badge-icon" style="display:none;">★</span>
-            </div>
-            <div style="font-size:12px;color:var(--muted);" id="modalProfileEmail">email@example.com</div>
-            <div style="font-size:12px;color:var(--lightning);font-weight:800;margin-top:2px;">
-              Баланс: <span id="modalBalanceSpan">0</span> ⚡️
             </div>
           </div>
         </div>
 
-        <!-- ОТОБРАЖЕНИЕ ПОДАРКОВ В ПРОФИЛЕ ВСЕГДА -->
-        <div style="font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;">
-          Коллекция подарков в профиле:
-        </div>
-        <div class="gifts-container" id="profileGiftsDisplay">
-          <span style="font-size:12px;color:var(--muted);">У вас пока нет подарков</span>
-        </div>
-
-        <form id="profileEditForm">
-          <div class="field">
-            <label for="editDisplayName">Имя пользователя</label>
-            <input id="editDisplayName" type="text" placeholder="Имя" required>
-          </div>
-          <div class="field">
-            <label for="editUsername">Юзернейм (через @)</label>
-            <input id="editUsername" type="text" placeholder="@username" required>
-          </div>
-          <div class="field">
-            <label for="editBirthDate">Дата рождения</label>
-            <input id="editBirthDate" type="date">
-          </div>
-          <button class="primary" type="submit">Сохранить изменения</button>
-        </form>
-
-        <button class="action-pill-btn danger" id="logoutBtn" style="width:100%;margin-top:16px;padding:11px;">
-          Выйти с аккаунта
-        </button>
-      </div>
-
-      <!-- ВКЛАДКА 2: ПОДПИСКА FACTURA -->
-      <div id="tabSub" class="tab-content" style="display:none;">
-        <div style="background:linear-gradient(135deg,#241838,#3d1f3b);border:1px solid #7c3aed;border-radius:18px;padding:16px;margin-bottom:16px;">
-          <div style="font-size:11px;font-weight:800;color:#ffb703;text-transform:uppercase;">ПРЕМИУМ ДОСТУП</div>
-          <div style="font-size:18px;font-weight:800;display:flex;align-items:center;gap:6px;margin:6px 0;">
-            <span>Подписка Factura</span>
-            <span class="star-badge-icon">★</span>
-          </div>
-          <p style="font-size:13px;color:#d1c4e9;margin:0 0 12px 0;">
-            При покупке подписка стоит <b>199 ₽</b>. В профиле и сообщениях отображается эксклюзивная звёздочка ★, открываются расширенные лимиты.
-          </p>
-          <button class="primary" id="buySubBtn" style="background:linear-gradient(90deg,#ffb703,#fb8500);color:#000;">
-            Купить подписку за 199 ₽
-          </button>
-        </div>
-      </div>
-
-      <!-- ВКЛАДКА 3: БАЛАНС ПЛАТФОРМЫ (МОЛНИИ ⚡️) -->
-      <div id="tabBalance" class="tab-content" style="display:none;">
-        <div style="background:#12151e;border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:14px;text-align:center;">
-          <div style="font-size:13px;color:var(--muted);">Ваш баланс платформы Factura:</div>
-          <div style="font-size:32px;font-weight:900;color:#ffb703;margin:8px 0;">
-            ⚡️ <span id="balanceTabVal">0</span> молний
-          </div>
-          <div style="font-size:12px;color:var(--muted);">Курс: 1 молния = 1 рубль. Используется для покупки новогодних подарков.</div>
-        </div>
-
-        <div class="field">
-          <label>Пополнение баланса (Минимум от 200 ₽ — 200 ⚡️):</label>
-          <input type="number" id="topupInputAmount" value="200" min="200" step="10">
-        </div>
-        <button class="primary" id="confirmTopupBtn" style="background:linear-gradient(90deg,#ffb703,#e69500);color:#10131c;font-weight:800;">
-          Пополнить баланс молний ⚡️
-        </button>
-      </div>
-
-      <!-- ВКЛАДКА 4: НОВОГОДНИЕ ПОДАРКИ (🧑‍🎄, ☃️) -->
-      <div id="tabGifts" class="tab-content" style="display:none;">
-        <div style="font-size:13px;color:var(--muted);margin-bottom:12px;">
-          Купленные подарки навсегда сохраняются в вашем профиле! Доступны для покупки только до <b>10.01.2027</b>.
-        </div>
-        <div class="gift-shop-grid">
-          <div class="gift-shop-card">
-            <div class="gift-icon">🧑‍🎄</div>
-            <div class="gift-name">Санта Factura</div>
-            <div class="gift-deadline">До 10.01.2027</div>
-            <div style="font-weight:800;color:#ffb703;margin-bottom:8px;">100 ⚡️</div>
-            <button class="action-pill-btn" onclick="buyGift('🧑‍🎄', 'Санта Factura', 100)" style="width:100%;">Купить</button>
-          </div>
-
-          <div class="gift-shop-card">
-            <div class="gift-icon">☃️</div>
-            <div class="gift-name">Снеговик 2027</div>
-            <div class="gift-deadline">До 10.01.2027</div>
-            <div style="font-weight:800;color:#ffb703;margin-bottom:8px;">75 ⚡️</div>
-            <button class="action-pill-btn" onclick="buyGift('☃️', 'Снеговик 2027', 75)" style="width:100%;">Купить</button>
+        <div class="ios-cell-row" id="btnAddAccountRow">
+          <div class="ios-cell-icon" style="background:#e5f1ff;color:#007aff;font-size:20px;font-weight:300;">+</div>
+          <div class="ios-cell-content">
+            <div class="ios-cell-title" style="color:#007aff;">Добавить аккаунт</div>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- ВКЛАДКА 5: ПОДАТЬ ЗАЯВКУ НА ВЕРИФИКАЦИЮ (АНКЕТА) -->
-      <div id="tabApplyVerif" class="tab-content" style="display:none;">
-        <div style="font-size:13px;color:var(--muted);margin-bottom:14px;">
-          Заполните официальную анкету для подтверждения личности и получения оригинальной синей галочки Factura:
-        </div>
-        <form id="verifApplyForm">
-          <div class="field">
-            <label>ФИО / Название организации:</label>
-            <input id="verifFullName" placeholder="Иванов Иван Иванович" required>
-          </div>
-          <div class="field">
-            <label>Ссылка на деятельность / соцсети / сайт:</label>
-            <input id="verifLink" placeholder="https://..." required>
-          </div>
-          <div class="field">
-            <label>Цель получения верификации:</label>
-            <textarea id="verifReason" rows="3" placeholder="Официальный представитель, автор контента..." required></textarea>
-          </div>
-          <button class="primary" type="submit">Отправить анкету на проверку</button>
-        </form>
-      </div>
-
-      <!-- ВКЛАДКА 6: ВЫДАЧА ВЕРИФИКАЦИИ (ДЛЯ АДМИНОВ) -->
-      <div id="tabAdminVerif" class="tab-content" style="display:none;">
-        <div style="font-size:13px;color:var(--muted);margin-bottom:12px;">
-          Список поданных заявок на получение галочки через интерфейс:
-        </div>
-        <div id="adminVerifRequestsList"></div>
-      </div>
-
-      <!-- ВКЛАДКА 7: ПАНЕЛЬ АДМИНИСТРАТОРА (ВЫДАЧА МОЛНИЙ, ПРЕМИУМА, МОДЕРАТОРОВ) -->
-      <div id="tabAdminManage" class="tab-content" style="display:none;">
-        <div style="font-size:14px;font-weight:800;color:var(--accent);margin-bottom:12px;">Управление платформой Factura:</div>
+    <!-- 2. ВТОРАЯ ГРУППА: СЕРВИСЫ И ФУНКЦИИ -->
+    <div class="ios-group-wrapper">
+      <div class="ios-cells-card">
         
-        <!-- Выдача молний себе или любому -->
-        <div class="field">
-          <label>Выдать молнии ⚡️ (любое количество):</label>
-          <div style="display:flex;gap:8px;">
-            <input type="number" id="adminGiveLightningAmount" value="500">
-            <button class="action-pill-btn success" id="adminGiveLightningBtn">Выдать ⚡️</button>
+        <!-- МОЙ ПРОФИЛЬ -->
+        <div class="ios-cell-row" id="cellOpenProfile">
+          <div class="ios-cell-icon" style="background:#ff3b30;">👤</div>
+          <div class="ios-cell-content">
+            <div class="ios-cell-title">Мой профиль</div>
+            <div class="ios-cell-right"><span class="ios-chevron">›</span></div>
           </div>
         </div>
 
-        <!-- Выдача премиума -->
-        <div class="field">
-          <label>Выдать подписку Factura Premium ★:</label>
-          <button class="action-pill-btn" id="adminTogglePremiumBtn" style="width:100%;">
-            Переключить Премиум для себя
-          </button>
-        </div>
-
-        <!-- Управление галочкой текущего канала/чата -->
-        <div class="field">
-          <label>Управление галочкой для открытого канала/чата:</label>
-          <div style="display:flex;gap:8px;">
-            <button class="action-pill-btn success" id="adminGiveChannelBadgeBtn" style="flex:1;">Выдать галочку</button>
-            <button class="action-pill-btn danger" id="adminRemoveChannelBadgeBtn" style="flex:1;">Забрать галочку</button>
+        <!-- ПОДПИСКА FACTURA -->
+        <div class="ios-cell-row" id="cellOpenSubscription">
+          <div class="ios-cell-icon" style="background:#af52de;">★</div>
+          <div class="ios-cell-content">
+            <div class="ios-cell-title">Подписка Factura</div>
+            <div class="ios-cell-right">
+              <span id="subStatusText" style="font-size:13px;color:#af52de;font-weight:600;">199 ₽</span>
+              <span class="ios-chevron">›</span>
+            </div>
           </div>
         </div>
 
-        <!-- Назначение модератора -->
-        <div class="field" style="margin-top:16px;">
-          <label>Назначить пользователя модератором платформы:</label>
-          <div style="display:flex;gap:8px;">
-            <input id="adminAddModUsername" placeholder="@username">
-            <button class="action-pill-btn" id="adminAddModBtn">Назначить</button>
+        <!-- БАЛАНС ПЛАТФОРМЫ (МОЛНИИ ⚡️) -->
+        <div class="ios-cell-row" id="cellOpenBalance">
+          <div class="ios-cell-icon" style="background:#ff9500;">⚡️</div>
+          <div class="ios-cell-content">
+            <div class="ios-cell-title">Баланс молний</div>
+            <div class="ios-cell-right">
+              <span id="balanceTextRight" style="font-size:13px;color:#ff9500;font-weight:700;">0 ⚡️</span>
+              <span class="ios-chevron">›</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- НОВОГОДНИЕ ПОДАРКИ (🧑‍🎄, ☃️) -->
+        <div class="ios-cell-row" id="cellOpenGifts">
+          <div class="ios-cell-icon" style="background:#34c759;">🎁</div>
+          <div class="ios-cell-content">
+            <div class="ios-cell-title">Подарки до 10.01.2027</div>
+            <div class="ios-cell-right">
+              <span style="font-size:12px;">🧑‍🎄 ☃️</span>
+              <span class="ios-chevron">›</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ПОДАТЬ ЗАЯВКУ НА ВЕРИФИКАЦИЮ -->
+        <div class="ios-cell-row" id="cellOpenApplyVerif">
+          <div class="ios-cell-icon" style="background:#007aff;">
+            <svg style="width:16px;height:16px;fill:#fff;"><use href="#icon-verified-star"></use></svg>
+          </div>
+          <div class="ios-cell-content">
+            <div class="ios-cell-title">Подать на верификацию</div>
+            <div class="ios-cell-right"><span class="ios-chevron">›</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 3. ТРЕТЬЯ ГРУППА: ПАНЕЛЬ МОДЕРАЦИИ (ДОСТУПНА МОДЕРАТОРАМ И @tg) -->
+    <div class="ios-group-wrapper" id="groupModeration" style="display:none;">
+      <div class="ios-group-title">Модерация платформы</div>
+      <div class="ios-cells-card">
+        <div class="ios-cell-row" id="cellOpenModeration">
+          <div class="ios-cell-icon" style="background:#ff3b30;">🚩</div>
+          <div class="ios-cell-content">
+            <div class="ios-cell-title">Рассмотрение жалоб</div>
+            <div class="ios-cell-right">
+              <span id="reportsCountBadge" style="background:#ff3b30;color:#fff;font-size:11px;font-weight:700;padding:2px 7px;border-radius:10px;">0</span>
+              <span class="ios-chevron">›</span>
+            </div>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- ВКЛАДКА 8: МОДЕРАЦИЯ ЖАЛОБ -->
-      <div id="tabModeration" class="tab-content" style="display:none;">
-        <div style="font-size:13px;color:var(--muted);margin-bottom:12px;">
-          Поступившие жалобы на собеседников, каналы и чаты:
+    <!-- 4. ЧЕТВЕРТАЯ ГРУППА: ПАНЕЛЬ ГЛАВНОГО АДМИНИСТРАТОРА (СТРОГО ДЛЯ @tg) -->
+    <div class="ios-group-wrapper" id="groupMainAdmin" style="display:none;">
+      <div class="ios-group-title">Панель Главного Администратора (@tg)</div>
+      <div class="ios-cells-card">
+        
+        <!-- ВЫДАЧА ВЕРИФИКАЦИИ -->
+        <div class="ios-cell-row" id="cellOpenVerifRequests">
+          <div class="ios-cell-icon" style="background:#5856d6;">☑️</div>
+          <div class="ios-cell-content">
+            <div class="ios-cell-title">Выдача верификации пользователям</div>
+            <div class="ios-cell-right"><span class="ios-chevron">›</span></div>
+          </div>
         </div>
-        <div id="moderationReportsList"></div>
-      </div>
 
+        <!-- УПРАВЛЕНИЕ АДМИНА (МОЛНИИ, ПРЕМИУМ, ГАЛОЧКИ КАНАЛОВ, МОДЕРАТОРЫ) -->
+        <div class="ios-cell-row" id="cellOpenAdminControl">
+          <div class="ios-cell-icon" style="background:#1c1c1e;">👑</div>
+          <div class="ios-cell-content">
+            <div class="ios-cell-title">Управление привилегиями</div>
+            <div class="ios-cell-right"><span class="ios-chevron">›</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ВЫХОД С АККАУНТА -->
+    <div class="ios-group-wrapper">
+      <div class="ios-cells-card">
+        <div class="ios-cell-row" id="cellLogout">
+          <div class="ios-cell-icon" style="background:#8e8e93;">🚪</div>
+          <div class="ios-cell-content">
+            <div class="ios-cell-title" style="color:#ff3b30;">Выйти из аккаунта</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- НИЖНИЙ ТАББАР (ТОЧНО КАК НА СКРИНШОТЕ TELEGRAM iOS) -->
+  <nav class="ios-tab-bar">
+    <button class="tab-bar-item" id="tabBtnContacts">
+      <div class="tab-bar-icon">👤</div>
+      <div class="tab-bar-label">Контакты</div>
+    </button>
+    <button class="tab-bar-item" id="tabBtnCalls">
+      <div class="tab-bar-icon">📞</div>
+      <div class="tab-bar-label">Звонки</div>
+    </button>
+    <button class="tab-bar-item active" id="tabBtnChats">
+      <div class="tab-bar-icon">💬</div>
+      <div class="tab-bar-label">Чаты</div>
+    </button>
+    <button class="tab-bar-item" id="tabBtnSettings">
+      <div class="tab-bar-icon">⚙️</div>
+      <div class="tab-bar-label">Настройки</div>
+    </button>
+  </nav>
+
+</div>
+
+<!-- ================= ДИАЛОГ ЧАТА ================= -->
+<div class="screen-chat-dialog" id="screenChatDialog">
+  <header class="dialog-header">
+    <button class="dialog-back-btn" id="btnBackFromChat">‹ Назад</button>
+    <div class="dialog-header-center">
+      <div class="dialog-header-name">
+        <span id="dialogChatTitle">Команда Factura</span>
+        <span id="dialogVerifiedStar" class="badge-verified-custom" style="display:none;">
+          <svg><use href="#icon-verified-star"></use></svg>
+        </span>
+      </div>
+      <div class="dialog-header-sub" id="dialogChatSub">канал</div>
+    </div>
+    <button class="dialog-report-btn" id="btnOpenReportModal">🚩 Пожаловаться</button>
+  </header>
+
+  <div class="dialog-messages-wrap" id="dialogMessagesList"></div>
+
+  <form class="dialog-footer" id="dialogSendForm">
+    <input id="dialogInputText" placeholder="Сообщение..." autocomplete="off">
+    <button class="btn-dialog-send" type="submit">➤</button>
+  </form>
+</div>
+
+<!-- ================= МОДАЛКИ ЭКРАНОВ ИЗ ВКЛАДОК НАСТРОЕК ================= -->
+
+<!-- 1. МОДАЛКА: МОЙ ПРОФИЛЬ -->
+<div class="modal-screen" id="modalScreenProfile">
+  <header class="modal-nav-header">
+    <button class="modal-nav-btn" onclick="closeModalScreen('modalScreenProfile')">Закрыть</button>
+    <div class="modal-nav-title">Мой профиль</div>
+    <button class="modal-nav-btn" style="opacity:0;">Готово</button>
+  </header>
+  <div class="modal-body-scroll">
+    <div class="gifts-collection-card">
+      <div style="font-size:13px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;margin-bottom:6px;">Коллекция подарков в профиле:</div>
+      <div id="profileGiftsDisplay">
+        <span style="font-size:13px;color:var(--text-secondary);">У вас пока нет подарков</span>
+      </div>
+    </div>
+
+    <form id="formEditProfile" class="ios-cells-card" style="padding:14px;">
+      <div class="auth-field">
+        <label>Имя пользователя</label>
+        <input id="inputDisplayName" required>
+      </div>
+      <div class="auth-field">
+        <label>Юзернейм через @</label>
+        <input id="inputUsername" required>
+      </div>
+      <div class="auth-field">
+        <label>Дата рождения</label>
+        <input id="inputBirthDate" type="date">
+      </div>
+      <button class="btn-primary" type="submit">Сохранить изменения</button>
+    </form>
+  </div>
+</div>
+
+<!-- 2. МОДАЛКА: ПОДПИСКА FACTURA (199 РУБЛЕЙ) -->
+<div class="modal-screen" id="modalScreenSub">
+  <header class="modal-nav-header">
+    <button class="modal-nav-btn" onclick="closeModalScreen('modalScreenSub')">Закрыть</button>
+    <div class="modal-nav-title">Подписка Factura</div>
+    <button class="modal-nav-btn" style="opacity:0;">Готово</button>
+  </header>
+  <div class="modal-body-scroll">
+    <div class="ios-cells-card" style="padding:24px;text-align:center;">
+      <div style="font-size:54px;margin-bottom:12px;">★</div>
+      <h2 style="margin:0 0 8px 0;font-size:22px;">Factura Premium</h2>
+      <p style="font-size:14px;color:var(--text-secondary);line-height:1.4;margin:0 0 20px 0;">
+        Эксклюзивная золотая звёздочка ★ рядом с вашим именем в профиле и сообщениях, доступ к специальным возможностям платформы.
+      </p>
+      <div style="font-size:26px;font-weight:800;color:#af52de;margin-bottom:18px;">199 ₽ / месяц</div>
+      <button class="btn-primary" id="btnBuyPremiumAction" style="background:#af52de;">Оформить за 199 ₽</button>
     </div>
   </div>
 </div>
 
-<!-- ================= 4. МОДАЛКА: СОЗДАТЬ ЧАТ ИЛИ КАНАЛ ================= -->
-<div class="modal-overlay" id="createChatModal">
-  <div class="modal-box" style="max-width:420px;">
-    <div class="modal-header">
-      <div class="modal-title">Создать чат или канал</div>
-      <button class="modal-close-btn" id="closeCreateChatModalBtn">&times;</button>
+<!-- 3. МОДАЛКА: БАЛАНС ПЛАТФОРМЫ (МОЛНИИ ⚡️) -->
+<div class="modal-screen" id="modalScreenBalance">
+  <header class="modal-nav-header">
+    <button class="modal-nav-btn" onclick="closeModalScreen('modalScreenBalance')">Закрыть</button>
+    <div class="modal-nav-title">Баланс молний</div>
+    <button class="modal-nav-btn" style="opacity:0;">Готово</button>
+  </header>
+  <div class="modal-body-scroll">
+    <div class="ios-cells-card" style="padding:20px;text-align:center;margin-bottom:14px;">
+      <div style="font-size:14px;color:var(--text-secondary);">Текущий баланс:</div>
+      <div style="font-size:36px;font-weight:800;color:#ff9500;margin:6px 0;">
+        ⚡️ <span id="balanceModalNum">0</span> молний
+      </div>
+      <div style="font-size:12px;color:var(--text-secondary);">Курс: 1 молния = 1 рубль</div>
     </div>
-    <div class="modal-body">
-      <form id="createChatForm">
-        <div class="field">
-          <label>Тип:</label>
-          <select id="newChatType">
-            <option value="chat">Групповой чат</option>
-            <option value="channel">Канал для подписчиков</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Название:</label>
-          <input id="newChatTitle" placeholder="Например: IT Новости или Друзья" required>
-        </div>
-        <div class="field">
-          <label>Первое сообщение / описание:</label>
-          <textarea id="newChatFirstMsg" rows="3" placeholder="Добро пожаловать в наш новый канал!"></textarea>
-        </div>
-        <button class="primary" type="submit">Создать</button>
-      </form>
+
+    <div class="ios-cells-card" style="padding:16px;">
+      <div style="font-size:13px;font-weight:700;margin-bottom:8px;">Пополнить баланс (от 200 ₽ — 200 ⚡️):</div>
+      <input type="number" id="inputTopupAmt" value="200" min="200" step="10" style="width:100%;padding:12px;border:1px solid #e5e5ea;border-radius:12px;margin-bottom:12px;font-size:16px;">
+      <button class="btn-primary" id="btnTopupSubmit" style="background:#ff9500;">Пополнить молнии ⚡️</button>
     </div>
   </div>
 </div>
 
-<!-- ================= 5. МОДАЛКА: ОТПРАВИТЬ ЖАЛОБУ ================= -->
-<div class="modal-overlay" id="reportModal">
-  <div class="modal-box" style="max-width:420px;">
-    <div class="modal-header">
-      <div class="modal-title">🚩 Подать жалобу</div>
-      <button class="modal-close-btn" id="closeReportModalBtn">&times;</button>
+<!-- 4. МОДАЛКА: НОВОГОДНИЕ ПОДАРКИ (🧑‍🎄, ☃️) -->
+<div class="modal-screen" id="modalScreenGifts">
+  <header class="modal-nav-header">
+    <button class="modal-nav-btn" onclick="closeModalScreen('modalScreenGifts')">Закрыть</button>
+    <div class="modal-nav-title">Подарки Factura</div>
+    <button class="modal-nav-btn" style="opacity:0;">Готово</button>
+  </header>
+  <div class="modal-body-scroll">
+    <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">
+      Купленные подарки навсегда сохраняются в вашем профиле! Доступны для покупки только до <b>10.01.2027</b>.
     </div>
-    <div class="modal-body">
-      <div style="font-size:13px;color:var(--muted);margin-bottom:12px;" id="reportTargetText">
-        Жалоба на объект
+
+    <div class="gifts-grid">
+      <div class="gift-card">
+        <div class="gift-card-icon">🧑‍🎄</div>
+        <div class="gift-card-name">Санта Factura</div>
+        <div class="gift-card-exp">До 10.01.2027</div>
+        <div style="font-size:15px;font-weight:800;color:#ff9500;margin-bottom:8px;">100 ⚡️</div>
+        <button class="btn-buy-gift" onclick="purchaseGift('🧑‍🎄', 'Санта Factura', 100)">Купить</button>
       </div>
-      <form id="sendReportForm">
-        <div class="field">
-          <label>Причина жалобы:</label>
-          <select id="reportReasonSelect">
-            <option value="Мошенничество">Мошенничество</option>
-            <option value="Оскорбления">Оскорбления и травля</option>
-            <option value="Порнография">Порнография и неприемлемый контент</option>
-            <option value="Спам">Спам и реклама</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Подробности нарушения:</label>
-          <textarea id="reportDetailsText" rows="3" placeholder="Опишите ситуацию подробнее..." required></textarea>
-        </div>
-        <button class="primary" style="background:#dc2626;" type="submit">Отправить жалобу модераторам</button>
-      </form>
+
+      <div class="gift-card">
+        <div class="gift-card-icon">☃️</div>
+        <div class="gift-card-name">Снеговик 2027</div>
+        <div class="gift-card-exp">До 10.01.2027</div>
+        <div style="font-size:15px;font-weight:800;color:#ff9500;margin-bottom:8px;">75 ⚡️</div>
+        <button class="btn-buy-gift" onclick="purchaseGift('☃️', 'Снеговик 2027', 75)">Купить</button>
+      </div>
     </div>
+  </div>
+</div>
+
+<!-- 5. МОДАЛКА: ПОДАТЬ НА ВЕРИФИКАЦИЮ (АНКЕТА) -->
+<div class="modal-screen" id="modalScreenApplyVerif">
+  <header class="modal-nav-header">
+    <button class="modal-nav-btn" onclick="closeModalScreen('modalScreenApplyVerif')">Закрыть</button>
+    <div class="modal-nav-title">Верификация</div>
+    <button class="modal-nav-btn" style="opacity:0;">Готово</button>
+  </header>
+  <div class="modal-body-scroll">
+    <form id="formApplyVerif" class="ios-cells-card" style="padding:16px;">
+      <p style="font-size:13px;color:var(--text-secondary);margin:0 0 14px 0;">
+        Заполните анкету для подтверждения личности и получения оригинальной синей зубчатой галочки:
+      </p>
+      <div class="auth-field">
+        <label>ФИО или название бренда</label>
+        <input id="verifFio" placeholder="Иванов Иван Иванович" required>
+      </div>
+      <div class="auth-field">
+        <label>Ссылка на деятельность или канал</label>
+        <input id="verifLink" placeholder="https://..." required>
+      </div>
+      <div class="auth-field">
+        <label>Цель получения верификации</label>
+        <textarea id="verifReason" rows="3" style="width:100%;padding:10px;border-radius:12px;border:1px solid #e5e5ea;" placeholder="Официальный аккаунт, публичная личность..." required></textarea>
+      </div>
+      <button class="btn-primary" type="submit">Отправить заявку</button>
+    </form>
+  </div>
+</div>
+
+<!-- 6. МОДАЛКА: ВЫДАЧА ВЕРИФИКАЦИИ (ГЛАВНЫЙ АДМИН @tg) -->
+<div class="modal-screen" id="modalScreenAdminVerif">
+  <header class="modal-nav-header">
+    <button class="modal-nav-btn" onclick="closeModalScreen('modalScreenAdminVerif')">Закрыть</button>
+    <div class="modal-nav-title">Заявки на галочку</div>
+    <button class="modal-nav-btn" style="opacity:0;">Готово</button>
+  </header>
+  <div class="modal-body-scroll" id="adminVerifRequestsContainer"></div>
+</div>
+
+<!-- 7. МОДАЛКА: УПРАВЛЕНИЕ АДМИНИСТРАТОРА (СТРОГО @tg) -->
+<div class="modal-screen" id="modalScreenAdminControl">
+  <header class="modal-nav-header">
+    <button class="modal-nav-btn" onclick="closeModalScreen('modalScreenAdminControl')">Закрыть</button>
+    <div class="modal-nav-title">Панель Администратора</div>
+    <button class="modal-nav-btn" style="opacity:0;">Готово</button>
+  </header>
+  <div class="modal-body-scroll">
+    <div class="admin-banner">
+      <div style="font-size:17px;font-weight:700;margin-bottom:4px;">Вы — Главный Администратор (@tg)</div>
+      <div style="font-size:12px;opacity:0.8;">Полный доступ к балансам, подпискам, галочкам каналов и модераторам.</div>
+    </div>
+
+    <!-- ВЫДАЧА МОЛНИЙ -->
+    <div class="ios-cells-card" style="padding:14px;margin-bottom:12px;">
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px;">Выдать молнии ⚡️ (любое количество):</div>
+      <div style="display:flex;gap:8px;">
+        <input type="number" id="adminCustomLightning" value="1000" style="flex:1;padding:8px 12px;border:1px solid #e5e5ea;border-radius:10px;">
+        <button class="btn-action-small btn-success" id="btnAdminAddLightning">Начислить ⚡️</button>
+      </div>
+    </div>
+
+    <!-- ВЫДАЧА ПРЕМИУМА -->
+    <div class="ios-cells-card" style="padding:14px;margin-bottom:12px;">
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px;">Выдать / снять Premium ★:</div>
+      <button class="btn-primary" id="btnAdminToggleSub" style="background:#af52de;padding:10px;font-size:14px;">
+        Переключить подписку себе
+      </button>
+    </div>
+
+    <!-- ГАЛОЧКА ДЛЯ КАНАЛА/ЧАТА -->
+    <div class="ios-cells-card" style="padding:14px;margin-bottom:12px;">
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px;">Галочка для открытого канала/чата:</div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn-action-small btn-success" id="btnAdminGiveChannelVerif">Выдать галочку</button>
+        <button class="btn-action-small btn-danger" id="btnAdminRemoveChannelVerif">Забрать галочку</button>
+      </div>
+    </div>
+
+    <!-- НАЗНАЧЕНИЕ МОДЕРАТОРА -->
+    <div class="ios-cells-card" style="padding:14px;">
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px;">Назначить пользователя модератором:</div>
+      <div style="display:flex;gap:8px;">
+        <input id="adminNewModTag" placeholder="@username" style="flex:1;padding:8px 12px;border:1px solid #e5e5ea;border-radius:10px;">
+        <button class="btn-action-small btn-success" id="btnAdminAddMod">Назначить</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 8. МОДАЛКА: МОДЕРАЦИЯ ЖАЛОБ -->
+<div class="modal-screen" id="modalScreenModeration">
+  <header class="modal-nav-header">
+    <button class="modal-nav-btn" onclick="closeModalScreen('modalScreenModeration')">Закрыть</button>
+    <div class="modal-nav-title">Жалобы пользователей</div>
+    <button class="modal-nav-btn" style="opacity:0;">Готово</button>
+  </header>
+  <div class="modal-body-scroll" id="moderationListContainer"></div>
+</div>
+
+<!-- 9. МОДАЛКА: СОЗДАТЬ ЧАТ ИЛИ КАНАЛ -->
+<div class="modal-screen" id="modalScreenCreateChat">
+  <header class="modal-nav-header">
+    <button class="modal-nav-btn" onclick="closeModalScreen('modalScreenCreateChat')">Отмена</button>
+    <div class="modal-nav-title">Новый диалог</div>
+    <button class="modal-nav-btn" style="opacity:0;">Создать</button>
+  </header>
+  <div class="modal-body-scroll">
+    <form id="formCreateNewChat" class="ios-cells-card" style="padding:16px;">
+      <div class="auth-field">
+        <label>Тип</label>
+        <select id="selectNewChatType" style="width:100%;padding:10px;border-radius:12px;border:1px solid #e5e5ea;background:#f2f2f7;">
+          <option value="chat">Групповой чат</option>
+          <option value="channel">Публичный канал</option>
+        </select>
+      </div>
+      <div class="auth-field">
+        <label>Название</label>
+        <input id="inputNewChatTitle" placeholder="Например: Новости IT" required>
+      </div>
+      <div class="auth-field">
+        <label>Первое сообщение</label>
+        <textarea id="inputNewChatFirstMsg" rows="3" style="width:100%;padding:10px;border-radius:12px;border:1px solid #e5e5ea;" placeholder="Приветствуем подписчиков..."></textarea>
+      </div>
+      <button class="btn-primary" type="submit">Создать</button>
+    </form>
+  </div>
+</div>
+
+<!-- 10. МОДАЛКА: ПОДАТЬ ЖАЛОБУ -->
+<div class="modal-screen" id="modalScreenSendReport">
+  <header class="modal-nav-header">
+    <button class="modal-nav-btn" onclick="closeModalScreen('modalScreenSendReport')">Отмена</button>
+    <div class="modal-nav-title">🚩 Подать жалобу</div>
+    <button class="modal-nav-btn" style="opacity:0;">Готово</button>
+  </header>
+  <div class="modal-body-scroll">
+    <form id="formSendReport" class="ios-cells-card" style="padding:16px;">
+      <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;" id="reportTargetLabel">Жалоба на чат</div>
+      <div class="auth-field">
+        <label>Причина жалобы</label>
+        <select id="selectReportReason" style="width:100%;padding:10px;border-radius:12px;border:1px solid #e5e5ea;background:#f2f2f7;">
+          <option value="Мошенничество">Мошенничество</option>
+          <option value="Оскорбления">Оскорбления</option>
+          <option value="Порнография">Порнография</option>
+          <option value="Спам">Спам и реклама</option>
+        </select>
+      </div>
+      <div class="auth-field">
+        <label>Подробности нарушения</label>
+        <textarea id="textReportDetails" rows="4" style="width:100%;padding:10px;border-radius:12px;border:1px solid #e5e5ea;" placeholder="Опишите нарушение..." required></textarea>
+      </div>
+      <button class="btn-primary" style="background:#ff3b30;" type="submit">Отправить жалобу</button>
+    </form>
   </div>
 </div>
 
 <script>
 (function() {
-  // ДАННЫЕ ПО УМОЛЧАНИЮ
+  // ТЕКУЩИЙ ПОЛЬЗОВАТЕЛЬ И ХРАНИЛИЩЕ
   var currentUser = null;
   var activeChatId = 1;
 
-  // БАЗА ДИАЛОГОВ (ОФИЦИАЛЬНАЯ КОМАНДА FACTURA + КАНАЛЫ/ЧАТЫ)
   var chats = [
     {
       id: 1,
       name: 'Команда Factura',
       type: 'channel',
       initials: 'F',
-      color: 'linear-gradient(135deg,#8b7cff,#b06cff)',
+      color: 'linear-gradient(135deg, #007aff, #5856d6)',
       hasVerifiedBadge: true,
       messages: [
         {
           id: 1,
-          text: '🎉 Добро пожаловать в Factura!\n\nВаш аккаунт успешно зарегистрирован.\n\nВам доступны:\n• Настройки профиля, имени и даты рождения\n• Подписка Factura за 199 ₽ с золотой звёздочкой ★\n• Пополнение баланса молний ⚡️\n• Коллекционные новогодние подарки 🧑‍🎄, ☃️\n• Подача заявки на верификацию и создание своих каналов/чатов!',
+          text: '🎉 Добро пожаловать в Factura!\n\nВаш аккаунт успешно создан.\n\nВам доступны настройки в стиле Telegram iOS, баланс молний ⚡️, подарки 🧑‍🎄 ☃️, подача на верификацию и создание своих чатов и каналов!',
           time: '12:00',
           mine: false
         }
@@ -713,29 +1250,27 @@ h1{font-size:22px;margin:0 0 6px}
     }
   ];
 
-  // СПИСКИ ЗАЯВОК НА ВЕРИФИКАЦИЮ И ЖАЛОБ
   var verifRequests = [];
   var reportsList = [];
-  var moderatorsList = ['@admin'];
+  var moderatorsList = ['@tg', '@admin'];
 
-  // ИНИЦИАЛИЗАЦИЯ И ХРАНИЛИЩЕ
-  function loadState() {
+  function loadSavedState() {
     try {
-      var saved = localStorage.getItem('factura_v7_state');
-      if (saved) {
-        var parsed = JSON.parse(saved);
-        if (parsed.currentUser) currentUser = parsed.currentUser;
-        if (parsed.chats && parsed.chats.length) chats = parsed.chats;
-        if (parsed.verifRequests) verifRequests = parsed.verifRequests;
-        if (parsed.reportsList) reportsList = parsed.reportsList;
-        if (parsed.moderatorsList) moderatorsList = parsed.moderatorsList;
+      var s = localStorage.getItem('factura_v8_ios_state');
+      if (s) {
+        var p = JSON.parse(s);
+        if (p.currentUser) currentUser = p.currentUser;
+        if (p.chats && p.chats.length) chats = p.chats;
+        if (p.verifRequests) verifRequests = p.verifRequests;
+        if (p.reportsList) reportsList = p.reportsList;
+        if (p.moderatorsList) moderatorsList = p.moderatorsList;
       }
     } catch(e) {}
   }
 
-  function saveState() {
+  function saveCurrentState() {
     try {
-      localStorage.setItem('factura_v7_state', JSON.stringify({
+      localStorage.setItem('factura_v8_ios_state', JSON.stringify({
         currentUser: currentUser,
         chats: chats,
         verifRequests: verifRequests,
@@ -745,441 +1280,438 @@ h1{font-size:22px;margin:0 0 6px}
     } catch(e) {}
   }
 
-  loadState();
+  loadSavedState();
 
-  // DOM ЭЛЕМЕНТЫ АВТОРИЗАЦИИ
-  var authWrap = document.getElementById('authWrap');
-  var appShell = document.getElementById('appShell');
-  var authForm = document.getElementById('authForm');
-  var emailInput = document.getElementById('emailInput');
-  var passInput = document.getElementById('passInput');
-  var confirmField = document.getElementById('confirmField');
-  var confirmInput = document.getElementById('confirmInput');
-  var toggleAuthBtn = document.getElementById('toggleAuthBtn');
+  // АВТОРИЗАЦИЯ
   var isRegister = true;
+  var authWrap = document.getElementById('authWrap');
+  var appViewport = document.getElementById('appViewport');
+  var authForm = document.getElementById('authForm');
+  var authEmail = document.getElementById('authEmail');
+  var authPassword = document.getElementById('authPassword');
+  var authConfirmPassword = document.getElementById('authConfirmPassword');
+  var authConfirmBlock = document.getElementById('authConfirmBlock');
+  var authTitle = document.getElementById('authTitle');
+  var authSubmitBtn = document.getElementById('authSubmitBtn');
+  var authSwitchBtn = document.getElementById('authSwitchBtn');
 
-  toggleAuthBtn.addEventListener('click', function() {
+  authSwitchBtn.addEventListener('click', function() {
     isRegister = !isRegister;
-    confirmField.style.display = isRegister ? 'block' : 'none';
-    document.getElementById('authTitle').textContent = isRegister ? 'Создать аккаунт' : 'С возвращением';
-    document.getElementById('submitBtn').textContent = isRegister ? 'Зарегистрироваться' : 'Войти';
-    toggleAuthBtn.textContent = isRegister ? 'Войти' : 'Создать аккаунт';
+    authConfirmBlock.style.display = isRegister ? 'block' : 'none';
+    authTitle.textContent = isRegister ? 'Создать аккаунт' : 'Вход в Factura';
+    authSubmitBtn.textContent = isRegister ? 'Зарегистрироваться' : 'Войти';
+    authSwitchBtn.textContent = isRegister ? 'Уже есть аккаунт? Войти' : 'Впервые в Factura? Создать аккаунт';
   });
 
   authForm.addEventListener('submit', function(e) {
     e.preventDefault();
-    var email = emailInput.value.trim().toLowerCase();
-    var pass = passInput.value;
-    if (pass.length < 8) return alert('Пароль от 8 символов!');
-    if (isRegister && pass !== confirmInput.value) return alert('Пароли не совпадают!');
+    var email = authEmail.value.trim().toLowerCase();
+    var pass = authPassword.value;
+
+    if (pass.length < 8) return alert('Пароль минимум 8 символов!');
+    if (isRegister && pass !== authConfirmPassword.value) return alert('Пароли не совпадают!');
 
     var base = email.split('@')[0];
+    
+    // ПРОВЕРКА НА ГЛАВНОГО АДМИНИСТРАТОРА @tg
+    var isTgMainAdmin = (email.indexOf('tg@') === 0 || email === 'tg@factura.ru' || base === 'tg');
+    var assignedUsername = isTgMainAdmin ? '@tg' : ('@' + base.replace(/[^a-z0-9_]/g, ''));
+
     currentUser = {
       email: email,
-      displayName: base.charAt(0).toUpperCase() + base.slice(1),
-      username: '@' + base.replace(/[^a-z0-9_]/g, ''),
+      displayName: isTgMainAdmin ? 'Rust (Admin)' : (base.charAt(0).toUpperCase() + base.slice(1)),
+      username: assignedUsername,
       birthDate: '',
-      hasSubscription: false,
-      hasVerifiedBadge: false,
-      balanceLightning: 250, // Стартовый приветственный баланс молний
+      hasSubscription: isTgMainAdmin,
+      hasVerifiedBadge: isTgMainAdmin,
+      balanceLightning: isTgMainAdmin ? 9999 : 250,
       gifts: [],
-      role: email.includes('admin') ? 'admin' : 'user'
+      // СТРОГО: Только @tg является главным администратором!
+      isMainAdmin: isTgMainAdmin,
+      isModerator: isTgMainAdmin || moderatorsList.includes(assignedUsername)
     };
 
-    saveState();
-    launchApp();
+    saveCurrentState();
+    launchMainApp();
   });
 
-  function launchApp() {
+  function launchMainApp() {
     if (!currentUser) return;
-    authWrap.style.display = 'none';
-    appShell.style.display = 'grid';
 
-    // Проверяем роль модератора
-    if (moderatorsList.includes(currentUser.username) && currentUser.role !== 'admin') {
-      currentUser.role = 'moderator';
+    // Автоматическая проверка прав
+    if (currentUser.username === '@tg') {
+      currentUser.isMainAdmin = true;
+      currentUser.isModerator = true;
+    } else if (moderatorsList.includes(currentUser.username)) {
+      currentUser.isModerator = true;
     }
 
-    updateHeaderUI();
-    renderChatList();
-    openChat(activeChatId);
+    authWrap.style.display = 'none';
+    appViewport.style.display = 'flex';
+
+    updateUserSettingsUI();
+    renderChatsList();
+    renderVerifRequestsList();
+    renderModerationReports();
   }
 
-  // ОБНОВЛЕНИЕ ДАННЫХ ПРОФИЛЯ В ИНТЕРФЕЙСЕ
-  function updateHeaderUI() {
+  // ОБНОВЛЕНИЕ ДАННЫХ В НАСТРОЙКАХ (КАК НА СКРИНШОТЕ TELEGRAM)
+  function updateUserSettingsUI() {
     if (!currentUser) return;
 
     var initial = currentUser.displayName.charAt(0).toUpperCase();
-    document.getElementById('myAvatar').textContent = initial;
-    document.getElementById('myDisplayName').textContent = currentUser.displayName;
-    document.getElementById('myUsername').textContent = currentUser.username;
-    document.getElementById('myBalanceDisplay').textContent = currentUser.balanceLightning;
-    document.getElementById('modalBalanceSpan').textContent = currentUser.balanceLightning;
-    document.getElementById('balanceTabVal').textContent = currentUser.balanceLightning;
+    document.getElementById('heroAvatar').textContent = initial;
+    document.getElementById('heroDisplayName').textContent = currentUser.displayName;
+    document.getElementById('heroUserTag').textContent = currentUser.username;
+    document.getElementById('accountRowName').textContent = currentUser.displayName;
 
-    // Звездочка
-    document.getElementById('myStarBadge').style.display = currentUser.hasSubscription ? 'inline-flex' : 'none';
-    document.getElementById('modalProfileStar').style.display = currentUser.hasSubscription ? 'inline-flex' : 'none';
+    document.getElementById('balanceRowVal').textContent = currentUser.balanceLightning;
+    document.getElementById('balanceTextRight').textContent = currentUser.balanceLightning + ' ⚡️';
+    document.getElementById('balanceModalNum').textContent = currentUser.balanceLightning;
 
-    // Галочка
-    document.getElementById('myVerifiedBadge').style.display = currentUser.hasVerifiedBadge ? 'inline-flex' : 'none';
-    document.getElementById('modalProfileVerified').style.display = currentUser.hasVerifiedBadge ? 'inline-flex' : 'none';
+    // Значки
+    document.getElementById('heroVerifiedBadge').style.display = currentUser.hasVerifiedBadge ? 'inline-flex' : 'none';
+    document.getElementById('heroStarBadge').style.display = currentUser.hasSubscription ? 'inline-flex' : 'none';
+    document.getElementById('subStatusText').textContent = currentUser.hasSubscription ? 'Активна ★' : '199 ₽';
 
-    document.getElementById('roleLabelBadge').textContent = currentUser.role.toUpperCase();
-
-    // Профиль модалка
-    document.getElementById('modalUserAvatar').textContent = initial;
-    document.getElementById('modalProfileName').textContent = currentUser.displayName;
-    document.getElementById('modalProfileEmail').textContent = currentUser.email;
-
-    document.getElementById('editDisplayName').value = currentUser.displayName;
-    document.getElementById('editUsername').value = currentUser.username;
-    document.getElementById('editBirthDate').value = currentUser.birthDate || '';
+    // Форма профиля
+    document.getElementById('inputDisplayName').value = currentUser.displayName;
+    document.getElementById('inputUsername').value = currentUser.username;
+    document.getElementById('inputBirthDate').value = currentUser.birthDate || '';
 
     // Отображение подарков
-    var giftBox = document.getElementById('profileGiftsDisplay');
-    giftBox.innerHTML = '';
+    var gContainer = document.getElementById('profileGiftsDisplay');
+    gContainer.innerHTML = '';
     if (currentUser.gifts && currentUser.gifts.length > 0) {
       currentUser.gifts.forEach(function(g) {
-        var span = document.createElement('div');
-        span.className = 'gift-badge-item';
-        span.innerHTML = '<span>' + g.icon + '</span><span>' + g.name + '</span>';
-        giftBox.appendChild(span);
+        var p = document.createElement('span');
+        p.className = 'item-badge-pill';
+        p.innerHTML = g.icon + ' ' + g.name;
+        gContainer.appendChild(p);
       });
     } else {
-      giftBox.innerHTML = '<span style="font-size:12px;color:var(--muted);">У вас пока нет подарков</span>';
+      gContainer.innerHTML = '<span style="font-size:13px;color:var(--text-secondary);">У вас пока нет подарков</span>';
     }
 
-    // Доступ к вкладкам модератора/админа
-    var isAdmin = currentUser.role === 'admin';
-    var isMod = currentUser.role === 'admin' || currentUser.role === 'moderator';
-    document.getElementById('tabAdminVerifBtn').style.display = isAdmin ? 'inline-block' : 'none';
-    document.getElementById('tabAdminManageBtn').style.display = isAdmin ? 'inline-block' : 'none';
-    document.getElementById('tabModerationBtn').style.display = isMod ? 'inline-block' : 'none';
+    // СТРОГО: Панель Администратора доступна ТОЛЬКО @tg!
+    var isTgAdmin = (currentUser.username === '@tg');
+    document.getElementById('groupMainAdmin').style.display = isTgAdmin ? 'block' : 'none';
+
+    // Панель модератора доступна модераторам и @tg
+    var canModerate = isTgAdmin || currentUser.isModerator;
+    document.getElementById('groupModeration').style.display = canModerate ? 'block' : 'none';
+    document.getElementById('reportsCountBadge').textContent = reportsList.length;
   }
 
-  // СПИСОК ЧАТОВ И КАНАЛОВ
-  function renderChatList() {
-    var list = document.getElementById('chatList');
-    list.innerHTML = '';
-    var q = document.getElementById('searchInput').value.trim().toLowerCase();
+  // СПИСОК ЧАТОВ
+  function renderChatsList() {
+    var cont = document.getElementById('chatsListContainer');
+    cont.innerHTML = '';
 
-    chats.filter(function(c) {
-      return c.name.toLowerCase().indexOf(q) !== -1;
-    }).forEach(function(chat) {
+    chats.forEach(function(chat) {
       var row = document.createElement('div');
-      row.className = 'chat-row' + (chat.id === activeChatId ? ' active' : '');
-      var lastMsg = chat.messages.length ? chat.messages[chat.messages.length - 1].text : 'Нет сообщений';
+      row.className = 'chat-cell';
+      var last = chat.messages.length ? chat.messages[chat.messages.length - 1].text : 'Нет сообщений';
 
       row.innerHTML = 
-        '<div class="avatar" style="background:' + chat.color + '">' + chat.initials + '</div>' +
-        '<div class="chat-meta">' +
-          '<div class="chat-title-line">' +
-            '<span class="chat-name">' + chat.name + '</span>' +
-            (chat.hasVerifiedBadge ? '<span class="badge-factura-verified"><svg><use href="#icon-verified-star"></use></svg></span>' : '') +
-            '<span class="chat-type-badge ' + (chat.type === 'channel' ? 'channel' : '') + '">' + (chat.type === 'channel' ? 'Канал' : 'Чат') + '</span>' +
+        '<div class="chat-avatar" style="background:' + chat.color + '">' + chat.initials + '</div>' +
+        '<div class="chat-body-meta">' +
+          '<div class="chat-title-row">' +
+            '<div class="chat-title-left">' +
+              '<span>' + chat.name + '</span>' +
+              (chat.hasVerifiedBadge ? '<span class="badge-verified-custom"><svg><use href="#icon-verified-star"></use></svg></span>' : '') +
+            '</div>' +
+            '<span class="chat-time">12:00</span>' +
           '</div>' +
-          '<div class="preview">' + lastMsg + '</div>' +
+          '<div class="chat-last-msg">' + last + '</div>' +
         '</div>';
 
       row.addEventListener('click', function() {
-        openChat(chat.id);
+        openChatDialog(chat.id);
       });
-      list.appendChild(row);
+      cont.appendChild(row);
     });
   }
 
-  document.getElementById('searchInput').addEventListener('input', renderChatList);
-
-  function openChat(id) {
+  // ОТКРЫТИЕ ДИАЛОГА
+  function openChatDialog(id) {
     activeChatId = id;
     var chat = chats.find(function(c) { return c.id === id; });
     if (!chat) return;
 
-    document.getElementById('emptyPlaceholder').style.display = 'none';
-    document.getElementById('activeChatContainer').style.display = 'flex';
-    appShell.classList.add('chat-open');
+    document.getElementById('dialogChatTitle').textContent = chat.name;
+    document.getElementById('dialogChatSub').textContent = chat.type === 'channel' ? 'публичный канал' : 'чат';
+    document.getElementById('dialogVerifiedStar').style.display = chat.hasVerifiedBadge ? 'inline-flex' : 'none';
 
-    document.getElementById('chatHeaderAvatar').style.background = chat.color;
-    document.getElementById('chatHeaderAvatar').textContent = chat.initials;
-    document.getElementById('chatTitleSpan').textContent = chat.name;
-    document.getElementById('chatHeaderVerified').style.display = chat.hasVerifiedBadge ? 'inline-flex' : 'none';
-    document.getElementById('chatHeaderSub').textContent = chat.type === 'channel' ? 'Официальный канал' : 'Участники онлайн';
-
-    renderMessages(chat);
-    renderChatList();
+    renderDialogMessages(chat);
+    document.getElementById('screenChatDialog').style.display = 'flex';
   }
 
-  function renderMessages(chat) {
-    var box = document.getElementById('messagesList');
-    box.innerHTML = '<div class="date-chip">Сегодня</div>';
+  function renderDialogMessages(chat) {
+    var wrap = document.getElementById('dialogMessagesList');
+    wrap.innerHTML = '';
+
     chat.messages.forEach(function(m) {
-      var div = document.createElement('div');
-      div.className = 'message' + (m.mine ? ' mine' : '');
-      div.innerHTML = m.text.replace(/\n/g, '<br>') + '<div class="message-time">' + m.time + '</div>';
-      box.appendChild(div);
+      var b = document.createElement('div');
+      b.className = 'msg-bubble ' + (m.mine ? 'outgoing' : 'incoming');
+      b.innerHTML = m.text.replace(/\n/g, '<br>') + '<div class="msg-time">' + m.time + '</div>';
+      wrap.appendChild(b);
     });
-    box.scrollTop = box.scrollHeight;
+    wrap.scrollTop = wrap.scrollHeight;
   }
 
-  // ОТПРАВКА СООБЩЕНИЯ
-  document.getElementById('msgForm').addEventListener('submit', function(e) {
+  document.getElementById('btnBackFromChat').addEventListener('click', function() {
+    document.getElementById('screenChatDialog').style.display = 'none';
+  });
+
+  document.getElementById('dialogSendForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    var input = document.getElementById('msgInput');
-    var val = input.value.trim();
-    if (!val) return;
+    var inp = document.getElementById('dialogInputText');
+    var txt = inp.value.trim();
+    if (!txt) return;
 
     var chat = chats.find(function(c) { return c.id === activeChatId; });
     if (!chat) return;
 
     var now = new Date();
-    var timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+    var t = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
 
     chat.messages.push({
       id: Date.now(),
-      text: val,
-      time: timeStr,
+      text: txt,
+      time: t,
       mine: true
     });
 
-    input.value = '';
-    renderMessages(chat);
-    renderChatList();
-    saveState();
+    inp.value = '';
+    renderDialogMessages(chat);
+    renderChatsList();
+    saveCurrentState();
   });
 
-  document.getElementById('backBtn').addEventListener('click', function() {
-    appShell.classList.remove('chat-open');
-  });
+  // ПЕРЕКЛЮЧЕНИЕ ТАБОВ (ЧАТЫ / НАСТРОЙКИ)
+  var tabBtnChats = document.getElementById('tabBtnChats');
+  var tabBtnSettings = document.getElementById('tabBtnSettings');
+  var tabChatsView = document.getElementById('tabChatsView');
+  var tabSettingsView = document.getElementById('tabSettingsView');
 
-  // ВКЛАДКИ НАСТРОЕК
-  var tabButtons = document.querySelectorAll('.tab-btn');
-  tabButtons.forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      tabButtons.forEach(function(b) { b.classList.remove('active'); });
-      document.querySelectorAll('.tab-content').forEach(function(tc) { tc.style.display = 'none'; });
-      btn.classList.add('active');
-      document.getElementById(btn.getAttribute('data-tab')).style.display = 'block';
-    });
-  });
+  function switchTab(name) {
+    tabBtnChats.classList.remove('active');
+    tabBtnSettings.classList.remove('active');
+    tabChatsView.classList.remove('active');
+    tabSettingsView.classList.remove('active');
 
-  // ОТКРЫТИЕ И ЗАКРЫТИЕ НАСТРОЕК
-  var settingsModal = document.getElementById('settingsModal');
-  document.getElementById('profileFooter').addEventListener('click', function() {
-    updateHeaderUI();
-    settingsModal.classList.add('open');
-  });
-  document.getElementById('openSettingsBtn').addEventListener('click', function(e) {
-    e.stopPropagation();
-    updateHeaderUI();
-    settingsModal.classList.add('open');
-  });
-  document.getElementById('closeSettingsModalBtn').addEventListener('click', function() {
-    settingsModal.classList.remove('open');
-  });
-  document.getElementById('openTopupBtn').addEventListener('click', function() {
-    settingsModal.classList.add('open');
-    document.querySelector('[data-tab="tabBalance"]').click();
-  });
+    if (name === 'chats') {
+      tabBtnChats.classList.add('active');
+      tabChatsView.classList.add('active');
+    } else if (name === 'settings') {
+      tabBtnSettings.classList.add('active');
+      tabSettingsView.classList.add('active');
+      updateUserSettingsUI();
+    }
+  }
+
+  tabBtnChats.addEventListener('click', function() { switchTab('chats'); });
+  tabBtnSettings.addEventListener('click', function() { switchTab('settings'); });
+  document.getElementById('tabBtnContacts').addEventListener('click', function() { alert('Раздел контактов'); });
+  document.getElementById('tabBtnCalls').addEventListener('click', function() { alert('Журнал звонков пуст'); });
+
+  // УПРАВЛЕНИЕ МОДАЛКАМИ ВНУТРИ НАСТРОЕК
+  window.openModalScreen = function(id) {
+    document.getElementById(id).classList.add('open');
+  };
+  window.closeModalScreen = function(id) {
+    document.getElementById(id).classList.remove('open');
+    updateUserSettingsUI();
+  };
+
+  document.getElementById('cellOpenProfile').addEventListener('click', function() { openModalScreen('modalScreenProfile'); });
+  document.getElementById('btnHeroEditProfile').addEventListener('click', function() { openModalScreen('modalScreenProfile'); });
+  document.getElementById('cellOpenSubscription').addEventListener('click', function() { openModalScreen('modalScreenSub'); });
+  document.getElementById('cellOpenBalance').addEventListener('click', function() { openModalScreen('modalScreenBalance'); });
+  document.getElementById('cellOpenGifts').addEventListener('click', function() { openModalScreen('modalScreenGifts'); });
+  document.getElementById('cellOpenApplyVerif').addEventListener('click', function() { openModalScreen('modalScreenApplyVerif'); });
+
+  document.getElementById('cellOpenVerifRequests').addEventListener('click', function() { openModalScreen('modalScreenAdminVerif'); });
+  document.getElementById('cellOpenAdminControl').addEventListener('click', function() { openModalScreen('modalScreenAdminControl'); });
+  document.getElementById('cellOpenModeration').addEventListener('click', function() { openModalScreen('modalScreenModeration'); });
+
+  document.getElementById('btnOpenCreateChat').addEventListener('click', function() { openModalScreen('modalScreenCreateChat'); });
+  document.getElementById('btnAddAccountRow').addEventListener('click', function() { alert('Добавление второго аккаунта'); });
 
   // 1. СОХРАНЕНИЕ ПРОФИЛЯ
-  document.getElementById('profileEditForm').addEventListener('submit', function(e) {
+  document.getElementById('formEditProfile').addEventListener('submit', function(e) {
     e.preventDefault();
-    var name = document.getElementById('editDisplayName').value.trim();
-    var tag = document.getElementById('editUsername').value.trim();
+    var name = document.getElementById('inputDisplayName').value.trim();
+    var tag = document.getElementById('inputUsername').value.trim();
     if (!tag.startsWith('@')) tag = '@' + tag;
 
     currentUser.displayName = name;
     currentUser.username = tag;
-    currentUser.birthDate = document.getElementById('editBirthDate').value;
+    currentUser.birthDate = document.getElementById('inputBirthDate').value;
 
-    saveState();
-    updateHeaderUI();
-    renderChatList();
+    saveCurrentState();
+    closeModalScreen('modalScreenProfile');
     alert('Профиль успешно обновлен!');
   });
 
-  // 2. ВЫХОД С АККАУНТА
-  document.getElementById('logoutBtn').addEventListener('click', function() {
-    if (confirm('Выйти с аккаунта Factura?')) {
-      currentUser = null;
-      localStorage.removeItem('factura_v7_state');
-      settingsModal.classList.remove('open');
-      appShell.style.display = 'none';
-      authWrap.style.display = 'flex';
-    }
-  });
-
-  // 3. ПОКУПКА ПОДПИСКИ FACTURA (199 РУБЛЕЙ)
-  document.getElementById('buySubBtn').addEventListener('click', function() {
-    if (currentUser.hasSubscription) return alert('У вас уже есть подписка Factura! ★');
-    if (confirm('Купить подписку Factura за 199 ₽?')) {
+  // 2. ПОДПИСКА FACTURA (199 РУБЛЕЙ)
+  document.getElementById('btnBuyPremiumAction').addEventListener('click', function() {
+    if (currentUser.hasSubscription) return alert('У вас уже есть подписка Factura!');
+    if (confirm('Оформить подписку Factura за 199 ₽/мес?')) {
       currentUser.hasSubscription = true;
-      saveState();
-      updateHeaderUI();
-      alert('Поздравляем! Подписка подключена, вам присвоена золотая звёздочка ★!');
+      saveCurrentState();
+      closeModalScreen('modalScreenSub');
+      alert('Поздравляем! Вам присвоена эксклюзивная звёздочка ★ Factura Premium!');
     }
   });
 
-  // 4. ПОПОЛНЕНИЕ БАЛАНСА МОЛНИЙ (ОТ 200 РУБЛЕЙ)
-  document.getElementById('confirmTopupBtn').addEventListener('click', function() {
-    var amt = parseInt(document.getElementById('topupInputAmount').value, 10);
-    if (!amt || amt < 200) {
-      alert('Минимальная сумма пополнения — от 200 ₽ (200 ⚡️)!');
-      return;
-    }
-    currentUser.balanceLightning += amt;
-    saveState();
-    updateHeaderUI();
-    alert('Баланс успешно пополнен на +' + amt + ' ⚡️ молний!');
+  // 3. ПОПОЛНЕНИЕ МОЛНИЙ (ОТ 200 РУБЛЕЙ)
+  document.getElementById('btnTopupSubmit').addEventListener('click', function() {
+    var val = parseInt(document.getElementById('inputTopupAmt').value, 10);
+    if (!val || val < 200) return alert('Минимальная сумма пополнения — от 200 ₽ (200 ⚡️)!');
+    currentUser.balanceLightning += val;
+    saveCurrentState();
+    closeModalScreen('modalScreenBalance');
+    alert('Баланс успешно пополнен на +' + val + ' ⚡️ молний!');
   });
 
-  // 5. ПОКУПКА НОВОГОДНИХ ПОДАРКОВ (🧑‍🎄, ☃️) ДО 10.01.2027
-  window.buyGift = function(icon, name, price) {
+  // 4. ПОКУПКА ПОДАРКОВ (ДО 10.01.2027)
+  window.purchaseGift = function(icon, name, price) {
     var now = new Date();
-    var deadline = new Date('2027-01-10T23:59:59');
-    if (now > deadline) {
-      alert('Срок новогодней акции завершен (до 10.01.2027)!');
-      return;
+    if (now > new Date('2027-01-10T23:59:59')) {
+      return alert('Срок новогодней акции завершён (до 10.01.2027)!');
     }
     if (currentUser.balanceLightning < price) {
-      alert('Недостаточно молний ⚡️! Пополните баланс на ' + price + ' ⚡️.');
-      return;
+      return alert('Недостаточно молний ⚡️! Пополните баланс на ' + price + ' ⚡️.');
     }
     currentUser.balanceLightning -= price;
     if (!currentUser.gifts) currentUser.gifts = [];
     currentUser.gifts.push({ icon: icon, name: name });
 
-    saveState();
-    updateHeaderUI();
-    alert('Подарок ' + icon + ' «' + name + '» успешно приобретен и навсегда добавлен в ваш профиль!');
+    saveCurrentState();
+    updateUserSettingsUI();
+    alert('Подарок ' + icon + ' «' + name + '» навсегда закреплен в вашем профиле!');
   };
 
-  // 6. ПОДАЧА ЗАЯВКИ НА ВЕРИФИКАЦИЮ
-  document.getElementById('verifApplyForm').addEventListener('submit', function(e) {
+  // 5. АНКЕТА НА ВЕРИФИКАЦИЮ
+  document.getElementById('formApplyVerif').addEventListener('submit', function(e) {
     e.preventDefault();
-    var req = {
+    verifRequests.push({
       id: Date.now(),
       username: currentUser.username,
       displayName: currentUser.displayName,
-      fullName: document.getElementById('verifFullName').value,
+      fio: document.getElementById('verifFio').value,
       link: document.getElementById('verifLink').value,
       reason: document.getElementById('verifReason').value,
       time: new Date().toLocaleDateString()
-    };
-    verifRequests.push(req);
-    saveState();
-    alert('Анкета верификации отправлена на рассмотрение администрации!');
-    document.getElementById('verifApplyForm').reset();
-    renderVerifRequests();
+    });
+    saveCurrentState();
+    closeModalScreen('modalScreenApplyVerif');
+    document.getElementById('formApplyVerif').reset();
+    renderVerifRequestsList();
+    alert('Анкета верификации отправлена на рассмотрение главному администратору @tg!');
   });
 
-  // 7. ВЫДАЧА ВЕРИФИКАЦИИ АДМИНОМ
-  function renderVerifRequests() {
-    var box = document.getElementById('adminVerifRequestsList');
+  // 6. ПАНЕЛЬ ВЫДАЧИ ВЕРИФИКАЦИИ (@tg)
+  function renderVerifRequestsList() {
+    var box = document.getElementById('adminVerifRequestsContainer');
     box.innerHTML = '';
     if (!verifRequests.length) {
-      box.innerHTML = '<div style="color:var(--muted);font-size:13px;">Нет ожидающих заявок</div>';
+      box.innerHTML = '<div style="color:var(--text-secondary);text-align:center;padding:30px;">Нет активных заявок</div>';
       return;
     }
-    verifRequests.forEach(function(r, index) {
-      var item = document.createElement('div');
-      item.className = 'list-card-item';
-      item.innerHTML = 
-        '<div class="list-card-title">' +
-          '<span>' + r.displayName + ' (' + r.username + ')</span>' +
-          '<span style="font-size:11px;color:var(--muted);">' + r.time + '</span>' +
+
+    verifRequests.forEach(function(req, idx) {
+      var card = document.createElement('div');
+      card.className = 'request-card';
+      card.innerHTML = 
+        '<div class="request-card-title">' +
+          '<span>' + req.displayName + ' (' + req.username + ')</span>' +
+          '<span style="font-size:12px;color:var(--text-secondary);">' + req.time + '</span>' +
         '</div>' +
-        '<div style="font-size:12px;color:#c8ceda;"><b>ФИО:</b> ' + r.fullName + '</div>' +
-        '<div style="font-size:12px;color:#c8ceda;"><b>Ссылка:</b> ' + r.link + '</div>' +
-        '<div style="font-size:12px;color:#c8ceda;margin-bottom:8px;"><b>Причина:</b> ' + r.reason + '</div>' +
-        '<div style="display:flex;gap:8px;">' +
-          '<button class="action-pill-btn success" onclick="approveVerif(' + index + ')">Одобрить галочку</button>' +
-          '<button class="action-pill-btn danger" onclick="rejectVerif(' + index + ')">Отклонить</button>' +
+        '<div style="font-size:13px;"><b>ФИО:</b> ' + req.fio + '</div>' +
+        '<div style="font-size:13px;"><b>Ссылка:</b> ' + req.link + '</div>' +
+        '<div style="font-size:13px;color:var(--text-secondary);margin-top:4px;"><b>Причина:</b> ' + req.reason + '</div>' +
+        '<div class="btn-group-row">' +
+          '<button class="btn-action-small btn-success" onclick="approveVerifReq(' + idx + ')">Одобрить галочку</button>' +
+          '<button class="btn-action-small btn-danger" onclick="rejectVerifReq(' + idx + ')">Отклонить</button>' +
         '</div>';
-      box.appendChild(item);
+      box.appendChild(card);
     });
   }
 
-  window.approveVerif = function(idx) {
-    var req = verifRequests[idx];
-    if (req.username === currentUser.username) {
+  window.approveVerifReq = function(idx) {
+    var r = verifRequests[idx];
+    if (r.username === currentUser.username) {
       currentUser.hasVerifiedBadge = true;
     }
     verifRequests.splice(idx, 1);
-    saveState();
-    updateHeaderUI();
-    renderVerifRequests();
-    alert('Верификация одобрена! Галочка успешно выдана.');
+    saveCurrentState();
+    updateUserSettingsUI();
+    renderVerifRequestsList();
+    alert('Галочка успешно выдана!');
   };
 
-  window.rejectVerif = function(idx) {
+  window.rejectVerifReq = function(idx) {
     verifRequests.splice(idx, 1);
-    saveState();
-    renderVerifRequests();
+    saveCurrentState();
+    renderVerifRequestsList();
     alert('Заявка отклонена.');
   };
 
-  // 8. ПАНЕЛЬ АДМИНИСТРАТОРА (ВЫДАЧА МОЛНИЙ, ПРЕМИУМА, ГАЛОЧКИ КАНАЛУ)
-  document.getElementById('adminGiveLightningBtn').addEventListener('click', function() {
-    var amt = parseInt(document.getElementById('adminGiveLightningAmount').value, 10) || 500;
-    currentUser.balanceLightning += amt;
-    saveState();
-    updateHeaderUI();
-    alert('Вам начислено ' + amt + ' ⚡️ молний!');
+  // 7. УПРАВЛЕНИЕ АДМИНИСТРАТОРА (@tg)
+  document.getElementById('btnAdminAddLightning').addEventListener('click', function() {
+    var val = parseInt(document.getElementById('adminCustomLightning').value, 10) || 1000;
+    currentUser.balanceLightning += val;
+    saveCurrentState();
+    updateUserSettingsUI();
+    alert('Начислено +' + val + ' ⚡️ молний!');
   });
 
-  document.getElementById('adminTogglePremiumBtn').addEventListener('click', function() {
+  document.getElementById('btnAdminToggleSub').addEventListener('click', function() {
     currentUser.hasSubscription = !currentUser.hasSubscription;
-    saveState();
-    updateHeaderUI();
+    saveCurrentState();
+    updateUserSettingsUI();
     alert('Статус Premium переключен: ' + (currentUser.hasSubscription ? 'АКТИВЕН ★' : 'ОТКЛЮЧЕН'));
   });
 
-  document.getElementById('adminGiveChannelBadgeBtn').addEventListener('click', function() {
-    var chat = chats.find(function(c) { return c.id === activeChatId; });
-    if (!chat) return;
-    chat.hasVerifiedBadge = true;
-    saveState();
-    openChat(activeChatId);
-    alert('Оригинальная синяя галочка выдана каналу «' + chat.name + '»!');
+  document.getElementById('btnAdminGiveChannelVerif').addEventListener('click', function() {
+    var c = chats.find(function(x) { return x.id === activeChatId; });
+    if (!c) return;
+    c.hasVerifiedBadge = true;
+    saveCurrentState();
+    renderChatsList();
+    alert('Галочка выдана каналу «' + c.name + '»!');
   });
 
-  document.getElementById('adminRemoveChannelBadgeBtn').addEventListener('click', function() {
-    var chat = chats.find(function(c) { return c.id === activeChatId; });
-    if (!chat) return;
-    chat.hasVerifiedBadge = false;
-    saveState();
-    openChat(activeChatId);
-    alert('Галочка удалена с канала «' + chat.name + '»!');
+  document.getElementById('btnAdminRemoveChannelVerif').addEventListener('click', function() {
+    var c = chats.find(function(c) { return c.id === activeChatId; });
+    if (!c) return;
+    c.hasVerifiedBadge = false;
+    saveCurrentState();
+    renderChatsList();
+    alert('Галочка удалена с канала «' + c.name + '»!');
   });
 
-  document.getElementById('adminAddModBtn').addEventListener('click', function() {
-    var tag = document.getElementById('adminAddModUsername').value.trim();
+  document.getElementById('btnAdminAddMod').addEventListener('click', function() {
+    var tag = document.getElementById('adminNewModTag').value.trim();
     if (!tag) return;
     if (!tag.startsWith('@')) tag = '@' + tag;
     if (!moderatorsList.includes(tag)) moderatorsList.push(tag);
-    if (tag === currentUser.username) currentUser.role = 'moderator';
-    saveState();
-    updateHeaderUI();
-    alert('Пользователь ' + tag + ' успешно назначен модератором Factura!');
-    document.getElementById('adminAddModUsername').value = '';
+    if (tag === currentUser.username) currentUser.isModerator = true;
+    saveCurrentState();
+    updateUserSettingsUI();
+    alert('Пользователь ' + tag + ' назначен модератором!');
+    document.getElementById('adminNewModTag').value = '';
   });
 
-  // 9. СОЗДАНИЕ КАНАЛОВ И ЧАТОВ ДЛЯ ПОЛЬЗОВАТЕЛЕЙ
-  var createChatModal = document.getElementById('createChatModal');
-  document.getElementById('openCreateChatModalBtn').addEventListener('click', function() {
-    createChatModal.classList.add('open');
-  });
-  document.getElementById('closeCreateChatModalBtn').addEventListener('click', function() {
-    createChatModal.classList.remove('open');
-  });
-
-  document.getElementById('createChatForm').addEventListener('submit', function(e) {
+  // 8. СОЗДАНИЕ ЧАТА / КАНАЛА
+  document.getElementById('formCreateNewChat').addEventListener('submit', function(e) {
     e.preventDefault();
-    var title = document.getElementById('newChatTitle').value.trim();
-    var type = document.getElementById('newChatType').value;
-    var msg = document.getElementById('newChatFirstMsg').value.trim() || 'Добро пожаловать в новый ' + (type === 'channel' ? 'канал' : 'чат') + '!';
+    var title = document.getElementById('inputNewChatTitle').value.trim();
+    var type = document.getElementById('selectNewChatType').value;
+    var msg = document.getElementById('inputNewChatFirstMsg').value.trim() || 'Добро пожаловать!';
 
     var newId = Date.now();
     chats.push({
@@ -1187,80 +1719,73 @@ h1{font-size:22px;margin:0 0 6px}
       name: title,
       type: type,
       initials: title.charAt(0).toUpperCase(),
-      color: type === 'channel' ? 'linear-gradient(135deg,#16a34a,#059669)' : 'linear-gradient(135deg,#3b82f6,#1d4ed8)',
+      color: type === 'channel' ? 'linear-gradient(135deg, #34c759, #30b0c7)' : 'linear-gradient(135deg, #007aff, #5856d6)',
       hasVerifiedBadge: false,
       messages: [
         {
           id: Date.now(),
           text: msg,
-          time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}),
+          time: '12:00',
           mine: false
         }
       ]
     });
 
-    saveState();
-    createChatModal.classList.remove('open');
-    document.getElementById('createChatForm').reset();
-    renderChatList();
-    openChat(newId);
-    alert('Новый ' + (type === 'channel' ? 'канал' : 'чат') + ' успешно создан!');
+    saveCurrentState();
+    closeModalScreen('modalScreenCreateChat');
+    document.getElementById('formCreateNewChat').reset();
+    renderChatsList();
+    openChatDialog(newId);
   });
 
-  // 10. ПОДАЧА ЖАЛОБЫ (МОШЕННИЧЕСТВО, ОСКОРБЛЕНИЯ, ПОРНОГРАФИЯ И Т.Д.)
-  var reportModal = document.getElementById('reportModal');
-  document.getElementById('openReportModalBtn').addEventListener('click', function() {
-    var chat = chats.find(function(c) { return c.id === activeChatId; });
-    if (!chat) return;
-    document.getElementById('reportTargetText').textContent = 'Объект жалобы: ' + (chat.type === 'channel' ? 'Канал' : 'Чат') + ' «' + chat.name + '»';
-    reportModal.classList.add('open');
-  });
-  document.getElementById('closeReportModalBtn').addEventListener('click', function() {
-    reportModal.classList.remove('open');
+  // 9. ЖАЛОБЫ
+  document.getElementById('btnOpenReportModal').addEventListener('click', function() {
+    var c = chats.find(function(x) { return x.id === activeChatId; });
+    if (!c) return;
+    document.getElementById('reportTargetLabel').textContent = 'Жалоба на ' + (c.type === 'channel' ? 'канал' : 'чат') + ' «' + c.name + '»';
+    openModalScreen('modalScreenSendReport');
   });
 
-  document.getElementById('sendReportForm').addEventListener('submit', function(e) {
+  document.getElementById('formSendReport').addEventListener('submit', function(e) {
     e.preventDefault();
-    var chat = chats.find(function(c) { return c.id === activeChatId; });
-    var rep = {
+    var c = chats.find(function(x) { return x.id === activeChatId; });
+    reportsList.push({
       id: Date.now(),
-      targetName: chat ? chat.name : 'Диалог',
-      senderUsername: currentUser.username,
-      reason: document.getElementById('reportReasonSelect').value,
-      details: document.getElementById('reportDetailsText').value.trim(),
+      targetName: c ? c.name : 'Чат',
+      senderTag: currentUser.username,
+      reason: document.getElementById('selectReportReason').value,
+      details: document.getElementById('textReportDetails').value.trim(),
       time: new Date().toLocaleString()
-    };
-    reportsList.push(rep);
-    saveState();
-    reportModal.classList.remove('open');
-    document.getElementById('sendReportForm').reset();
-    renderReportsList();
-    alert('Жалоба успешно отправлена модераторам Factura.');
+    });
+    saveCurrentState();
+    closeModalScreen('modalScreenSendReport');
+    document.getElementById('formSendReport').reset();
+    renderModerationReports();
+    alert('Жалоба успешно направлена модераторам.');
   });
 
-  // 11. МОДЕРАЦИЯ ЖАЛОБ МОДЕРАТОРАМИ
-  function renderReportsList() {
-    var box = document.getElementById('moderationReportsList');
+  function renderModerationReports() {
+    var box = document.getElementById('moderationListContainer');
     box.innerHTML = '';
     if (!reportsList.length) {
-      box.innerHTML = '<div style="color:var(--muted);font-size:13px;">Активных жалоб нет</div>';
+      box.innerHTML = '<div style="color:var(--text-secondary);text-align:center;padding:30px;">Нет активных жалоб</div>';
       return;
     }
-    reportsList.forEach(function(r, idx) {
+
+    reportsList.forEach(function(rep, idx) {
       var item = document.createElement('div');
-      item.className = 'list-card-item';
-      item.style.borderColor = '#dc2626';
+      item.className = 'request-card';
       item.innerHTML = 
-        '<div class="list-card-title">' +
-          '<span style="color:#ef4444;">🚩 ' + r.reason + '</span>' +
-          '<span style="font-size:11px;color:var(--muted);">' + r.time + '</span>' +
+        '<div class="request-card-title">' +
+          '<span style="color:#ff3b30;">🚩 ' + rep.reason + '</span>' +
+          '<span style="font-size:12px;color:var(--text-secondary);">' + rep.time + '</span>' +
         '</div>' +
-        '<div style="font-size:12px;color:#fff;"><b>На объект:</b> ' + r.targetName + '</div>' +
-        '<div style="font-size:12px;color:var(--muted);"><b>Отправил:</b> ' + r.senderUsername + '</div>' +
-        '<div style="font-size:12px;background:#10141e;padding:8px;border-radius:8px;margin:6px 0;">' + r.details + '</div>' +
-        '<div style="display:flex;gap:8px;">' +
-          '<button class="action-pill-btn danger" onclick="resolveReport(' + idx + ', true)">Заблокировать / Принять меры</button>' +
-          '<button class="action-pill-btn" onclick="resolveReport(' + idx + ', false)">Отклонить жалобу</button>' +
+        '<div style="font-size:13px;"><b>На объект:</b> ' + rep.targetName + '</div>' +
+        '<div style="font-size:12px;color:var(--text-secondary);"><b>От:</b> ' + rep.senderTag + '</div>' +
+        '<div style="background:#f2f2f7;padding:8px;border-radius:8px;font-size:13px;margin:8px 0;">' + rep.details + '</div>' +
+        '<div class="btn-group-row">' +
+          '<button class="btn-action-small btn-danger" onclick="resolveReport(' + idx + ', true)">Заблокировать объект</button>' +
+          '<button class="btn-action-small btn-success" onclick="resolveReport(' + idx + ', false)">Отклонить жалобу</button>' +
         '</div>';
       box.appendChild(item);
     });
@@ -1268,16 +1793,28 @@ h1{font-size:22px;margin:0 0 6px}
 
   window.resolveReport = function(idx, actionTaken) {
     reportsList.splice(idx, 1);
-    saveState();
-    renderReportsList();
-    alert(actionTaken ? 'Жалоба удовлетворена, меры приняты!' : 'Жалоба отклонена.');
+    saveCurrentState();
+    renderModerationReports();
+    updateUserSettingsUI();
+    alert(actionTaken ? 'Жалоба принята, объект заблокирован!' : 'Жалоба отклонена.');
   };
 
-  // АВТОМАТИЧЕСКИЙ ВХОД ПРИ НАЛИЧИИ СЕССИИ
+  // ВЫХОД С АККАУНТА
+  document.getElementById('cellLogout').addEventListener('click', function() {
+    if (confirm('Выйти из аккаунта Factura?')) {
+      currentUser = null;
+      localStorage.removeItem('factura_v8_ios_state');
+      appViewport.style.display = 'none';
+      authWrap.style.display = 'flex';
+      authEmail.value = '';
+      authPassword.value = '';
+      authConfirmPassword.value = '';
+    }
+  });
+
+  // ЕСЛИ ПОЛЬЗОВАТЕЛЬ УЖЕ ВОШЕЛ
   if (currentUser) {
-    launchApp();
-    renderVerifRequests();
-    renderReportsList();
+    launchMainApp();
   }
 
 })();
