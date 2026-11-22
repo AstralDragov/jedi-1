@@ -2,9 +2,24 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no,maximum-scale=1">
 <meta name="theme-color" content="#f2f2f7">
-<title>Factura</title>
+
+<!-- МЕТАТЕГИ ДЛЯ ПРЕВРАЩЕНИЯ В NATIVE APP (iOS И ANDROID PWA) -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Factura">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="application-name" content="Factura">
+<meta name="msapplication-TileColor" content="#007aff">
+
+<title>Factura — Мессенджер</title>
+
+<!-- ВСТРОЕННЫЙ WEB MANIFEST ДЛЯ УСТАНОВКИ НА ТЕЛЕФОН БЕЗ ЛИШНИХ ФАЙЛОВ -->
+<link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22Factura%22%2C%22short_name%22%3A%22Factura%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f2f2f7%22%2C%22theme_color%22%3A%22%23f2f2f7%22%2C%22orientation%22%3A%22portrait%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%3Butf8%2C%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20512%20512%27%3E%3Crect%20width%3D%27512%27%20height%3D%27512%27%20rx%3D%27128%27%20fill%3D%27%23007aff%27%2F%3E%3Ctext%20x%3D%2750%25%27%20y%3D%2758%25%27%20dominant-baseline%3D%27middle%27%20text-anchor%3D%27middle%27%20font-family%3D%27sans-serif%27%20font-weight%3D%27900%27%20font-size%3D%27300%27%20fill%3D%27%23ffffff%27%3EF%3C%2Ftext%3E%3C%2Fsvg%3E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
+
+<!-- ИКОНКА ДЛЯ ДОМАШНЕГО ЭКРАНА IPHONE -->
+<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='128' fill='%23007aff'/><text x='50%' y='58%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-weight='900' font-size='300' fill='%23ffffff'>F</text></svg>">
 
 <style>
 :root {
@@ -19,7 +34,6 @@
   --accent-gold: #ff9500;
   --accent-green: #34c759;
   --accent-red: #ff3b30;
-  --accent-teal: #30b0c7;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
@@ -27,6 +41,7 @@
 * {
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
+  outline: none;
 }
 
 body {
@@ -37,6 +52,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   min-height: 100vh;
   user-select: none;
+  overflow-x: hidden;
 }
 
 button, input, textarea, select {
@@ -44,7 +60,7 @@ button, input, textarea, select {
 }
 button { cursor: pointer; }
 
-/* SVG ОРИГИНАЛЬНАЯ ЗУБЧАТАЯ СИНЯЯ ГАЛОЧКА */
+/* ЗУБЧАТАЯ СИНЯЯ ГАЛОЧКА */
 .badge-verified-custom {
   display: inline-flex;
   align-items: center;
@@ -76,6 +92,42 @@ button { cursor: pointer; }
   box-shadow: 0 2px 5px rgba(251,133,0,0.35);
 }
 
+/* ================= БАННЕР УСТАНОВКИ ПРИЛОЖЕНИЯ ================= */
+.install-app-banner {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 12px 14px;
+  margin: 8px 16px 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+  border: 1px solid #e5e5ea;
+}
+.install-app-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #007aff, #5856d6);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+.install-app-btn {
+  background: var(--accent-blue);
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
 /* ================= АВТОРИЗАЦИЯ ================= */
 .auth-container {
   min-height: 100vh;
@@ -95,16 +147,16 @@ button { cursor: pointer; }
   text-align: center;
 }
 .auth-brand-logo {
-  width: 64px;
-  height: 64px;
-  border-radius: 18px;
+  width: 68px;
+  height: 68px;
+  border-radius: 20px;
   background: linear-gradient(135deg, #007aff, #5856d6);
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 32px;
-  font-weight: 800;
+  font-size: 34px;
+  font-weight: 900;
   margin: 0 auto 16px auto;
   box-shadow: 0 8px 20px rgba(0,122,255,0.28);
 }
@@ -165,7 +217,7 @@ button { cursor: pointer; }
   cursor: pointer;
 }
 
-/* ================= ОСНОВНОЙ КАРКАС ПРИЛОЖЕНИЯ ================= */
+/* ================= ОСНОВНОЙ ВЬЮПОРТ ПРИЛОЖЕНИЯ ================= */
 .app-viewport {
   max-width: 480px;
   margin: 0 auto;
@@ -219,7 +271,7 @@ button { cursor: pointer; }
 }
 
 .chats-list {
-  padding: 8px 16px;
+  padding: 4px 16px 12px 16px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -355,7 +407,6 @@ button { cursor: pointer; }
   font-size: 14px;
   line-height: 1.4;
   word-break: break-word;
-  position: relative;
 }
 .msg-bubble.incoming {
   align-self: flex-start;
@@ -451,7 +502,7 @@ button { cursor: pointer; }
   cursor: pointer;
 }
 
-/* ИНСЕТ-ГРУППЫ (КАК В iOS TELEGRAM) */
+/* ИНСЕТ-ГРУППЫ TELEGRAM */
 .ios-group-wrapper {
   margin: 12px 16px 6px 16px;
 }
@@ -570,7 +621,7 @@ button { cursor: pointer; }
   font-weight: 600;
 }
 
-/* ================= МОДАЛКИ ЭКРАНОВ НАСТРОЕК ================= */
+/* ================= МОДАЛКИ СТРАНИЦ НАСТРОЕК ================= */
 .modal-screen {
   position: fixed;
   inset: 0;
@@ -613,7 +664,7 @@ button { cursor: pointer; }
   padding: 16px;
 }
 
-/* БАННЕР ПОДАРКОВ */
+/* ПОДАРКИ */
 .gifts-collection-card {
   background: #ffffff;
   border-radius: 14px;
@@ -698,6 +749,48 @@ button { cursor: pointer; }
   padding: 16px;
   margin-bottom: 16px;
 }
+
+/* МОДАЛКА ИНСТРУКЦИИ УСТАНОВКИ НА IPHONE */
+.ios-install-sheet {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(5px);
+  z-index: 300;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+}
+.ios-install-box {
+  background: #ffffff;
+  width: 100%;
+  max-width: 480px;
+  border-radius: 24px 24px 0 0;
+  padding: 24px 20px calc(24px + var(--safe-bottom)) 20px;
+  text-align: center;
+  box-shadow: 0 -10px 30px rgba(0,0,0,0.15);
+}
+.ios-install-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  margin: 14px 0;
+  font-size: 14px;
+}
+.step-number {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #007aff;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+  flex-shrink: 0;
+}
 </style>
 </head>
 <body>
@@ -714,7 +807,7 @@ button { cursor: pointer; }
   <div class="auth-card">
     <div class="auth-brand-logo">F</div>
     <h1 id="authTitle">Создать аккаунт</h1>
-    <p id="authSubtitle">Добро пожаловать в мессенджер Factura</p>
+    <p id="authSubtitle">Добро пожаловать в приложение Factura</p>
 
     <form id="authForm">
       <div class="auth-field">
@@ -747,6 +840,16 @@ button { cursor: pointer; }
       <div class="chats-header-title">Чаты</div>
       <button class="header-icon-btn" id="btnOpenCreateChat" title="Создать чат или канал">+</button>
     </header>
+
+    <!-- БАННЕР БЫСТРОЙ УСТАНОВКИ ПРИЛОЖЕНИЯ (ЕСЛИ ОТКРЫТО В БРАУЗЕРЕ) -->
+    <div class="install-app-banner" id="pwaInstallBanner">
+      <div class="install-app-icon">F</div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-weight:700;font-size:14px;">Установить Factura</div>
+        <div style="font-size:12px;color:var(--text-secondary);">Использовать как родное приложение</div>
+      </div>
+      <button class="install-app-btn" id="btnInstallPwa">Установить</button>
+    </div>
 
     <div class="chats-list" id="chatsListContainer"></div>
   </main>
@@ -958,7 +1061,7 @@ button { cursor: pointer; }
   </form>
 </div>
 
-<!-- ================= МОДАЛКИ ЭКРАНОВ ИЗ ВКЛАДОК НАСТРОЕК ================= -->
+<!-- ================= МОДАЛКИ СТРАНИЦ НАСТРОЕК ================= -->
 
 <!-- 1. МОДАЛКА: МОЙ ПРОФИЛЬ -->
 <div class="modal-screen" id="modalScreenProfile">
@@ -1225,9 +1328,85 @@ button { cursor: pointer; }
   </div>
 </div>
 
+<!-- 11. ИНСТРУКЦИЯ ПО УСТАНОВКЕ НА IPHONE (SHEET) -->
+<div class="ios-install-sheet" id="iosInstallSheet">
+  <div class="ios-install-box">
+    <div style="font-size:20px;font-weight:800;margin-bottom:6px;">Установка на iPhone</div>
+    <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">
+      Установите Factura на главный экран, чтобы открывать без рамок Safari:
+    </div>
+
+    <div class="ios-install-step">
+      <div class="step-number">1</div>
+      <div>Нажмите иконку <b>«Поделиться»</b> (квадрат со стрелкой вверх внизу экрана Safari)</div>
+    </div>
+    <div class="ios-install-step">
+      <div class="step-number">2</div>
+      <div>Пролистайте меню вниз и выберите <b>«На экран „Домой“»</b> ➕</div>
+    </div>
+    <div class="ios-install-step">
+      <div class="step-number">3</div>
+      <div>В правом верхнем углу нажмите <b>«Добавить»</b></div>
+    </div>
+
+    <button class="btn-primary" style="margin-top:16px;" onclick="document.getElementById('iosInstallSheet').style.display='none'">
+      Понятно
+    </button>
+  </div>
+</div>
+
 <script>
 (function() {
-  // ТЕКУЩИЙ ПОЛЬЗОВАТЕЛЬ И ХРАНИЛИЩЕ
+  // ЗВУКОВОЙ ДВИЖОК NATIVE APP (БЕЗ ВНЕШНИХ ФАЙЛОВ)
+  var audioCtx = null;
+  function playHapticBeep(freq, type, duration) {
+    try {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      var osc = audioCtx.createOscillator();
+      var gain = audioCtx.createGain();
+      osc.type = type || 'sine';
+      osc.frequency.setValueAtTime(freq || 600, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + (duration || 0.08));
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + (duration || 0.08));
+    } catch(e) {}
+    if (navigator.vibrate) {
+      try { navigator.vibrate(10); } catch(e) {}
+    }
+  }
+
+  // PWA УСТАНОВКА
+  var deferredPrompt = null;
+  var isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+  var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+
+  if (isStandalone) {
+    var banner = document.getElementById('pwaInstallBanner');
+    if (banner) banner.style.display = 'none';
+  }
+
+  window.addEventListener('beforeinstallprompt', function(e) {
+    e.preventDefault();
+    deferredPrompt = e;
+  });
+
+  document.getElementById('btnInstallPwa').addEventListener('click', function() {
+    if (isIos) {
+      document.getElementById('iosInstallSheet').style.display = 'flex';
+    } else if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(function() {
+        deferredPrompt = null;
+      });
+    } else {
+      alert('Чтобы установить приложение: нажмите меню браузера (три точки) ➔ «Установить приложение» или «Добавить на главный экран».');
+    }
+  });
+
+  // СОСТОЯНИЕ ПРИЛОЖЕНИЯ
   var currentUser = null;
   var activeChatId = 1;
 
@@ -1242,7 +1421,7 @@ button { cursor: pointer; }
       messages: [
         {
           id: 1,
-          text: '🎉 Добро пожаловать в Factura!\n\nВаш аккаунт успешно создан.\n\nВам доступны настройки в стиле Telegram iOS, баланс молний ⚡️, подарки 🧑‍🎄 ☃️, подача на верификацию и создание своих чатов и каналов!',
+          text: '🎉 Добро пожаловать в Factura!\n\nВаше приложение готово к работе на телефоне.\n\nВам доступны:\n• Настройки в стиле Telegram iOS\n• Баланс молний ⚡️\n• Подарки 🧑‍🎄 ☃️ до 10.01.2027\n• Подача на верификацию\n• Создание чатов и каналов!\n\nГлавный администратор приложения: @tg',
           time: '12:00',
           mine: false
         }
@@ -1256,7 +1435,7 @@ button { cursor: pointer; }
 
   function loadSavedState() {
     try {
-      var s = localStorage.getItem('factura_v8_ios_state');
+      var s = localStorage.getItem('factura_v9_app_state');
       if (s) {
         var p = JSON.parse(s);
         if (p.currentUser) currentUser = p.currentUser;
@@ -1270,7 +1449,7 @@ button { cursor: pointer; }
 
   function saveCurrentState() {
     try {
-      localStorage.setItem('factura_v8_ios_state', JSON.stringify({
+      localStorage.setItem('factura_v9_app_state', JSON.stringify({
         currentUser: currentUser,
         chats: chats,
         verifRequests: verifRequests,
@@ -1313,7 +1492,7 @@ button { cursor: pointer; }
 
     var base = email.split('@')[0];
     
-    // ПРОВЕРКА НА ГЛАВНОГО АДМИНИСТРАТОРА @tg
+    // СТРОГО: Только @tg является главным администратором!
     var isTgMainAdmin = (email.indexOf('tg@') === 0 || email === 'tg@factura.ru' || base === 'tg');
     var assignedUsername = isTgMainAdmin ? '@tg' : ('@' + base.replace(/[^a-z0-9_]/g, ''));
 
@@ -1326,7 +1505,6 @@ button { cursor: pointer; }
       hasVerifiedBadge: isTgMainAdmin,
       balanceLightning: isTgMainAdmin ? 9999 : 250,
       gifts: [],
-      // СТРОГО: Только @tg является главным администратором!
       isMainAdmin: isTgMainAdmin,
       isModerator: isTgMainAdmin || moderatorsList.includes(assignedUsername)
     };
@@ -1338,7 +1516,6 @@ button { cursor: pointer; }
   function launchMainApp() {
     if (!currentUser) return;
 
-    // Автоматическая проверка прав
     if (currentUser.username === '@tg') {
       currentUser.isMainAdmin = true;
       currentUser.isModerator = true;
@@ -1355,7 +1532,7 @@ button { cursor: pointer; }
     renderModerationReports();
   }
 
-  // ОБНОВЛЕНИЕ ДАННЫХ В НАСТРОЙКАХ (КАК НА СКРИНШОТЕ TELEGRAM)
+  // ОБНОВЛЕНИЕ ДАННЫХ В НАСТРОЙКАХ
   function updateUserSettingsUI() {
     if (!currentUser) return;
 
@@ -1369,12 +1546,10 @@ button { cursor: pointer; }
     document.getElementById('balanceTextRight').textContent = currentUser.balanceLightning + ' ⚡️';
     document.getElementById('balanceModalNum').textContent = currentUser.balanceLightning;
 
-    // Значки
     document.getElementById('heroVerifiedBadge').style.display = currentUser.hasVerifiedBadge ? 'inline-flex' : 'none';
     document.getElementById('heroStarBadge').style.display = currentUser.hasSubscription ? 'inline-flex' : 'none';
     document.getElementById('subStatusText').textContent = currentUser.hasSubscription ? 'Активна ★' : '199 ₽';
 
-    // Форма профиля
     document.getElementById('inputDisplayName').value = currentUser.displayName;
     document.getElementById('inputUsername').value = currentUser.username;
     document.getElementById('inputBirthDate').value = currentUser.birthDate || '';
@@ -1393,11 +1568,11 @@ button { cursor: pointer; }
       gContainer.innerHTML = '<span style="font-size:13px;color:var(--text-secondary);">У вас пока нет подарков</span>';
     }
 
-    // СТРОГО: Панель Администратора доступна ТОЛЬКО @tg!
+    // Панель Главного Администратора: ТОЛЬКО @tg!
     var isTgAdmin = (currentUser.username === '@tg');
     document.getElementById('groupMainAdmin').style.display = isTgAdmin ? 'block' : 'none';
 
-    // Панель модератора доступна модераторам и @tg
+    // Панель модератора: модераторам и @tg
     var canModerate = isTgAdmin || currentUser.isModerator;
     document.getElementById('groupModeration').style.display = canModerate ? 'block' : 'none';
     document.getElementById('reportsCountBadge').textContent = reportsList.length;
@@ -1427,6 +1602,7 @@ button { cursor: pointer; }
         '</div>';
 
       row.addEventListener('click', function() {
+        playHapticBeep(450, 'sine', 0.05);
         openChatDialog(chat.id);
       });
       cont.appendChild(row);
@@ -1461,6 +1637,7 @@ button { cursor: pointer; }
   }
 
   document.getElementById('btnBackFromChat').addEventListener('click', function() {
+    playHapticBeep(350, 'sine', 0.04);
     document.getElementById('screenChatDialog').style.display = 'none';
   });
 
@@ -1472,6 +1649,8 @@ button { cursor: pointer; }
 
     var chat = chats.find(function(c) { return c.id === activeChatId; });
     if (!chat) return;
+
+    playHapticBeep(750, 'triangle', 0.09);
 
     var now = new Date();
     var t = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
@@ -1489,13 +1668,14 @@ button { cursor: pointer; }
     saveCurrentState();
   });
 
-  // ПЕРЕКЛЮЧЕНИЕ ТАБОВ (ЧАТЫ / НАСТРОЙКИ)
+  // ПЕРЕКЛЮЧЕНИЕ ТАБОВ
   var tabBtnChats = document.getElementById('tabBtnChats');
   var tabBtnSettings = document.getElementById('tabBtnSettings');
   var tabChatsView = document.getElementById('tabChatsView');
   var tabSettingsView = document.getElementById('tabSettingsView');
 
   function switchTab(name) {
+    playHapticBeep(520, 'sine', 0.05);
     tabBtnChats.classList.remove('active');
     tabBtnSettings.classList.remove('active');
     tabChatsView.classList.remove('active');
@@ -1513,14 +1693,22 @@ button { cursor: pointer; }
 
   tabBtnChats.addEventListener('click', function() { switchTab('chats'); });
   tabBtnSettings.addEventListener('click', function() { switchTab('settings'); });
-  document.getElementById('tabBtnContacts').addEventListener('click', function() { alert('Раздел контактов'); });
-  document.getElementById('tabBtnCalls').addEventListener('click', function() { alert('Журнал звонков пуст'); });
+  document.getElementById('tabBtnContacts').addEventListener('click', function() {
+    playHapticBeep(300, 'sine', 0.04);
+    alert('Раздел «Контакты»');
+  });
+  document.getElementById('tabBtnCalls').addEventListener('click', function() {
+    playHapticBeep(300, 'sine', 0.04);
+    alert('Журнал звонков пуст');
+  });
 
-  // УПРАВЛЕНИЕ МОДАЛКАМИ ВНУТРИ НАСТРОЕК
+  // МОДАЛКИ
   window.openModalScreen = function(id) {
+    playHapticBeep(550, 'sine', 0.05);
     document.getElementById(id).classList.add('open');
   };
   window.closeModalScreen = function(id) {
+    playHapticBeep(380, 'sine', 0.04);
     document.getElementById(id).classList.remove('open');
     updateUserSettingsUI();
   };
@@ -1566,7 +1754,7 @@ button { cursor: pointer; }
     }
   });
 
-  // 3. ПОПОЛНЕНИЕ МОЛНИЙ (ОТ 200 РУБЛЕЙ)
+  // 3. ПОПОЛНЕНИЕ МОЛНИЙ
   document.getElementById('btnTopupSubmit').addEventListener('click', function() {
     var val = parseInt(document.getElementById('inputTopupAmt').value, 10);
     if (!val || val < 200) return alert('Минимальная сумма пополнения — от 200 ₽ (200 ⚡️)!');
@@ -1613,7 +1801,7 @@ button { cursor: pointer; }
     alert('Анкета верификации отправлена на рассмотрение главному администратору @tg!');
   });
 
-  // 6. ПАНЕЛЬ ВЫДАЧИ ВЕРИФИКАЦИИ (@tg)
+  // 6. ВЫДАЧА ВЕРИФИКАЦИИ (@tg)
   function renderVerifRequestsList() {
     var box = document.getElementById('adminVerifRequestsContainer');
     box.innerHTML = '';
@@ -1799,11 +1987,11 @@ button { cursor: pointer; }
     alert(actionTaken ? 'Жалоба принята, объект заблокирован!' : 'Жалоба отклонена.');
   };
 
-  // ВЫХОД С АККАУНТА
+  // ВЫХОД
   document.getElementById('cellLogout').addEventListener('click', function() {
-    if (confirm('Выйти из аккаунта Factura?')) {
+    if (confirm('Выйти из приложения Factura?')) {
       currentUser = null;
-      localStorage.removeItem('factura_v8_ios_state');
+      localStorage.removeItem('factura_v9_app_state');
       appViewport.style.display = 'none';
       authWrap.style.display = 'flex';
       authEmail.value = '';
@@ -1812,7 +2000,6 @@ button { cursor: pointer; }
     }
   });
 
-  // ЕСЛИ ПОЛЬЗОВАТЕЛЬ УЖЕ ВОШЕЛ
   if (currentUser) {
     launchMainApp();
   }
