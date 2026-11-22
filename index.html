@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="ru" style="background:#10131c;">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#10131c">
+<title>Factura — мессенджер</title>
+
+<style>
+:root{--bg:#10131c;--panel:#171b26;--line:#292f3e;--text:#f3f5fa;--muted:#929bad;--accent:#8b7cff;--accent2:#47d7b0;--danger:#ff7085}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:#10131c;color:#f3f5fa;font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;min-height:100vh;overflow-x:hidden}
+button,input{font:inherit}
+button{cursor:pointer}
+
+/* АВТОРИЗАЦИЯ */
+.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(ellipse at 20% 20%,#27224d 0,transparent 45%),radial-gradient(ellipse at 80% 80%,#123d3b 0,transparent 40%),#10131c}
+.auth-card{width:100%;max-width:400px;padding:30px 24px;background:#171b26;border:1px solid var(--line);border-radius:24px;box-shadow:0 24px 60px rgba(0,0,0,0.6)}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.brand-mark{height:44px;width:44px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#b06cff);display:grid;place-items:center;font-weight:900;font-size:22px;color:#fff}
+.brand-name{font-size:22px;font-weight:800;letter-spacing:-.5px}
+.brand-caption{font-size:12px;color:var(--muted)}
+h1{font-size:22px;margin:0 0 6px}
+.sub{color:var(--muted);margin:0 0 20px;font-size:13px}
+.field{margin-bottom:14px}
+.field label{display:block;color:#c8ceda;font-size:13px;margin-bottom:6px}
+.field input{width:100%;border:1px solid var(--line);background:#10141e;color:#fff;padding:12px 14px;border-radius:12px;outline:none}
+.field input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(139,124,255,0.2)}
+.primary{border:0;background:linear-gradient(100deg,var(--accent),#a172ff);color:#fff;font-weight:700;border-radius:12px;padding:13px 16px;width:100%;margin-top:6px}
+.switch{text-align:center;color:var(--muted);font-size:13px;margin-top:16px}
+.link{color:#b5aaff;background:none;border:0;padding:0;font-weight:700}
+.error{color:var(--danger);font-size:13px;min-height:18px;margin-top:8px}
+
+/* ИНТЕРФЕЙС МЕССЕНДЖЕРА */
+.app-shell{height:100vh;max-width:1200px;margin:auto;display:grid;grid-template-columns:320px 1fr;background:var(--panel);border-left:1px solid var(--line);border-right:1px solid var(--line)}
+.sidebar{border-right:1px solid var(--line);display:flex;flex-direction:column;min-width:0;background:#171b26}
+.side-head{padding:18px 16px 12px;border-bottom:1px solid var(--line)}
+.side-brand{display:flex;align-items:center;justify-content:space-between}
+.small-brand{display:flex;gap:10px;align-items:center}
+.small-brand .brand-mark{width:36px;height:36px;border-radius:11px;font-size:17px}
+.small-brand .brand-name{font-size:18px}
+.search{margin-top:14px;width:100%;border:1px solid var(--line);background:#10141e;color:#fff;padding:10px 12px;border-radius:10px;outline:none}
+.section-label{padding:14px 16px 6px;color:var(--muted);font-size:11px;font-weight:800;letter-spacing:1px}
+.chat-list{overflow-y:auto;flex:1}
+.chat-row{display:flex;align-items:center;gap:11px;padding:12px 16px;cursor:pointer;border-left:3px solid transparent}
+.chat-row:hover,.chat-row.active{background:#222838}
+.chat-row.active{border-left-color:var(--accent)}
+.avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;color:#fff;font-weight:800}
+.chat-meta{min-width:0;flex:1}
+.chat-name{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.preview{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.time{font-size:11px;color:var(--muted);align-self:flex-start}
+.side-foot{padding:14px 16px;border-top:1px solid var(--line);display:flex;align-items:center;gap:10px;background:#141721}
+.user-info{flex:1;min-width:0}
+.user-email{font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis}
+.logout{border:1px solid var(--line);background:transparent;color:var(--muted);padding:6px 10px;border-radius:8px}
+
+.main{display:flex;flex-direction:column;min-width:0;background:#151823}
+.empty{margin:auto;text-align:center;color:var(--muted);padding:24px}
+.empty-icon{font-size:42px;margin-bottom:10px}
+.conversation-head{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;background:#171b26}
+.conversation-head .avatar{width:38px;height:38px}
+.head-name{font-weight:700}
+.online{font-size:12px;color:var(--accent2)}
+.messages{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:10px}
+.date-chip{align-self:center;background:#252b39;color:var(--muted);padding:4px 10px;border-radius:16px;font-size:11px;margin-bottom:4px}
+.message{max-width:min(78%,560px);padding:10px 14px;border-radius:16px;background:#252b39;align-self:flex-start;word-break:break-word}
+.message.mine{align-self:flex-end;background:#6559c7}
+.message-time{font-size:10px;color:#c3c1d7;text-align:right;margin-top:4px}
+.composer{padding:12px 16px;border-top:1px solid var(--line);display:flex;gap:10px;align-items:center;background:#171b26}
+.composer input{flex:1;min-width:0;border:1px solid var(--line);background:#10141e;color:#fff;padding:12px 16px;border-radius:20px;outline:none}
+.send{width:42px;height:42px;border:0;border-radius:50%;background:var(--accent);color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center}
+.top-mobile{display:none}
+
+@media(max-width:700px){
+  .app-shell{display:block;height:100dvh;border:0}
+  .sidebar{height:100%;border:0}
+  .main{height:100%;display:none}
+  .app-shell.chat-open .sidebar{display:none}
+  .app-shell.chat-open .main{display:flex}
+  .top-mobile{display:inline-block}
+  .back{border:0;background:none;color:var(--accent);font-size:24px;padding:0 8px 0 0}
+  .side-head{padding-top:calc(14px + env(safe-area-inset-top))}
+  .conversation-head{padding-top:calc(12px + env(safe-area-inset-top))}
+  .composer{padding-bottom:calc(12px + env(safe-area-inset-bottom))}
+}
+</style>
+</head>
+<body>
+
+<!-- 1. ЭКРАН ВХОДА И РЕГИСТРАЦИИ -->
+<section id="authWrap" class="auth-wrap">
+  <div class="auth-card">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <div>
+        <div class="brand-name">Factura</div>
+        <div class="brand-caption">Мессенджер нового поколения</div>
+      </div>
+    </div>
+    <h1 id="authTitle">Создать аккаунт</h1>
+    <p id="authSub" class="sub">Зарегистрируйтесь по почте и паролю, чтобы начать общение.</p>
+    
+    <form id="authForm">
+      <div class="field">
+        <label for="emailInput">Электронная почта</label>
+        <input id="emailInput" type="email" placeholder="name@example.com" autocomplete="email" required>
+      </div>
+      <div class="field">
+        <label for="passInput">Пароль</label>
+        <input id="passInput" type="password" placeholder="Не менее 8 символов" minlength="8" required>
+      </div>
+      <div class="field" id="confirmField">
+        <label for="confirmInput">Повторите пароль</label>
+        <input id="confirmInput" type="password" placeholder="Введите пароль ещё раз">
+      </div>
+      <button class="primary" id="submitBtn" type="submit">Зарегистрироваться</button>
+      <div class="error" id="errorMsg"></div>
+    </form>
+
+    <div class="switch">
+      <span id="switchText">Уже есть аккаунт?</span>
+      <button class="link" id="toggleAuthBtn" type="button">Войти</button>
+    </div>
+  </div>
+</section>
+
+<!-- 2. ОСНОВНОЙ ИНТЕРФЕЙС МЕССЕНДЖЕРА -->
+<div id="appShell" class="app-shell" style="display:none;">
+  <aside class="sidebar">
+    <div class="side-head">
+      <div class="side-brand">
+        <div class="small-brand">
+          <div class="brand-mark">F</div>
+          <div class="brand-name">Factura</div>
+        </div>
+        <span style="color:var(--muted);font-size:12px;font-weight:700;">CHATS</span>
+      </div>
+      <input class="search" id="searchInput" placeholder="⌕  Поиск чатов...">
+    </div>
+    <div class="section-label">СООБЩЕНИЯ</div>
+    <div class="chat-list" id="chatList"></div>
+    
+    <div class="side-foot">
+      <div class="avatar" id="myAvatar" style="width:36px;height:36px;background:linear-gradient(135deg,#8b7cff,#47d7b0)">U</div>
+      <div class="user-info">
+        <div class="chat-name">Мой профиль</div>
+        <div class="user-email" id="myEmail">user@mail.com</div>
+      </div>
+      <button class="logout" id="logoutBtn">Выйти</button>
+    </div>
+  </aside>
+
+  <main class="main" id="chatMain">
+    <div class="empty" id="emptyPlaceholder">
+      <div class="empty-icon">✉️</div>
+      <div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px;">Добро пожаловать в Factura</div>
+      <div>Выберите любой диалог слева, чтобы начать переписку.</div>
+    </div>
+
+    <div id="activeChatContainer" style="display:none;flex-direction:column;height:100%;width:100%;">
+      <header class="conversation-head">
+        <button class="back top-mobile" id="backBtn">‹</button>
+        <div class="avatar" id="chatHeaderAvatar">F</div>
+        <div>
+          <div class="head-name" id="chatHeaderName">Имя чата</div>
+          <div class="online">● В сети</div>
+        </div>
+      </header>
+
+      <div class="messages" id="messagesList">
+        <div class="date-chip">Сегодня</div>
+      </div>
+
+      <form class="composer" id="msgForm">
+        <input id="msgInput" placeholder="Напишите сообщение..." autocomplete="off">
+        <button class="send" type="submit">➤</button>
+      </form>
+    </div>
+  </main>
+</div>
+
+<!-- ЧИСТЫЙ JAVASCRIPT БЕЗ ВНЕШНИХ БИБЛИОТЕК (100% ГАРАНТИЯ ЗАПУСКА НА ЛЮБОМ ТЕЛЕФОНЕ) -->
+<script>
+(function() {
+  var isRegister = true;
+  var currentUser = null;
+  var activeChatId = null;
+
+  var chats = [
+    {
+      id: 1,
+      name: 'Команда Factura',
+      initials: 'F',
+      color: 'linear-gradient(135deg,#8b7cff,#b06cff)',
+      last: 'Добро пожаловать в Factura 👋',
+      time: 'сейчас',
+      messages: [
+        { id: 1, text: 'Привет! Добро пожаловать в Factura 👋', time: '10:00', mine: false },
+        { id: 2, text: 'Вы успешно вошли. Напишите ответное сообщение в поле внизу!', time: '10:01', mine: false }
+      ]
+    },
+    {
+      id: 2,
+      name: 'Алексей (Разработка)',
+      initials: 'А',
+      color: 'linear-gradient(135deg,#32b9a6,#3778c2)',
+      last: 'Дизайн готов, тестируем функционал',
+      time: '10:15',
+      messages: [
+        { id: 3, text: 'Привет! Как тебе дизайн мессенджера Factura?', time: '10:14', mine: false },
+        { id: 4, text: 'Всё работает быстро и плавно!', time: '10:15', mine: true }
+      ]
+    },
+    {
+      id: 3,
+      name: 'Дизайн-бюро',
+      initials: 'Д',
+      color: 'linear-gradient(135deg,#f39b58,#df5c87)',
+      last: 'Макеты согласованы',
+      time: 'вчера',
+      messages: [
+        { id: 5, text: 'Макеты тёмной темы согласованы и загружены.', time: '18:40', mine: false }
+      ]
+    }
+  ];
+
+  // DOM элементы
+  var authWrap = document.getElementById('authWrap');
+  var appShell = document.getElementById('appShell');
+  var authTitle = document.getElementById('authTitle');
+  var authSub = document.getElementById('authSub');
+  var authForm = document.getElementById('authForm');
+  var emailInput = document.getElementById('emailInput');
+  var passInput = document.getElementById('passInput');
+  var confirmField = document.getElementById('confirmField');
+  var confirmInput = document.getElementById('confirmInput');
+  var submitBtn = document.getElementById('submitBtn');
+  var switchText = document.getElementById('switchText');
+  var toggleAuthBtn = document.getElementById('toggleAuthBtn');
+  var errorMsg = document.getElementById('errorMsg');
+
+  var chatList = document.getElementById('chatList');
+  var searchInput = document.getElementById('searchInput');
+  var myAvatar = document.getElementById('myAvatar');
+  var myEmail = document.getElementById('myEmail');
+  var logoutBtn = document.getElementById('logoutBtn');
+
+  var emptyPlaceholder = document.getElementById('emptyPlaceholder');
+  var activeChatContainer = document.getElementById('activeChatContainer');
+  var chatHeaderAvatar = document.getElementById('chatHeaderAvatar');
+  var chatHeaderName = document.getElementById('chatHeaderName');
+  var messagesList = document.getElementById('messagesList');
+  var msgForm = document.getElementById('msgForm');
+  var msgInput = document.getElementById('msgInput');
+  var backBtn = document.getElementById('backBtn');
+
+  // Переключение Вход / Регистрация
+  toggleAuthBtn.addEventListener('click', function() {
+    isRegister = !isRegister;
+    errorMsg.textContent = '';
+    if (isRegister) {
+      authTitle.textContent = 'Создать аккаунт';
+      authSub.textContent = 'Зарегистрируйтесь по почте и паролю, чтобы начать общение.';
+      confirmField.style.display = 'block';
+      confirmInput.required = true;
+      submitBtn.textContent = 'Зарегистрироваться';
+      switchText.textContent = 'Уже есть аккаунт?';
+      toggleAuthBtn.textContent = 'Войти';
+    } else {
+      authTitle.textContent = 'С возвращением';
+      authSub.textContent = 'Войдите в Factura по вашей электронной почте.';
+      confirmField.style.display = 'none';
+      confirmInput.required = false;
+      submitBtn.textContent = 'Войти';
+      switchText.textContent = 'Впервые в Factura?';
+      toggleAuthBtn.textContent = 'Создать аккаунт';
+    }
+  });
+
+  // Отправка формы авторизации
+  authForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    errorMsg.textContent = '';
+    var email = emailInput.value.trim().toLowerCase();
+    var pass = passInput.value;
+
+    if (!email || !pass) {
+      errorMsg.textContent = 'Заполните все поля!';
+      return;
+    }
+    if (pass.length < 8) {
+      errorMsg.textContent = 'Пароль должен содержать минимум 8 символов!';
+      return;
+    }
+    if (isRegister && pass !== confirmInput.value) {
+      errorMsg.textContent = 'Пароли не совпадают!';
+      return;
+    }
+
+    // Успешный вход
+    currentUser = { email: email };
+    myEmail.textContent = email;
+    myAvatar.textContent = email.charAt(0).toUpperCase();
+
+    authWrap.style.display = 'none';
+    appShell.style.display = 'grid';
+    renderChats();
+  });
+
+  // Выход
+  logoutBtn.addEventListener('click', function() {
+    currentUser = null;
+    activeChatId = null;
+    appShell.style.display = 'none';
+    authWrap.style.display = 'flex';
+    emailInput.value = '';
+    passInput.value = '';
+    confirmInput.value = '';
+    errorMsg.textContent = '';
+  });
+
+  // Рендер списка чатов
+  function renderChats() {
+    chatList.innerHTML = '';
+    var query = searchInput.value.trim().toLowerCase();
+    var filtered = chats.filter(function(c) {
+      return c.name.toLowerCase().indexOf(query) !== -1;
+    });
+
+    if (filtered.length === 0) {
+      chatList.innerHTML = '<div class="empty" style="padding:15px;font-size:13px;">Ничего не найдено</div>';
+      return;
+    }
+
+    filtered.forEach(function(chat) {
+      var row = document.createElement('div');
+      row.className = 'chat-row' + (activeChatId === chat.id ? ' active' : '');
+      row.innerHTML = 
+        '<div class="avatar" style="background:' + chat.color + '">' + chat.initials + '</div>' +
+        '<div class="chat-meta">' +
+          '<div class="chat-name">' + chat.name + '</div>' +
+          '<div class="preview">' + chat.last + '</div>' +
+        '</div>' +
+        '<span class="time">' + chat.time + '</span>';
+
+      row.addEventListener('click', function() {
+        openChat(chat.id);
+      });
+      chatList.appendChild(row);
+    });
+  }
+
+  searchInput.addEventListener('input', renderChats);
+
+  // Открыть чат
+  function openChat(id) {
+    activeChatId = id;
+    var chat = chats.find(function(c) { return c.id === id; });
+    if (!chat) return;
+
+    emptyPlaceholder.style.display = 'none';
+    activeChatContainer.style.display = 'flex';
+    appShell.classList.add('chat-open');
+
+    chatHeaderAvatar.style.background = chat.color;
+    chatHeaderAvatar.textContent = chat.initials;
+    chatHeaderName.textContent = chat.name;
+
+    renderMessages(chat);
+    renderChats();
+    msgInput.focus();
+  }
+
+  // Кнопка назад на мобилках
+  backBtn.addEventListener('click', function() {
+    activeChatId = null;
+    appShell.classList.remove('chat-open');
+    renderChats();
+  });
+
+  // Отрисовка сообщений
+  function renderMessages(chat) {
+    messagesList.innerHTML = '<div class="date-chip">Сегодня</div>';
+    chat.messages.forEach(function(m) {
+      var d = document.createElement('div');
+      d.className = 'message' + (m.mine ? ' mine' : '');
+      d.innerHTML = m.text + '<div class="message-time">' + m.time + '</div>';
+      messagesList.appendChild(d);
+    });
+    messagesList.scrollTop = messagesList.scrollHeight;
+  }
+
+  // Отправка сообщения
+  msgForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var text = msgInput.value.trim();
+    if (!text || activeChatId === null) return;
+
+    var chat = chats.find(function(c) { return c.id === activeChatId; });
+    if (!chat) return;
+
+    var now = new Date();
+    var hours = String(now.getHours()).padStart(2, '0');
+    var minutes = String(now.getMinutes()).padStart(2, '0');
+    var timeStr = hours + ':' + minutes;
+
+    chat.messages.push({
+      id: Date.now(),
+      text: text,
+      time: timeStr,
+      mine: true
+    });
+    chat.last = text;
+    chat.time = timeStr;
+
+    msgInput.value = '';
+    renderMessages(chat);
+    renderChats();
+  });
+
+})();
+</script>
+</body>
+</html>
