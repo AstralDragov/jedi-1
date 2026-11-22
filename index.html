@@ -347,10 +347,15 @@
     .leader-avatar {
       width: 44px;
       height: 44px;
-      border-radius: 12px;
-      background: #e2e5eb;
+      border-radius: 50%;
       overflow: hidden;
       flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+    .leader-avatar svg {
+      width: 100%;
+      height: 100%;
+      display: block;
     }
 
     /* SHOP VIEW */
@@ -370,42 +375,61 @@
       margin-bottom: 16px;
     }
     .avatar-grid-category {
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 700;
       color: var(--vk-subtext);
-      letter-spacing: 0.5px;
-      margin: 14px 0 8px 0;
+      letter-spacing: 0.4px;
+      margin: 16px 0 10px 0;
       text-transform: uppercase;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
     .avatar-selector-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-bottom: 12px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
     }
     .avatar-choice-item {
       position: relative;
       aspect-ratio: 1;
-      border-radius: 14px;
+      border-radius: 50%;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
       border: 2px solid transparent;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-      transition: transform 0.15s, border-color 0.15s;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
     }
     .avatar-choice-item:active {
-      transform: scale(0.95);
+      transform: scale(0.93);
     }
     .avatar-choice-item.selected {
       border-color: var(--vk-blue);
-      box-shadow: 0 0 0 3px rgba(41, 121, 255, 0.25);
+      box-shadow: 0 0 0 3px rgba(41, 121, 255, 0.35);
     }
     .avatar-choice-item svg {
       width: 100%;
       height: 100%;
+      display: block;
+    }
+    .check-mark-badge {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--vk-blue);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #fff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
     }
 
     /* NOTIFICATIONS */
@@ -449,9 +473,9 @@
       position: relative;
       width: 110px;
       height: 110px;
-      border-radius: 22px;
+      border-radius: 50%;
       background: linear-gradient(135deg, #2979ff 0%, #792ec0 100%);
-      padding: 3px;
+      padding: 4px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -461,7 +485,7 @@
     .avatar-inner {
       width: 100%;
       height: 100%;
-      border-radius: 19px;
+      border-radius: 50%;
       overflow: hidden;
       background: #fff;
       display: flex;
@@ -471,11 +495,12 @@
     .avatar-inner svg {
       width: 100%;
       height: 100%;
+      display: block;
     }
     .avatar-level-badge {
       position: absolute;
-      bottom: -6px;
-      right: -6px;
+      bottom: -4px;
+      right: -4px;
       background: #2979ff;
       color: #fff;
       border: 3px solid #fff;
@@ -866,7 +891,7 @@
       </div>
     </section>
 
-    <!-- 3. ТАБ: МАГАЗИН -->
+    <!-- 3. ТАБ: МАГАЗИН АВАТАРОВ -->
     <section v-if="currentTab === 'shop'">
       <div class="balance-card-mini">
         <svg width="34" height="34" viewBox="0 0 24 24" fill="#2979ff">
@@ -874,7 +899,7 @@
         </svg>
         <div style="flex: 1;">
           <div style="font-weight: 700; font-size: 15px;">Ваш баланс: {{ currentUser.points }} баллов</div>
-          <div style="font-size: 12px; color: var(--vk-subtext);">Баллы начисляются за принятые и идеальные ответы</div>
+          <div style="font-size: 12px; color: var(--vk-subtext);">В этом разделе вы можете сменить аватар и имя</div>
         </div>
       </div>
 
@@ -895,18 +920,52 @@
         </div>
       </div>
 
+      <!-- ВЫБОР АВАТАРОВ ПО РОЛЯМ -->
+      <div class="shop-section-card">
+        <div style="font-weight: 800; font-size: 16px; margin-bottom: 2px;">Аватар Агента</div>
+        <div style="font-size: 12px; color: var(--vk-subtext); margin-bottom: 14px;">
+          Для каждой роли доступны уникальные аватары: Специалисты, Агенты в очках, Ниндзя и Хакеры.
+        </div>
+
+        <div v-for="(list, roleKey) in avatarCatalog" :key="roleKey">
+          <div class="avatar-grid-category">
+            <span>{{ catTitles[roleKey] }}</span>
+            <span v-if="currentUser.role === roleKey" style="color: var(--vk-blue); font-size: 10px; font-weight: 800;">
+              ВАША РОЛЬ
+            </span>
+          </div>
+          <div class="avatar-selector-grid">
+            <div v-for="(svgContent, idx) in list" :key="idx" 
+                 class="avatar-choice-item"
+                 :class="{ selected: selectedAvatarSvg === svgContent }"
+                 @click="selectedAvatarSvg = svgContent">
+              <div v-html="svgContent" style="width:100%; height:100%;"></div>
+              <div v-if="selectedAvatarSvg === svgContent" class="check-mark-badge">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-solid-blue" :disabled="!selectedAvatarSvg" @click="applySelectedAvatar">
+          Установить выбранный аватар
+        </button>
+      </div>
+
       <!-- СМЕНА НОМЕРА (100 БАЛЛОВ) -->
       <div class="shop-section-card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
-          <div style="font-weight: 700; font-size: 15px;">Сменить ID/номер</div>
+          <div style="font-weight: 700; font-size: 15px;">ID Агента</div>
           <span style="font-size: 12px; color: var(--vk-blue); font-weight:700;">100 баллов</span>
         </div>
         <div style="font-size: 12px; color: var(--vk-subtext); margin-bottom: 10px;">
-          Ник не затрагивается, изменится только ваш порядковый номер специалиста.
+          Изменится ваш порядковый номер специалиста.
         </div>
-        <input type="number" v-model.number="shopForm.newNumber" placeholder="Введите новый номер">
+        <input type="number" v-model.number="shopForm.newNumber" placeholder="Например: 380">
         <button class="btn-solid-blue" :disabled="!shopForm.newNumber || currentUser.points < 100" @click="buyNumberChange">
-          Купить смену номера (100 баллов)
+          Изменить за 100 баллов
         </button>
       </div>
 
@@ -922,30 +981,6 @@
         <input type="text" v-model="shopForm.newCustomNick" placeholder="Например: Нео, Хранитель, Агент Смит">
         <button class="btn-solid-blue" :disabled="!shopForm.newCustomNick.trim() || currentUser.points < 150" @click="buyCustomNickChange">
           Купить смену ника (150 баллов)
-        </button>
-      </div>
-
-      <!-- АВАТАРКИ: ИСКЛЮЧИТЕЛЬНО АГЕНТЫ ПОДДЕРЖКИ -->
-      <div class="shop-section-card">
-        <div style="font-weight: 700; font-size: 15px; margin-bottom: 4px;">Фирменные аватары Агентов Поддержки</div>
-        <div style="font-size: 12px; color: var(--vk-subtext); margin-bottom: 14px;">
-          Оригинальные силуэты Агентов Поддержки в костюмах, темных очках и гарнитуре на цветных фонах из макета.
-        </div>
-
-        <div v-for="(list, catKey) in currentAvatarCategories" :key="catKey">
-          <div class="avatar-grid-category">{{ catTitles[catKey] }}</div>
-          <div class="avatar-selector-grid">
-            <div v-for="(svgContent, idx) in list" :key="idx" 
-                 class="avatar-choice-item"
-                 :class="{ selected: selectedAvatarSvg === svgContent }"
-                 @click="selectedAvatarSvg = svgContent"
-                 v-html="svgContent">
-            </div>
-          </div>
-        </div>
-
-        <button class="btn-action-outline" :disabled="!selectedAvatarSvg" @click="applySelectedAvatar">
-          Установить выбранный аватар Агента
         </button>
       </div>
     </section>
@@ -1192,58 +1227,172 @@ function safeStorageSet(key, value) {
   } catch (e) {}
 }
 
-// 1. КЛАССИЧЕСКИЙ АГЕНТ В ЧЁРНОМ КОСТЮМЕ (ТОЧНО ПО МАКЕТУ)
-const createClassicAgentSvg = (bg) => `
-<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-  <rect width="100" height="100" fill="${bg}"/>
-  <!-- Пиджак -->
-  <path d="M10 100 L25 65 L48 65 L44 100 Z" fill="#111111"/>
-  <path d="M90 100 L75 65 L52 65 L56 100 Z" fill="#111111"/>
-  <!-- Белая рубашка (треугольник воротника) -->
-  <polygon points="50,65 38,76 50,96 62,76" fill="#ffffff"/>
-  <!-- Чёрный галстук -->
-  <polygon points="48,72 52,72 54,88 50,95 46,88" fill="#111111"/>
-  <!-- Тёмные очки Агента -->
-  <rect x="26" y="32" width="20" height="11" rx="2" fill="#111111"/>
-  <rect x="54" y="32" width="20" height="11" rx="2" fill="#111111"/>
-  <rect x="46" y="35" width="8" height="4" fill="#111111"/>
-  <!-- Заушник / Проводная гарнитура поддержки -->
-  <path d="M26 38 C20 44 23 58 28 68" fill="none" stroke="#111111" stroke-width="2.5" stroke-linecap="round"/>
-</svg>`;
+/* ========================================================
+   ГЕНЕРАТОРЫ SVG-АВАТАРОВ ТОЧНО ПО ВАШЕМУ МАКЕТУ
+   1. Специалисты: Классические человечки поддержки
+   2. Спец. специалисты: Агенты в тёмных очках
+   3. Администраторы: Ниндзя в маске и повязке
+   4. Разработчики: Хакеры в капюшоне и неоновых очках/матрице
+======================================================== */
 
-// 2. АГЕНТ В КИБЕР / НЕОНОВОМ СТИЛЕ (ТЁМНЫЙ ПИДЖАК + ЦВЕТНОЙ ГАЛСТУК)
-const createNeonAgentSvg = (bg, accentColor) => `
-<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-  <rect width="100" height="100" fill="${bg}"/>
-  <path d="M10 100 L25 65 L48 65 L44 100 Z" fill="#0d1b2a"/>
-  <path d="M90 100 L75 65 L52 65 L56 100 Z" fill="#0d1b2a"/>
-  <polygon points="50,65 38,76 50,96 62,76" fill="#ffffff"/>
-  <polygon points="48,72 52,72 54,88 50,95 46,88" fill="${accentColor}"/>
-  <!-- Очки с цветным неоновым бликом -->
-  <rect x="26" y="32" width="20" height="11" rx="2" fill="#0d1b2a"/>
-  <rect x="54" y="32" width="20" height="11" rx="2" fill="#0d1b2a"/>
-  <rect x="46" y="35" width="8" height="4" fill="#0d1b2a"/>
-  <line x1="28" y1="36" x2="44" y2="36" stroke="${accentColor}" stroke-width="2"/>
-  <line x1="56" y1="36" x2="72" y2="36" stroke="${accentColor}" stroke-width="2"/>
-  <path d="M26 38 C20 44 23 58 28 68" fill="none" stroke="${accentColor}" stroke-width="2.5" stroke-linecap="round"/>
-</svg>`;
+// 1. АВАТАРЫ ДЛЯ СПЕЦИАЛИСТОВ (КАК В МАКЕТЕ: КЛАССИЧЕСКИЕ И НАЧИНАЮЩИЕ)
+function makeSpecialistAvatar(bg, outfit, hair, style = 'classic') {
+  if (style === 'junior') {
+    // Стиль начинающего с белой шапочкой/шлемом как в первом ряду скриншота
+    return `
+    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="50" fill="${bg}"/>
+      <!-- Плечи -->
+      <path d="M20 100 C22 74 36 65 50 65 C64 65 78 74 80 100 Z" fill="${outfit}"/>
+      <polygon points="50,65 42,78 50,86 58,78" fill="#ffffff"/>
+      <!-- Лицо -->
+      <circle cx="50" cy="46" r="18" fill="#f8cfab"/>
+      <!-- Глаза и улыбка -->
+      <circle cx="44" cy="46" r="2.2" fill="#1b2533"/>
+      <circle cx="56" cy="46" r="2.2" fill="#1b2533"/>
+      <path d="M46 54 Q50 58 54 54" fill="none" stroke="#ba654e" stroke-width="2" stroke-linecap="round"/>
+      <!-- Белая каска/шапочка с кисточкой -->
+      <path d="M26 44 C26 28 36 22 50 22 C64 22 74 28 74 44 Z" fill="#ffffff"/>
+      <path d="M30 44 L70 44" stroke="#e0e0e0" stroke-width="2"/>
+      <path d="M36 40 L34 50" stroke="#f1a942" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="34" cy="51" r="2" fill="#f1a942"/>
+    </svg>`;
+  }
 
-// 3. АГЕНТ СВЕТЛОЙ СТОРОНЫ (БЕЛЫЙ ПИДЖАК + ТЁМНЫЙ ГАЛСТУК)
-const createWhiteSuitAgentSvg = (bg) => `
-<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-  <rect width="100" height="100" fill="${bg}"/>
-  <path d="M10 100 L25 65 L48 65 L44 100 Z" fill="#ffffff"/>
-  <path d="M90 100 L75 65 L52 65 L56 100 Z" fill="#ffffff"/>
-  <polygon points="50,65 38,76 50,96 62,76" fill="#1b2838"/>
-  <polygon points="48,72 52,72 54,88 50,95 46,88" fill="#ffffff"/>
-  <rect x="26" y="32" width="20" height="11" rx="2" fill="#111111"/>
-  <rect x="54" y="32" width="20" height="11" rx="2" fill="#111111"/>
-  <rect x="46" y="35" width="8" height="4" fill="#111111"/>
-  <path d="M26 38 C20 44 23 58 28 68" fill="none" stroke="#111111" stroke-width="2.5" stroke-linecap="round"/>
-</svg>`;
+  // Классический агент, машущий рукой как в скриншоте (2-й ряд)
+  return `
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="50" cy="50" r="50" fill="${bg}"/>
+    <!-- Плечи и тело -->
+    <path d="M18 100 C20 74 35 64 50 64 C65 64 80 74 82 100 Z" fill="${outfit}"/>
+    <polygon points="50,64 43,76 50,84 57,76" fill="#ffffff"/>
+    <!-- Поднятая рука (приветствие) -->
+    <path d="M20 78 C20 62 25 54 28 50 C31 46 36 50 34 56 C32 62 28 70 26 80 Z" fill="#f8cfab"/>
+    <circle cx="28" cy="49" r="4" fill="#f8cfab"/>
+    <!-- Лицо -->
+    <circle cx="51" cy="43" r="17" fill="#f8cfab"/>
+    <!-- Глаза и улыбка -->
+    <circle cx="46" cy="43" r="2.2" fill="#1b2533"/>
+    <circle cx="56" cy="43" r="2.2" fill="#1b2533"/>
+    <path d="M47 51 Q51 55 55 51" fill="none" stroke="#ba654e" stroke-width="2" stroke-linecap="round"/>
+    <!-- Волосы классические -->
+    <path d="M33 40 C33 26 42 22 51 22 C61 22 69 26 69 40 C63 32 58 31 51 31 C43 31 38 34 33 40 Z" fill="${hair}"/>
+  </svg>`;
+}
 
-// Дефолтный аватар — классический Агент на салатовом фоне из макета
-const defaultAgentAvatar = createClassicAgentSvg('#9ccc65');
+// 2. АВАТАРЫ ДЛЯ СПЕЦ. СПЕЦИАЛИСТОВ (АГЕНТЫ В ТЁМНЫХ ОЧКАХ)
+function makeSpecialAgentAvatar(bg, suitColor, glassesTint) {
+  return `
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="50" cy="50" r="50" fill="${bg}"/>
+    <!-- Пиджак спецагента -->
+    <path d="M12 100 L25 66 L47 66 L43 100 Z" fill="${suitColor}"/>
+    <path d="M88 100 L75 66 L53 66 L57 100 Z" fill="${suitColor}"/>
+    <!-- Белый треугольник воротника -->
+    <polygon points="50,66 38,78 50,96 62,78" fill="#ffffff"/>
+    <polygon points="48,73 52,73 54,88 50,95 46,88" fill="#111111"/>
+    <!-- Голова -->
+    <circle cx="50" cy="43" r="18" fill="#f8d9b6"/>
+    <!-- Прическа спецагента -->
+    <path d="M32 40 C32 26 40 22 50 22 C60 22 68 26 68 40 C63 32 57 30 50 30 C42 30 37 34 32 40 Z" fill="#1b1c20"/>
+    <!-- Тёмные очки агента -->
+    <rect x="30" y="38" width="17" height="11" rx="2" fill="#111827"/>
+    <rect x="53" y="38" width="17" height="11" rx="2" fill="#111827"/>
+    <rect x="47" y="41" width="6" height="4" fill="#111827"/>
+    <!-- Блик на линзах -->
+    <line x1="32" y1="41" x2="43" y2="41" stroke="${glassesTint}" stroke-width="2"/>
+    <line x1="55" y1="41" x2="66" y2="41" stroke="${glassesTint}" stroke-width="2"/>
+    <!-- Наушник и провод гарнитуры -->
+    <path d="M30 46 C24 50 25 62 30 70" fill="none" stroke="#111827" stroke-width="2.5" stroke-linecap="round"/>
+  </svg>`;
+}
+
+// 3. АВАТАРЫ ДЛЯ АДМИНИСТРАТОРОВ (НИНДЗЯ)
+function makeNinjaAvatar(bg, ninjaColor, ribbonColor) {
+  return `
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="50" cy="50" r="50" fill="${bg}"/>
+    <!-- Кимоно / Накидка ниндзя -->
+    <path d="M15 100 C18 72 34 62 50 62 C66 62 82 72 85 100 Z" fill="${ninjaColor}"/>
+    <polygon points="50,62 40,78 50,92 60,78" fill="#0c0d12"/>
+    <!-- Голова в балаклаве ниндзя -->
+    <circle cx="50" cy="42" r="19" fill="${ninjaColor}"/>
+    <!-- Прорезь для глаз (кожа) -->
+    <path d="M34 39 C34 35 40 34 50 34 C60 34 66 35 66 39 C66 45 60 46 50 46 C40 46 34 45 34 39 Z" fill="#f8cfab"/>
+    <!-- Узкие сосредоточенные глаза ниндзя -->
+    <ellipse cx="43" cy="40" rx="3" ry="1.8" fill="#000000"/>
+    <ellipse cx="57" cy="40" rx="3" ry="1.8" fill="#000000"/>
+    <circle cx="44" cy="39.5" r="0.7" fill="#ffffff"/>
+    <circle cx="58" cy="39.5" r="0.7" fill="#ffffff"/>
+    <!-- Повязка с металлическим протектором -->
+    <path d="M29 32 L71 32 L70 25 L30 25 Z" fill="${ribbonColor}"/>
+    <rect x="42" y="26" width="16" height="5" rx="1.5" fill="#e2e8f0"/>
+    <circle cx="50" cy="28.5" r="1.5" fill="${ninjaColor}"/>
+    <!-- Развевающиеся ленты повязки сбоку -->
+    <path d="M29 30 C22 26 18 35 12 38 C18 36 24 38 28 34" fill="${ribbonColor}"/>
+  </svg>`;
+}
+
+// 4. АВАТАРЫ ДЛЯ РАЗРАБОТЧИКОВ (ХАКЕРЫ В КАПЮШОНЕ И НЕОНЕ)
+function makeHackerAvatar(bg, hoodColor, neonColor) {
+  return `
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="50" cy="50" r="50" fill="${bg}"/>
+    <!-- Тело в толстовке / худи -->
+    <path d="M14 100 C16 70 32 62 50 62 C68 62 84 70 86 100 Z" fill="${hoodColor}"/>
+    <!-- Капюшон хакера -->
+    <path d="M28 44 C26 22 36 17 50 17 C64 17 74 22 72 44 C72 60 64 64 50 64 C36 64 28 60 28 44 Z" fill="${hoodColor}"/>
+    <!-- Тёмная тень лица внутри капюшона -->
+    <ellipse cx="50" cy="44" rx="16" ry="18" fill="#0a0e17"/>
+    <!-- Неоновые кибер-очки / Визор матрицы -->
+    <rect x="35" y="38" width="30" height="9" rx="3" fill="#05101a" stroke="${neonColor}" stroke-width="2"/>
+    <line x1="39" y1="42.5" x2="61" y2="42.5" stroke="${neonColor}" stroke-width="2"/>
+    <!-- Неоновый код матрицы / индикаторы -->
+    <circle cx="39" cy="42.5" r="1.5" fill="#ffffff"/>
+    <circle cx="61" cy="42.5" r="1.5" fill="#ffffff"/>
+    <!-- Неоновая линия наушников/гарнитуры хакера -->
+    <path d="M30 46 L27 52 L31 54" stroke="${neonColor}" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  </svg>`;
+}
+
+// БАЗА ДАННЫХ АВАТАРОВ ПО РОЛЯМ
+const avatarCatalog = {
+  // 1. Специалисты: Классические аватары Поддержки
+  agent: [
+    makeSpecialistAvatar('#4986cc', '#1b3563', '#222222', 'classic'), // Синий классик
+    makeSpecialistAvatar('#ff72b6', '#3f8ae0', '#1f1f2e', 'classic'), // Розовый
+    makeSpecialistAvatar('#9c27b0', '#2979ff', '#2d1a3c', 'classic'), // Фиолетовый
+    makeSpecialistAvatar('#26c6da', '#00796b', '#263238', 'junior'),  // Бирюзовый начинающий
+    makeSpecialistAvatar('#ec407a', '#c2185b', '#37474f', 'junior'),  // Малиновый начинающий
+    makeSpecialistAvatar('#42a5f5', '#1565c0', '#212121', 'junior')   // Голубой начинающий
+  ],
+
+  // 2. Спец. специалисты: Агенты в очках
+  special: [
+    makeSpecialAgentAvatar('#1e293b', '#0f172a', '#38bdf8'), // Небесный кибер-агент
+    makeSpecialAgentAvatar('#6366f1', '#1e1b4b', '#a5b4fc'), // Индиго спецагент
+    makeSpecialAgentAvatar('#059669', '#064e3b', '#6ee7b7'), // Изумрудный спецагент
+    makeSpecialAgentAvatar('#e11d48', '#881337', '#fda4af')  // Рубиновый спецагент
+  ],
+
+  // 3. Администраторы: Ниндзя
+  admin: [
+    makeNinjaAvatar('#dc2626', '#18181b', '#ef4444'), // Красный пламенный ниндзя
+    makeNinjaAvatar('#1e1b4b', '#09090b', '#6366f1'), // Теневой ниндзя
+    makeNinjaAvatar('#047857', '#111827', '#10b981'), // Нефритовый ниндзя
+    makeNinjaAvatar('#b45309', '#1c1917', '#f59e0b')  // Золотой ниндзя
+  ],
+
+  // 4. Разработчики: Хакеры
+  dev: [
+    makeHackerAvatar('#022c22', '#0f172a', '#10b981'), // Зелёная матрица
+    makeHackerAvatar('#082f49', '#030712', '#0ea5e9'), // Неоновый синий киберпанк
+    makeHackerAvatar('#4c0519', '#18181b', '#f43f5e'), // Неоновый красный хакер
+    makeHackerAvatar('#3b0764', '#09090b', '#c084fc')  // Фиолетовый darknet
+  ]
+};
+
+const defaultAgentAvatar = avatarCatalog.agent[0];
 
 function initVueApp() {
   if (!window.Vue) {
@@ -1266,10 +1415,10 @@ function initVueApp() {
         devPointsToAdd: 100,
 
         currentUser: {
-          agentNumber: 1,
+          agentNumber: 380,
           customNick: '',
           role: 'agent',
-          points: 0,
+          points: 1,
           isTeamMember: false,
           avatarSvg: defaultAgentAvatar
         },
@@ -1288,34 +1437,18 @@ function initVueApp() {
 
         selectedAvatarSvg: defaultAgentAvatar,
 
-        catTitles: {
-          classic: "Классические Агенты Поддержки (VK Support)",
-          neon: "Спецагенты Ночной Смены (Cyber Agents)",
-          whiteSuit: "Элитные Агенты Безопасности (VIP Agents)"
-        },
+        avatarCatalog,
 
-        // Все категории теперь строго состоят из Агентов Поддержки
-        avatarCatalog: {
-          classic: [
-            createClassicAgentSvg('#9ccc65'), // Фирменный салатовый
-            createClassicAgentSvg('#fff176'), // Песочно-жёлтый
-            createClassicAgentSvg('#64b5f6')  // Небесно-голубой
-          ],
-          neon: [
-            createNeonAgentSvg('#ab47bc', '#e1bee7'), // Неоновый фиолетовый
-            createNeonAgentSvg('#26a69a', '#80cbc4'), // Бирюзовый
-            createNeonAgentSvg('#ef5350', '#ffcdd2')  // Кораллово-красный
-          ],
-          whiteSuit: [
-            createWhiteSuitAgentSvg('#1e88e5'), // Королевский синий
-            createWhiteSuitAgentSvg('#ff9800'), // Оранжевый
-            createWhiteSuitAgentSvg('#2e7d32')  // Изумрудный
-          ]
+        catTitles: {
+          agent: "Для Специалистов (Классические Агенты)",
+          special: "Для Спец. специалистов (Агенты в очках)",
+          admin: "Для Администраторов (Ниндзя)",
+          dev: "Для Разработчиков (Хакеры)"
         },
 
         agentsChatMessages: [
           { id: 1, sender: "Спец. специалист #1", text: "Привет всем! Проверяю ответы по регламенту. Ставьте огоньки на идеальные формулировки!", time: "10:14" },
-          { id: 2, sender: "Специалист #1", text: "Понял, разбираю очередь обращений.", time: "10:15" }
+          { id: 2, sender: "Специалист #380", text: "Понял, разбираю очередь обращений.", time: "10:15" }
         ],
 
         tickets: [
@@ -1381,7 +1514,7 @@ function initVueApp() {
         if (this.currentUser.customNick) {
           return this.currentUser.customNick;
         }
-        const num = `#${this.currentUser.agentNumber || 1}`;
+        const num = `#${this.currentUser.agentNumber || 380}`;
         switch (this.currentUser.role) {
           case 'special': return `Спец. специалист ${num}`;
           case 'admin': return `Администратор ${num}`;
@@ -1401,9 +1534,6 @@ function initVueApp() {
       currentAvatarSvg() {
         return this.currentUser.avatarSvg || defaultAgentAvatar;
       },
-      currentAvatarCategories() {
-        return this.avatarCatalog;
-      },
       normProgressPercent() {
         const p = ((this.stats.totalAnswers || 0) / 20) * 100;
         return Math.min(p, 100);
@@ -1418,16 +1548,12 @@ function initVueApp() {
       }
     },
     mounted() {
-      const saved = safeStorageGet('jedi_state_v4');
+      const saved = safeStorageGet('jedi_state_v5');
       if (saved) {
         try {
           const p = JSON.parse(saved);
           if (p && typeof p === 'object') {
             if (p.currentUser) {
-              // Если сохранён старый не-агентский аватар (монах/врач), заменяем на агентский
-              if (!p.currentUser.avatarSvg || p.currentUser.avatarSvg.includes('circle cx="50" cy="35"')) {
-                p.currentUser.avatarSvg = defaultAgentAvatar;
-              }
               this.currentUser = { ...this.currentUser, ...p.currentUser };
             }
             if (p.stats) this.stats = { ...this.stats, ...p.stats };
@@ -1436,16 +1562,42 @@ function initVueApp() {
           }
         } catch (e) {}
       }
-      this.selectedAvatarSvg = this.currentUser.avatarSvg || defaultAgentAvatar;
+
+      // Проверка валидности аватара под текущую роль
+      const validRoleAvatars = this.avatarCatalog[this.currentUser.role] || this.avatarCatalog.agent;
+      if (!validRoleAvatars.includes(this.currentUser.avatarSvg)) {
+        this.currentUser.avatarSvg = validRoleAvatars[0];
+      }
+      this.selectedAvatarSvg = this.currentUser.avatarSvg;
     },
     methods: {
       saveState() {
-        safeStorageSet('jedi_state_v4', JSON.stringify({
+        safeStorageSet('jedi_state_v5', JSON.stringify({
           currentUser: this.currentUser,
           stats: this.stats,
           notifications: this.notifications,
           adminReviewQueue: this.adminReviewQueue
         }));
+      },
+
+      setRole(role) {
+        if (!this.avatarCatalog[role]) return;
+        this.currentUser.role = role;
+        
+        // Автоматически назначаем подходящий аватар новой роли
+        const roleAvatars = this.avatarCatalog[role];
+        if (!roleAvatars.includes(this.currentUser.avatarSvg)) {
+          this.currentUser.avatarSvg = roleAvatars[0];
+        }
+        this.selectedAvatarSvg = this.currentUser.avatarSvg;
+        this.saveState();
+      },
+
+      applySelectedAvatar() {
+        if (!this.selectedAvatarSvg) return;
+        this.currentUser.avatarSvg = this.selectedAvatarSvg;
+        this.saveState();
+        alert("Аватар успешно установлен!");
       },
 
       openAgentsChat() {
@@ -1614,13 +1766,13 @@ function initVueApp() {
         }
       },
       acceptSpecialPromotion(notif) {
-        this.currentUser.role = 'special';
+        this.setRole('special');
         this.notifications = this.notifications.filter(n => n.id !== notif.id);
         this.notifications.unshift({
           id: Date.now(),
           type: 'approved',
           title: 'Должность повышена!',
-          text: 'Вы теперь Специальный специалист! Теперь вы модерируете ответы других агентов.',
+          text: 'Вы теперь Специальный специалист! Вам открыты аватары спецагентов.',
           time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         });
         this.saveState();
@@ -1642,7 +1794,7 @@ function initVueApp() {
         this.currentUser.customNick = '';
         this.shopForm.newNumber = null;
         this.saveState();
-        alert(`Номер успешно обновлен на #${this.currentUser.agentNumber}!`);
+        alert(`ID Агента изменен на #${this.currentUser.agentNumber}!`);
       },
 
       buyCustomNickChange() {
@@ -1654,23 +1806,11 @@ function initVueApp() {
         alert(`Новый ник «${this.currentUser.customNick}» успешно установлен!`);
       },
 
-      applySelectedAvatar() {
-        if (!this.selectedAvatarSvg) return;
-        this.currentUser.avatarSvg = this.selectedAvatarSvg;
-        this.saveState();
-        alert("Аватар Агента успешно обновлен!");
-      },
-
       devAddPoints() {
         if (this.currentUser.role !== 'dev' || !this.devPointsToAdd) return;
         this.currentUser.points += parseInt(this.devPointsToAdd, 10);
         this.saveState();
         alert(`Начислено +${this.devPointsToAdd} баллов разработчика!`);
-      },
-
-      setRole(role) {
-        this.currentUser.role = role;
-        this.saveState();
       },
 
       openNotificationsTab() {
