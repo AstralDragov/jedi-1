@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="theme-color" content="#0e121b">
+<meta name="theme-color" content="#0b0e14">
 <title>Factura Market — Маркетплейс цифровых товаров</title>
 
 <style>
@@ -16,13 +16,13 @@
   --border-light: #2c354d;
   --text: #f0f3fa;
   --text-muted: #8c97ad;
-  --accent: #5865f2; /* Discord / Telegram vibe */
+  --accent: #5865f2;
   --accent-cyan: #29b6f6;
-  --accent-tg: #229ed9;
   --gold: #ffb703;
   --green: #2ecc71;
   --danger: #ef4444;
   --warning: #f59e0b;
+  --yoomoney: #8928e0;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
@@ -41,7 +41,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   min-height: 100vh;
   line-height: 1.45;
-  padding-bottom: calc(30px + var(--safe-bottom));
+  padding-bottom: calc(40px + var(--safe-bottom));
 }
 
 button, input, select, textarea {
@@ -50,7 +50,7 @@ button, input, select, textarea {
 }
 button { cursor: pointer; }
 
-/* SVG ИКОНКА ОРИГИНАЛЬНОЙ ГАЛОЧКИ */
+/* ЗУБЧАТАЯ СИНЯЯ ГАЛОЧКА FACTURA */
 .badge-factura-star {
   display: inline-flex;
   width: 17px;
@@ -64,7 +64,7 @@ button { cursor: pointer; }
   fill: #1877f2;
 }
 
-/* ШАПКА САЙТА */
+/* ШАПКА */
 .navbar {
   position: sticky;
   top: 0;
@@ -138,9 +138,7 @@ button { cursor: pointer; }
   cursor: pointer;
   transition: all 0.2s;
 }
-.balance-tag:hover {
-  border-color: var(--gold);
-}
+.balance-tag:hover { border-color: var(--gold); }
 .balance-tag.frozen {
   border-color: var(--danger);
   background: rgba(239, 68, 68, 0.1);
@@ -151,17 +149,26 @@ button { cursor: pointer; }
   background: linear-gradient(135deg, #007aff, #5856d6);
   border: none;
   color: #fff;
-  padding: 8px 16px;
+  padding: 8px 14px;
   border-radius: 12px;
   font-weight: 700;
   font-size: 13px;
   display: flex;
   align-items: center;
   gap: 6px;
-  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.25);
-  transition: opacity 0.2s;
 }
-.btn-nav-primary:hover { opacity: 0.9; }
+.btn-nav-sec {
+  background: #dc2626;
+  border: none;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
 
 .user-nav-avatar {
   width: 38px;
@@ -178,30 +185,29 @@ button { cursor: pointer; }
   font-size: 15px;
 }
 
-/* БАННЕР ПРЕДУПРЕЖДЕНИЯ ДЛЯ ЗАБЛОКИРОВАННЫХ */
+/* УВЕДОМЛЕНИЕ О БЛОКИРОВКЕ */
 .banned-notice {
   background: #ef4444;
   color: #fff;
   padding: 12px 16px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   text-align: center;
   display: none;
 }
 
-/* ГЛАВНЫЙ КОНТЕЙНЕР */
+/* ГЛАВНАЯ СТРАНИЦА */
 .main-wrapper {
   max-width: 1240px;
   margin: 18px auto 0 auto;
   padding: 0 16px;
 }
 
-/* ГЕРО-БАННЕР */
 .hero-promo {
   background: linear-gradient(135deg, #161b29 0%, #1e1b38 50%, #132238 100%);
   border: 1px solid var(--border);
   border-radius: 20px;
-  padding: 26px 24px;
+  padding: 24px;
   margin-bottom: 20px;
   display: flex;
   flex-wrap: wrap;
@@ -218,7 +224,7 @@ button { cursor: pointer; }
 .hero-text p {
   color: var(--text-muted);
   font-size: 14px;
-  max-width: 580px;
+  max-width: 620px;
 }
 .hero-btns {
   display: flex;
@@ -226,23 +232,17 @@ button { cursor: pointer; }
   flex-wrap: wrap;
 }
 .btn-hero {
-  padding: 11px 18px;
+  padding: 10px 18px;
   border-radius: 12px;
   font-weight: 700;
-  font-size: 14px;
+  font-size: 13px;
   border: none;
 }
-.btn-hero.sell {
-  background: #2ecc71;
-  color: #0b0e14;
-}
-.btn-hero.security {
-  background: rgba(239, 68, 68, 0.18);
-  border: 1px solid rgba(239, 68, 68, 0.4);
-  color: #f87171;
-}
+.btn-hero.sell { background: #2ecc71; color: #0b0e14; }
+.btn-hero.support { background: rgba(56, 189, 248, 0.16); border: 1px solid rgba(56, 189, 248, 0.4); color: #38bdf8; }
+.btn-hero.sec { background: rgba(239, 68, 68, 0.18); border: 1px solid rgba(239, 68, 68, 0.4); color: #f87171; }
 
-/* КАТЕГОРИИ И ФИЛЬТРЫ */
+/* ФИЛЬТРЫ И ПОИСК */
 .categories-bar {
   display: flex;
   gap: 8px;
@@ -259,10 +259,6 @@ button { cursor: pointer; }
   font-weight: 700;
   color: var(--text-muted);
   white-space: nowrap;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.2s;
 }
 .category-btn.active, .category-btn:hover {
   background: var(--panel-card);
@@ -270,9 +266,7 @@ button { cursor: pointer; }
   color: var(--text);
 }
 
-.search-box-wrap {
-  margin-bottom: 20px;
-}
+.search-box-wrap { margin-bottom: 20px; }
 .search-input {
   width: 100%;
   background: var(--panel);
@@ -281,9 +275,6 @@ button { cursor: pointer; }
   padding: 12px 18px;
   border-radius: 14px;
   font-size: 14px;
-}
-.search-input:focus {
-  border-color: var(--accent);
 }
 
 /* СЕТКА ТОВАРОВ */
@@ -299,14 +290,12 @@ button { cursor: pointer; }
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: transform 0.2s, border-color 0.2s;
   cursor: pointer;
-  position: relative;
+  transition: transform 0.2s, border-color 0.2s;
 }
 .product-card:hover {
   transform: translateY(-2px);
   border-color: var(--border-light);
-  background: var(--panel-card-hover);
 }
 .product-image-box {
   height: 130px;
@@ -349,40 +338,31 @@ button { cursor: pointer; }
   font-weight: 700;
   font-size: 15px;
   margin-bottom: 6px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 .product-desc {
   font-size: 12px;
   color: var(--text-muted);
   margin-bottom: 12px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
   flex: 1;
 }
-
 .seller-line {
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: space-between;
   font-size: 12px;
   color: var(--text-muted);
   margin-bottom: 12px;
   padding-top: 8px;
   border-top: 1px solid var(--border);
 }
-.seller-avatar-mini {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  object-fit: cover;
-  background: #2a3147;
+.seller-profile-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #38bdf8;
+  cursor: pointer;
+  text-decoration: underline;
 }
-
 .product-foot-row {
   display: flex;
   align-items: center;
@@ -391,7 +371,6 @@ button { cursor: pointer; }
 .product-price {
   font-size: 18px;
   font-weight: 900;
-  color: #fff;
 }
 .btn-buy-card {
   background: var(--accent);
@@ -401,15 +380,13 @@ button { cursor: pointer; }
   border-radius: 10px;
   font-size: 13px;
   font-weight: 700;
-  transition: opacity 0.2s;
 }
-.btn-buy-card:hover { opacity: 0.9; }
 
-/* ================= МОДАЛЬНЫЕ ОКНА ================= */
+/* МОДАЛЬНЫЕ ОКНА */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(5, 7, 12, 0.75);
+  background: rgba(5, 7, 12, 0.78);
   backdrop-filter: blur(8px);
   z-index: 200;
   display: none;
@@ -421,15 +398,15 @@ button { cursor: pointer; }
 
 .modal-box {
   width: 100%;
-  max-width: 540px;
+  max-width: 560px;
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 22px;
   overflow: hidden;
-  box-shadow: 0 24px 60px rgba(0,0,0,0.8);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.85);
   display: flex;
   flex-direction: column;
-  max-height: 90vh;
+  max-height: 92vh;
 }
 .modal-header {
   padding: 16px 20px;
@@ -494,7 +471,7 @@ button { cursor: pointer; }
   margin-top: 8px;
 }
 
-/* ВЫБОР АВАТАРОК */
+/* АВАТАРКИ */
 .avatar-preset-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -508,47 +485,73 @@ button { cursor: pointer; }
   object-fit: cover;
   border: 2px solid transparent;
   cursor: pointer;
-  transition: transform 0.15s, border-color 0.15s;
 }
-.avatar-preset-item:hover, .avatar-preset-item.selected {
-  transform: scale(1.08);
+.avatar-preset-item.selected {
   border-color: var(--accent-cyan);
 }
 
-/* СТИЛИ ПАНЕЛИ СЛУЖБЫ БЕЗОПАСНОСТИ */
-.security-badge {
-  background: rgba(239, 68, 68, 0.15);
-  color: #f87171;
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  padding: 4px 10px;
-  border-radius: 8px;
+/* ОТЗЫВЫ */
+.review-card {
+  background: var(--panel-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+.review-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-size: 13px;
+}
+.review-stars { color: var(--gold); }
+
+/* ТИКЕТЫ */
+.ticket-card {
+  background: var(--panel-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+.ticket-status {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 6px;
   font-size: 11px;
   font-weight: 800;
 }
-.user-security-card {
+.ticket-status.open { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
+.ticket-status.resolved { background: rgba(46, 204, 113, 0.15); color: #2ecc71; }
+
+/* ПАНЕЛЬ БЕЗОПАСНОСТИ */
+.sec-user-row {
   background: var(--panel-card);
   border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 14px;
-  margin-bottom: 12px;
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 10px;
 }
-.user-security-card.is-blocked {
-  border-color: var(--danger);
-  background: rgba(239, 68, 68, 0.05);
+.sec-btn-group {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  flex-wrap: wrap;
 }
-.btn-sec-action {
-  padding: 7px 12px;
+.btn-sec-act {
+  padding: 6px 12px;
   border-radius: 8px;
+  border: none;
   font-size: 12px;
   font-weight: 700;
-  border: none;
 }
-.btn-sec-action.freeze { background: #f59e0b; color: #000; }
-.btn-sec-action.unfreeze { background: #10b981; color: #fff; }
-.btn-sec-action.ban { background: #ef4444; color: #fff; }
-.btn-sec-action.unban { background: #6366f1; color: #fff; }
+.btn-sec-act.freeze { background: var(--warning); color: #000; }
+.btn-sec-act.unfreeze { background: var(--green); color: #000; }
+.btn-sec-act.ban { background: var(--danger); color: #fff; }
+.btn-sec-act.unban { background: var(--accent); color: #fff; }
 
-.owner-pill {
+.owner-badge {
   background: linear-gradient(135deg, #ffb703, #fb8500);
   color: #000;
   font-size: 10px;
@@ -556,29 +559,22 @@ button { cursor: pointer; }
   padding: 2px 6px;
   border-radius: 6px;
 }
-
-@media(max-width: 600px) {
-  .hero-promo { padding: 18px 16px; }
-  .products-grid { grid-template-columns: 1fr; }
-  .logo-title span:last-child { display: none; }
-}
 </style>
 </head>
 <body>
 
-<!-- SVG ОРИГИНАЛЬНАЯ ЗУБЧАТАЯ СИНЯЯ ГАЛОЧКА FACTURA -->
 <svg style="display:none;">
   <symbol id="icon-verified-star" viewBox="0 0 24 24">
     <path fill-rule="evenodd" clip-rule="evenodd" d="M12 1L14.7 3.2L18.1 3.2L19.2 6.4L22.2 7.8L21.7 11.2L23.4 14.2L21.3 16.9L21.3 20.3L18 21.2L16 23.9L12.7 22.8L9.5 24.3L7.7 21.4L4.3 20.9L4 17.5L1.7 15L3.1 11.9L2.3 8.5L5.4 6.8L6.2 3.5L9.6 3.2L12 1ZM10.5 16.2L17.2 9.5L15.8 8.1L10.5 13.4L8.2 11.1L6.8 12.5L10.5 16.2Z"/>
   </symbol>
 </svg>
 
-<!-- УВЕДОМЛЕНИЕ О БЛОКИРОВКЕ (ЕСЛИ АККАУНТ ЗАБЛОКИРОВАН ЗА МОШЕННИЧЕСТВО) -->
+<!-- БАННЕР БЛОКИРОВКИ ЗА МОШЕННИЧЕСТВО -->
 <div id="banNoticeHeader" class="banned-notice">
   ⛔ ВАШ АККАУНТ ЗАБЛОКИРОВАН СЛУЖБОЙ БЕЗОПАСНОСТИ FACTURA ЗА МОШЕННИЧЕСТВО. ТОРГОВЫЕ ОПЕРАЦИИ ОГРАНИЧЕНЫ.
 </div>
 
-<!-- ШАПКА САЙТА -->
+<!-- НАВБАР -->
 <header class="navbar">
   <div class="nav-inner">
     <div class="logo-box" onclick="filterCategory('all')">
@@ -591,92 +587,161 @@ button { cursor: pointer; }
     </div>
 
     <div class="nav-actions">
-      <!-- БАЛАНС -->
-      <div class="balance-tag" id="userBalanceBtn" title="Нажмите для пополнения">
+      <!-- БАЛАНС (СТАРТУЕТ С 0 ₽) -->
+      <div class="balance-tag" id="userBalanceBtn" title="Пополнить через ЮMoney">
         <span>💰</span>
         <span id="navBalanceVal">0</span> ₽
       </div>
 
-      <!-- КНОПКА ВЫСТАВИТЬ ТОВАР -->
       <button class="btn-nav-primary" id="btnOpenCreateItem">
         <span>+</span> <span>Продать</span>
       </button>
 
-      <!-- ПАНЕЛЬ СЛУЖБЫ БЕЗОПАСНОСТИ (ОТОБРАЖАЕТСЯ ТОЛЬКО ДЛЯ SB / SHVED) -->
-      <button class="btn-nav-primary" id="btnOpenSecurityPanel" style="background: #dc2626; display:none;">
-        🛡️ СБ / Поддержка
+      <!-- ТИКЕТЫ В ПОДДЕРЖКУ / СБ -->
+      <button class="btn-nav-primary" id="btnOpenTicketsModal" style="background: rgba(56, 189, 248, 0.16); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3);">
+        ✉️ Тикеты
       </button>
 
-      <!-- АВАТАРКА ПРОФИЛЯ -->
-      <img id="navUserAvatar" class="user-nav-avatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop" alt="avatar">
+      <!-- ПАНЕЛЬ СЛУЖБЫ БЕЗОПАСНОСТИ (ВИДНА ТОЛЬКО SHVED) -->
+      <button class="btn-nav-sec" id="btnOpenSecurityPanel" style="display:none;">
+        🛡️ СБ Панель
+      </button>
+
+      <!-- АВАТАРКА -->
+      <img id="navUserAvatar" class="user-nav-avatar" src="" alt="avatar">
     </div>
   </div>
 </header>
 
 <div class="main-wrapper">
 
-  <!-- ГЕРО БАННЕР -->
   <div class="hero-promo">
     <div class="hero-text">
-      <h1>Маркетплейс цифровых товаров Factura</h1>
-      <p>Покупайте и продавайте аккаунты Telegram, Discord, игры, ключи и софт. Все сделки защищены гарантом и Службой Безопасности.</p>
+      <h1>Factura Market — Честный маркетплейс</h1>
+      <p>Покупка и продажа Telegram, Discord, Steam и игр с защитой Службы Безопасности. Реальные отзывы и прямая система тикетов.</p>
     </div>
     <div class="hero-btns">
       <button class="btn-hero sell" onclick="document.getElementById('btnOpenCreateItem').click()">
-        + Выставить аккаунт / игру
+        + Выставить товар
       </button>
-      <button class="btn-hero security" id="btnContactSupport">
-        🛡️ Служба безопасности
+      <button class="btn-hero support" onclick="document.getElementById('btnOpenTicketsModal').click()">
+        ✉️ Написать тикет в СБ
+      </button>
+      <button class="btn-hero sec" id="btnHeroSecurity" style="display:none;" onclick="document.getElementById('btnOpenSecurityPanel').click()">
+        🛡️ Управление СБ
       </button>
     </div>
   </div>
 
-  <!-- КАТЕГОРИИ -->
   <div class="categories-bar">
     <button class="category-btn active" data-cat="all" onclick="filterCategory('all')">Все товары</button>
-    <button class="category-btn" data-cat="telegram" onclick="filterCategory('telegram')">📱 Telegram аккаунты</button>
-    <button class="category-btn" data-cat="discord" onclick="filterCategory('discord')">🎮 Discord аккаунты / Nitro</button>
-    <button class="category-btn" data-cat="games" onclick="filterCategory('games')">🕹️ Игры & Ключи</button>
-    <button class="category-btn" data-cat="other" onclick="filterCategory('other')">📦 Прочее</button>
+    <button class="category-btn" data-cat="telegram" onclick="filterCategory('telegram')">📱 Telegram</button>
+    <button class="category-btn" data-cat="discord" onclick="filterCategory('discord')">🎮 Discord</button>
+    <button class="category-btn" data-cat="games" onclick="filterCategory('games')">🕹️ Игры</button>
+    <button class="category-btn" data-cat="other" onclick="filterCategory('other')">📦 Другое</button>
   </div>
 
-  <!-- ПОИСК -->
   <div class="search-box-wrap">
-    <input type="text" id="searchInput" class="search-input" placeholder="🔍 Поиск по названию, игре, Telegram юзернейму...">
+    <input type="text" id="searchInput" class="search-input" placeholder="🔍 Поиск по названию или описанию товара...">
   </div>
 
-  <!-- СЕТКА ТОВАРОВ -->
   <div class="products-grid" id="productsGrid"></div>
 
 </div>
 
-<!-- ================= 1. МОДАЛКА ВХОДА / СМЕНЫ АККАУНТА ================= -->
+<!-- ================= 1. МОДАЛКА РЕГИСТРАЦИИ И ВХОДА ================= -->
 <div class="modal-overlay" id="authModal">
-  <div class="modal-box" style="max-width: 400px;">
+  <div class="modal-box" style="max-width: 420px;">
     <div class="modal-header">
-      <div class="modal-title">Вход в Factura Market</div>
+      <div class="modal-title" id="authModalTitle">Регистрация в Factura Market</div>
       <button class="modal-close-btn" onclick="closeModal('authModal')">&times;</button>
     </div>
     <div class="modal-body">
       <form id="authForm">
+        <div class="form-group" id="emailGroup">
+          <label>Электронная почта</label>
+          <input type="email" id="authEmail" placeholder="name@example.com" required>
+        </div>
         <div class="form-group">
-          <label>Никнейм или Логин</label>
-          <input type="text" id="authLogin" placeholder="Shved или ваш ник" required>
+          <label>Никнейм / Логин</label>
+          <input type="text" id="authLogin" placeholder="Ваш никнейм" required>
         </div>
         <div class="form-group">
           <label>Пароль</label>
-          <input type="password" id="authPass" placeholder="Пароль" required>
+          <input type="password" id="authPass" placeholder="Минимум 6 символов" minlength="6" required>
         </div>
-        <button type="submit" class="btn-submit-action">Войти в аккаунт</button>
+        <button type="submit" class="btn-submit-action" id="authSubmitBtn">Зарегистрироваться</button>
       </form>
-      <div style="font-size: 12px; color: var(--text-muted); margin-top: 14px; text-align: center;">
-        💡 Владелец сайта: ник <b>Shved</b>, пароль <b>shved2007</b><br>(Имеет полный доступ к Службе Безопасности)
+      <div style="text-align:center;margin-top:14px;font-size:13px;color:var(--text-muted);">
+        <span id="authSwitchPrompt">Уже зарегистрированы?</span>
+        <button type="button" id="authSwitchBtn" style="background:none;border:none;color:#38bdf8;font-weight:700;margin-left:4px;">Войти</button>
+      </div>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:14px;background:rgba(0,0,0,0.25);padding:10px;border-radius:10px;">
+        🛡️ Аккаунт Владельца и Службы Безопасности:<br>Ник: <b>Shved</b> | Пароль: <b>shved2007</b>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ================= 2. МОДАЛКА ВЫСТАВЛЕНИЯ ТОВАРА ================= -->
+<!-- ================= 2. МОДАЛКА ПОПОЛНЕНИЯ ЧЕРЕЗ ЮMONEY ================= -->
+<div class="modal-overlay" id="topupModal">
+  <div class="modal-box" style="max-width: 460px;">
+    <div class="modal-header">
+      <div class="modal-title">🟣 Пополнение баланса через ЮMoney</div>
+      <button class="modal-close-btn" onclick="closeModal('topupModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:14px;">
+        Официальная форма перевода на кошелёк <b>ЮMoney</b> маркетплейса Factura.
+      </div>
+
+      <div style="background:#181226;border:1px solid #3d2366;border-radius:12px;padding:12px;margin-bottom:16px;">
+        <div style="font-size:11px;color:#c084fc;font-weight:800;text-transform:uppercase;">Получатель:</div>
+        <div style="font-size:15px;font-weight:900;color:#fff;font-family:monospace;">4100119652998051</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Назначение платежа: Пополнение баланса Factura</div>
+      </div>
+
+      <!-- НАСТОЯЩАЯ ФОРМА ОПЛАТЫ YOOMONEY QUICKPAY -->
+      <form method="POST" action="https://yoomoney.ru/quickpay/confirm.xml" target="_blank" id="yoomoneyRealForm">
+        <!-- Номер кошелька -->
+        <input type="hidden" name="receiver" value="4100119652998051">
+        <input type="hidden" name="formcomment" value="Factura Market: Пополнение счёта">
+        <input type="hidden" name="short-dest" value="Factura Market">
+        <input type="hidden" name="quickpay-form" value="shop">
+        <input type="hidden" name="targets" value="Пополнение баланса Factura">
+        <input type="hidden" name="label" id="ymPaymentLabel" value="">
+
+        <div class="form-group">
+          <label>Сумма пополнения (₽)</label>
+          <input type="number" name="sum" id="topupSumInput" min="10" value="500" required>
+        </div>
+
+        <div class="form-group">
+          <label>Способ оплаты</label>
+          <select name="paymentType">
+            <option value="PC">Кошелёк ЮMoney</option>
+            <option value="AC" selected>Банковская карта (Любой банк РФ)</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn-submit-action" style="background:var(--yoomoney);color:#fff;" id="btnGoToYoomoney">
+          Перейти к оплате в ЮMoney →
+        </button>
+      </form>
+
+      <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);text-align:center;">
+        <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">
+          После завершения перевода в ЮMoney нажмите кнопку ниже для зачисления на баланс:
+        </div>
+        <button class="btn-buy-card" id="btnConfirmPaidManual" style="background:#10b981;width:100%;padding:10px;">
+          ✓ Я оплатил перевод в ЮMoney (Зачислить)
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 3. МОДАЛКА ВЫСТАВЛЕНИЯ ТОВАРА ================= -->
 <div class="modal-overlay" id="createItemModal">
   <div class="modal-box">
     <div class="modal-header">
@@ -688,268 +753,252 @@ button { cursor: pointer; }
         <div class="form-group">
           <label>Категория</label>
           <select id="itemCategory" required>
-            <option value="telegram">Telegram аккаунт (отлёжка, сессии, каналы)</option>
-            <option value="discord">Discord аккаунт (токены, значки, Nitro)</option>
-            <option value="games">Игра / Ключ / Steam / Epic</option>
-            <option value="other">Цифровой товар / Софт</option>
+            <option value="telegram">Telegram аккаунт</option>
+            <option value="discord">Discord аккаунт / Nitro</option>
+            <option value="games">Игра / Steam / Ключ</option>
+            <option value="other">Прочее / Софт</option>
           </select>
         </div>
         <div class="form-group">
           <label>Название товара</label>
-          <input type="text" id="itemTitle" placeholder="Например: Telegram аккаунт 2018 года с Premium" required>
+          <input type="text" id="itemTitle" placeholder="Например: Telegram аккаунт 2020 года" required>
         </div>
         <div class="form-group">
-          <label>Цена (в рублях)</label>
-          <input type="number" id="itemPrice" min="1" placeholder="500" required>
+          <label>Цена (₽)</label>
+          <input type="number" id="itemPrice" min="1" placeholder="300" required>
         </div>
         <div class="form-group">
-          <label>Ссылка на картинку товара (необязательно)</label>
-          <input type="url" id="itemImgUrl" placeholder="https://...">
+          <label>Ссылка на картинку (необязательно)</label>
+          <input type="url" id="itemImg" placeholder="https://...">
         </div>
         <div class="form-group">
-          <label>Описание и данные для покупателя</label>
-          <textarea id="itemDesc" rows="3" placeholder="Укажите происхождение, отлёжку, доступ к почте..." required></textarea>
+          <label>Описание</label>
+          <textarea id="itemDesc" rows="3" placeholder="Укажите подробности товара..." required></textarea>
         </div>
         <div class="form-group">
-          <label>Секретные данные (выдаются покупателю после оплаты)</label>
-          <textarea id="itemSecret" rows="2" placeholder="Логин:пароль / токен / tdata / ключ активации" required></textarea>
+          <label>Данные для выдачи покупателю после оплаты</label>
+          <textarea id="itemSecret" rows="2" placeholder="Логин:пароль, токен или ссылка..." required></textarea>
         </div>
-        <button type="submit" class="btn-submit-action">Опубликовать в маркетплейсе</button>
+        <button type="submit" class="btn-submit-action">Опубликовать товар</button>
       </form>
     </div>
   </div>
 </div>
 
-<!-- ================= 3. МОДАЛКА ПРОФИЛЯ И СМЕНЫ АВАТАРКИ ================= -->
-<div class="modal-overlay" id="profileModal">
+<!-- ================= 4. МОДАЛКА ТИКЕТОВ В СЛУЖБУ БЕЗОПАСНОСТИ ================= -->
+<div class="modal-overlay" id="ticketsModal">
   <div class="modal-box">
     <div class="modal-header">
-      <div class="modal-title">👤 Мой профиль и аватарка</div>
-      <button class="modal-close-btn" onclick="closeModal('profileModal')">&times;</button>
+      <div class="modal-title">✉️ Тикеты в Службу Безопасности</div>
+      <button class="modal-close-btn" onclick="closeModal('ticketsModal')">&times;</button>
     </div>
     <div class="modal-body">
-      <div style="display:flex;align-items:center;gap:16px;margin-bottom:18px;">
-        <img id="profileBigAvatar" style="width:70px;height:70px;border-radius:50%;object-fit:cover;border:2px solid var(--accent);" src="" alt="">
+      <form id="createTicketForm" style="margin-bottom:20px;background:var(--panel-card);padding:14px;border-radius:14px;border:1px solid var(--border);">
+        <div style="font-weight:800;font-size:14px;margin-bottom:8px;">Создать новое обращение:</div>
+        <div class="form-group">
+          <label>Тема обращения</label>
+          <select id="ticketSubject" required>
+            <option value="Мошенничество / Скам">Мошенничество / Скам продавца</option>
+            <option value="Проблема с пополнением ЮMoney">Проблема с пополнением ЮMoney</option>
+            <option value="Невалидный товар">Невалидный аккаунт / товар</option>
+            <option value="Вопрос по безопасности">Вопрос по безопасности / разморозке</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Ник нарушителя (если есть)</label>
+          <input type="text" id="ticketSuspect" placeholder="Никнейм продавца или пользователя">
+        </div>
+        <div class="form-group">
+          <label>Описание ситуации</label>
+          <textarea id="ticketMessage" rows="3" placeholder="Подробно опишите суть обращения..." required></textarea>
+        </div>
+        <button type="submit" class="btn-submit-action" style="background:#38bdf8;color:#0b0e14;">Отправить тикет</button>
+      </form>
+
+      <div style="font-weight:800;font-size:14px;margin-bottom:10px;">История ваших тикетов:</div>
+      <div id="userTicketsList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 5. МОДАЛКА ПРОФИЛЯ ПОЛЬЗОВАТЕЛЯ И ОТЗЫВОВ ================= -->
+<div class="modal-overlay" id="userProfileModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title" id="sellerProfileTitle">Профиль пользователя</div>
+      <button class="modal-close-btn" onclick="closeModal('userProfileModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+        <img id="sellerProfileAvatar" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid var(--accent);" src="" alt="">
         <div>
-          <div style="font-size:18px;font-weight:800;display:flex;align-items:center;gap:6px;">
-            <span id="profileUsername">Username</span>
-            <span id="profileRoleBadge"></span>
-          </div>
-          <div style="font-size:13px;color:var(--text-muted);margin-top:2px;">
-            Баланс: <b style="color:var(--gold);"><span id="profileBalanceText">0</span> ₽</b>
-            <span id="profileFrozenStatus" style="color:var(--danger);display:none;font-weight:700;">(ЗАМОРОЖЕН)</span>
+          <div style="font-size:18px;font-weight:900;" id="sellerProfileName">User</div>
+          <div style="font-size:13px;color:var(--text-muted);" id="sellerProfileStats">Отзывов: 0 | Рейтинг: 5.0 ★</div>
+        </div>
+      </div>
+
+      <!-- ФОРМА ДОБАВЛЕНИЯ ОТЗЫВА -->
+      <form id="addReviewForm" style="background:var(--panel-card);padding:14px;border-radius:14px;border:1px solid var(--border);margin-bottom:16px;">
+        <div style="font-weight:800;font-size:13px;margin-bottom:8px;">Оставить отзыв о продавце:</div>
+        <div class="form-group">
+          <label>Оценка</label>
+          <select id="reviewRating">
+            <option value="5">★★★★★ (5 - Отлично, всё честно)</option>
+            <option value="4">★★★★☆ (4 - Хорошо)</option>
+            <option value="3">★★★☆☆ (3 - Нормально)</option>
+            <option value="2">★★☆☆☆ (2 - Плохо)</option>
+            <option value="1">★☆☆☆☆ (1 - Обман / Мошенник)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Ваш отзыв</label>
+          <textarea id="reviewText" rows="2" placeholder="Опишите опыт сделки с пользователем..." required></textarea>
+        </div>
+        <button type="submit" class="btn-buy-card" style="width:100%;">Опубликовать отзыв</button>
+      </form>
+
+      <div style="font-weight:800;font-size:14px;margin-bottom:10px;">Все отзывы о пользователе:</div>
+      <div id="sellerReviewsList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 6. МОДАЛКА МОЕГО ПРОФИЛЯ И СМЕНЫ АВАТАРКИ ================= -->
+<div class="modal-overlay" id="myProfileModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title">👤 Мой профиль</div>
+      <button class="modal-close-btn" onclick="closeModal('myProfileModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px;">
+        <img id="myModalAvatar" style="width:70px;height:70px;border-radius:50%;object-fit:cover;border:2px solid var(--accent);" src="" alt="">
+        <div>
+          <div style="font-size:18px;font-weight:800;" id="myModalName">Username</div>
+          <div style="font-size:13px;color:var(--text-muted);">
+            Баланс: <b style="color:var(--gold);"><span id="myModalBalance">0</span> ₽</b>
           </div>
         </div>
       </div>
 
       <div class="form-group">
-        <label>Выберите готовую аватарку:</label>
+        <label>Готовые аватарки на выбор:</label>
         <div class="avatar-preset-grid" id="avatarPresetGrid"></div>
       </div>
 
       <div class="form-group">
-        <label>Или вставьте любую ссылку на аватарку (URL):</label>
+        <label>Или вставьте ссылку на картинку:</label>
         <div style="display:flex;gap:8px;">
-          <input type="url" id="customAvatarUrlInput" placeholder="https://example.com/avatar.jpg">
-          <button type="button" class="btn-buy-card" id="btnApplyCustomAvatar">Применить</button>
+          <input type="url" id="customAvatarInput" placeholder="https://...">
+          <button type="button" class="btn-buy-card" id="btnSaveCustomAvatar">ОК</button>
         </div>
       </div>
 
       <div class="form-group">
         <label>Или загрузите файл с устройства:</label>
-        <input type="file" id="avatarFileInput" accept="image/*">
+        <input type="file" id="fileAvatarInput" accept="image/*">
       </div>
 
       <div style="display:flex;gap:10px;margin-top:20px;">
-        <button class="btn-submit-action" style="background:#232a3d;" onclick="openModal('authModal');closeModal('profileModal');">Сменить пользователя</button>
-        <button class="btn-submit-action" style="background:#ef4444;" onclick="logoutUser()">Выйти</button>
+        <button class="btn-submit-action" style="background:#232a3d;" onclick="openAuthModal(false)">Сменить аккаунт</button>
+        <button class="btn-submit-action" style="background:#ef4444;" onclick="logout()">Выйти</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ================= 4. МОДАЛКА ПОПОЛНЕНИЯ БАЛАНСА ================= -->
-<div class="modal-overlay" id="topupModal">
-  <div class="modal-box" style="max-width: 420px;">
+<!-- ================= 7. ПАНЕЛЬ СЛУЖБЫ БЕЗОПАСНОСТИ (SHVED) ================= -->
+<div class="modal-overlay" id="securityPanelModal">
+  <div class="modal-box" style="max-width: 760px;">
     <div class="modal-header">
-      <div class="modal-title">💰 Пополнение кошелька Factura</div>
-      <button class="modal-close-btn" onclick="closeModal('topupModal')">&times;</button>
+      <div class="modal-title" style="color:#f87171;">
+        🛡️ Служба Безопасности Factura (Контроль мошенничества)
+      </div>
+      <button class="modal-close-btn" onclick="closeModal('securityPanelModal')">&times;</button>
     </div>
     <div class="modal-body">
-      <div style="font-size:13px;color:var(--text-muted);margin-bottom:14px;">
-        Средства моментально зачисляются на внутренний счёт для покупок аккаунтов и игр.
+      <div style="background:#161c28;border:1px solid #28334a;border-radius:12px;padding:12px;margin-bottom:16px;font-size:13px;">
+        Права СБ: заморозка средств на кошельке, блокировка за мошенничество, рассмотрение тикетов пользователей.
       </div>
-      <div class="form-group">
-        <label>Сумма пополнения (₽)</label>
-        <input type="number" id="topupAmountInput" value="1000" min="100" step="100">
-      </div>
-      <button class="btn-submit-action" id="btnConfirmTopup" style="background:#10b981;">Пополнить баланс</button>
+
+      <div style="font-size:14px;font-weight:800;margin-bottom:10px;">Все тикеты пользователей:</div>
+      <div id="allTicketsSecurityList" style="margin-bottom:20px;"></div>
+
+      <div style="font-size:14px;font-weight:800;margin-bottom:10px;">Зарегистрированные пользователи:</div>
+      <div id="securityUsersList"></div>
     </div>
   </div>
 </div>
 
-<!-- ================= 5. МОДАЛКА ПРОСМОТРА И ПОКУПКИ ТОВАРА ================= -->
+<!-- ================= 8. МОДАЛКА ПОКУПКИ ТОВАРА ================= -->
 <div class="modal-overlay" id="buyModal">
   <div class="modal-box">
     <div class="modal-header">
       <div class="modal-title">🛒 Покупка товара</div>
       <button class="modal-close-btn" onclick="closeModal('buyModal')">&times;</button>
     </div>
-    <div class="modal-body">
-      <div id="buyModalContent"></div>
-    </div>
-  </div>
-</div>
-
-<!-- ================= 6. ПАНЕЛЬ СЛУЖБЫ БЕЗОПАСНОСТИ И ПОДДЕРЖКИ ================= -->
-<div class="modal-overlay" id="securityModal">
-  <div class="modal-box" style="max-width: 760px;">
-    <div class="modal-header">
-      <div class="modal-title" style="color:#f87171;">
-        🛡️ Служба Безопасности Factura (Контроль мошенничества)
-      </div>
-      <button class="modal-close-btn" onclick="closeModal('securityModal')">&times;</button>
-    </div>
-    <div class="modal-body">
-      <div style="background:#161c28;border:1px solid #28334a;border-radius:12px;padding:12px;margin-bottom:16px;font-size:13px;">
-        Права Службы Безопасности: заморозка средств подозрительных продавцов, блокировка аккаунтов за скам и мошенничество, снятие товаров с продажи.
-      </div>
-
-      <div style="font-size:14px;font-weight:800;text-transform:uppercase;margin-bottom:10px;color:var(--text-muted);">
-        Пользователи платформы:
-      </div>
-
-      <div id="securityUsersList"></div>
-    </div>
+    <div class="modal-body" id="buyModalBody"></div>
   </div>
 </div>
 
 <script>
 (function() {
 
-  // ПРЕДУСТАНОВЛЕННЫЕ АВАТАРКИ ДЛЯ ВЫБОРА
-  var PRESET_AVATARS = [
+  var PRESETS = [
     'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop',
     'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150&h=150&fit=crop',
     'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop',
     'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop',
-    'https://images.unsplash.com/photo-1628157582853-a796fa650a6a?w=150&h=150&fit=crop',
-    'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150&h=150&fit=crop',
-    'https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=150&h=150&fit=crop',
-    'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop',
-    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop',
-    'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&h=150&fit=crop'
+    'https://images.unsplash.com/photo-1628157582853-a796fa650a6a?w=150&h=150&fit=crop'
   ];
 
-  // БАЗА ДАННЫХ ПО УМОЛЧАНИЮ
-  var defaultUsers = [
+  // БАЗА ДАННЫХ: БЕЗ ФЕЙКОВЫХ ЮЗЕРОВ, У ВСЕХ БАЛАНС 0
+  var users = [
     {
+      email: 'shved@factura.market',
       username: 'Shved',
       pass: 'shved2007',
-      role: 'owner', // Владелец сайта + Служба безопасности
-      balance: 15000,
+      role: 'owner',
+      balance: 0, // У ВСЕХ СТРОГО 0 ₽
       isFrozen: false,
       isBlocked: false,
-      avatar: 'https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=150&h=150&fit=crop'
-    },
-    {
-      username: 'Security_Support',
-      pass: 'security123',
-      role: 'security',
-      balance: 5000,
-      isFrozen: false,
-      isBlocked: false,
-      avatar: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150&h=150&fit=crop'
-    },
-    {
-      username: 'Alex_Gamer',
-      pass: 'user1234',
-      role: 'user',
-      balance: 3200,
-      isFrozen: false,
-      isBlocked: false,
-      avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop'
-    },
-    {
-      username: 'Scam_Trader',
-      pass: 'scam1234',
-      role: 'user',
-      balance: 850,
-      isFrozen: true,
-      isBlocked: true,
-      avatar: 'https://images.unsplash.com/photo-1628157582853-a796fa650a6a?w=150&h=150&fit=crop'
+      avatar: PRESETS[0]
     }
   ];
 
-  var defaultProducts = [
-    {
-      id: 1,
-      category: 'telegram',
-      title: 'Telegram аккаунт 2018 года (Отлёжка 6 лет, RU +7)',
-      price: 1250,
-      seller: 'Shved',
-      desc: 'Чистый аккаунт без спамблока. Идеален для ведения крупных каналов и ботов. Сессия TData + код.',
-      secret: 'TData-Session-Pack: https://factura.storage/sessions/tg-shved-ru7.zip',
-      img: 'https://images.unsplash.com/photo-1614680376593-902f749f7ffc?w=400&h=250&fit=crop'
-    },
-    {
-      id: 2,
-      category: 'discord',
-      title: 'Discord Full Access + Nitro 1 Год + 2017 Early Supporter',
-      price: 2490,
-      seller: 'Alex_Gamer',
-      desc: 'Редкий дискорд аккаунт со значком Early Supporter и активным годовым Nitro.',
-      secret: 'Login: discord_vintage@factura.gg | Pass: Vintage99381! | Token: mfa.kZ93kld...',
-      img: 'https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?w=400&h=250&fit=crop'
-    },
-    {
-      id: 3,
-      category: 'games',
-      title: 'Steam Аккаунт CS2 Prime + 150+ Игр (GTA V, Rust, Cyberpunk)',
-      price: 3400,
-      seller: 'Shved',
-      desc: 'Личный Steam аккаунт, родная почта, чеки первой покупки. Без VAC банов.',
-      secret: 'SteamLogin: rust_shved_pro | Pass: MasterPass2026! | Mail: shved_mail@inbox.ru',
-      img: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&h=250&fit=crop'
-    },
-    {
-      id: 4,
-      category: 'telegram',
-      title: 'Telegram Premium на 12 месяцев (Активация подарком)',
-      price: 1890,
-      seller: 'Alex_Gamer',
-      desc: 'Официальный гифт код без захода на ваш аккаунт. Моментальная активация.',
-      secret: 'Gift-Link: https://t.me/giftcode/factura-premium-1y-942859201',
-      img: 'https://images.unsplash.com/photo-1614680376408-81e91ffe3db7?w=400&h=250&fit=crop'
-    }
-  ];
+  var products = [];
+  var tickets = [];
+  var reviews = [];
+  var currentUsername = 'Shved';
+  var selectedProfileTarget = null;
+  var isRegisterMode = true;
 
-  // СОСТОЯНИЕ В LOCALSTORAGE
-  var users = defaultUsers;
-  var products = defaultProducts;
-  var currentUsername = 'Shved'; // По умолчанию заходим владельцем Shved
-  var activeCategory = 'all';
-
-  function loadStorage() {
+  function loadState() {
     try {
-      var su = localStorage.getItem('factura_market_users');
-      var sp = localStorage.getItem('factura_market_products');
-      var sc = localStorage.getItem('factura_market_current');
+      var su = localStorage.getItem('factura_v10_users');
+      var sp = localStorage.getItem('factura_v10_products');
+      var st = localStorage.getItem('factura_v10_tickets');
+      var sr = localStorage.getItem('factura_v10_reviews');
+      var sc = localStorage.getItem('factura_v10_cur');
       if (su) users = JSON.parse(su);
       if (sp) products = JSON.parse(sp);
+      if (st) tickets = JSON.parse(st);
+      if (sr) reviews = JSON.parse(sr);
       if (sc) currentUsername = sc;
     } catch(e) {}
   }
 
-  function saveStorage() {
+  function saveState() {
     try {
-      localStorage.setItem('factura_market_users', JSON.stringify(users));
-      localStorage.setItem('factura_market_products', JSON.stringify(products));
-      localStorage.setItem('factura_market_current', currentUsername);
+      localStorage.setItem('factura_v10_users', JSON.stringify(users));
+      localStorage.setItem('factura_v10_products', JSON.stringify(products));
+      localStorage.setItem('factura_v10_tickets', JSON.stringify(tickets));
+      localStorage.setItem('factura_v10_reviews', JSON.stringify(reviews));
+      localStorage.setItem('factura_v10_cur', currentUsername);
     } catch(e) {}
   }
 
-  loadStorage();
+  loadState();
 
   function getCurrentUser() {
     var u = users.find(function(x) { return x.username.toLowerCase() === currentUsername.toLowerCase(); });
@@ -960,49 +1009,51 @@ button { cursor: pointer; }
     return u;
   }
 
-  // ОБНОВЛЕНИЕ ИНТЕРФЕЙСА
   function updateUI() {
-    var user = getCurrentUser();
+    var cur = getCurrentUser();
 
-    document.getElementById('navBalanceVal').textContent = user.balance;
-    document.getElementById('navUserAvatar').src = user.avatar;
+    document.getElementById('navBalanceVal').textContent = cur.balance;
+    document.getElementById('navUserAvatar').src = cur.avatar;
 
     var banNotice = document.getElementById('banNoticeHeader');
     var balanceBtn = document.getElementById('userBalanceBtn');
-    if (user.isBlocked) {
+
+    if (cur.isBlocked) {
       banNotice.style.display = 'block';
       balanceBtn.classList.add('frozen');
-    } else if (user.isFrozen) {
+    } else if (cur.isFrozen) {
       banNotice.style.display = 'block';
-      banNotice.textContent = '⚠️ ВАШ КОШЕЛЕК ЗАМОРОЖЕН СЛУЖБОЙ БЕЗОПАСНОСТИ FACTURA.';
+      banNotice.textContent = '⚠️ ВАШ КОШЕЛЁК ЗАМОРОЖЕН СЛУЖБОЙ БЕЗОПАСНОСТИ FACTURA.';
       balanceBtn.classList.add('frozen');
     } else {
       banNotice.style.display = 'none';
       balanceBtn.classList.remove('frozen');
     }
 
-    // Проверка прав для кнопки Службы Безопасности
-    var isStaff = (user.role === 'owner' || user.role === 'security' || user.username === 'Shved');
-    document.getElementById('btnOpenSecurityPanel').style.display = isStaff ? 'flex' : 'none';
+    var isOwnerOrSec = (cur.role === 'owner' || cur.role === 'security' || cur.username === 'Shved');
+    document.getElementById('btnOpenSecurityPanel').style.display = isOwnerOrSec ? 'flex' : 'none';
+    document.getElementById('btnHeroSecurity').style.display = isOwnerOrSec ? 'inline-block' : 'none';
 
     renderProducts();
-    renderSecurityUsers();
+    renderSecurityPanel();
+    renderUserTickets();
   }
+
+  window.openModal = function(id) { document.getElementById(id).classList.add('open'); };
+  window.closeModal = function(id) { document.getElementById(id).classList.remove('open'); };
 
   // РЕНДЕР ТОВАРОВ
   function renderProducts() {
     var grid = document.getElementById('productsGrid');
     grid.innerHTML = '';
-    var search = document.getElementById('searchInput').value.trim().toLowerCase();
+    var q = document.getElementById('searchInput').value.trim().toLowerCase();
 
     var filtered = products.filter(function(p) {
-      var matchCat = (activeCategory === 'all' || p.category === activeCategory);
-      var matchSearch = (p.title.toLowerCase().indexOf(search) !== -1 || p.desc.toLowerCase().indexOf(search) !== -1);
-      return matchCat && matchSearch;
+      return (p.title.toLowerCase().indexOf(q) !== -1 || p.desc.toLowerCase().indexOf(q) !== -1);
     });
 
-    if (filtered.length === 0) {
-      grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">Товаров в данной категории пока нет. Вы можете стать первым продавцом!</div>';
+    if (!filtered.length) {
+      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted);font-size:14px;">Пока нет опубликованных товаров. Нажмите «+ Продать», чтобы выставить свой аккаунт или игру!</div>';
       return;
     }
 
@@ -1010,25 +1061,19 @@ button { cursor: pointer; }
       var card = document.createElement('div');
       card.className = 'product-card';
 
-      var catClass = 'other';
-      var catName = 'Товар';
-      if (p.category === 'telegram') { catClass = 'telegram'; catName = 'Telegram'; }
-      else if (p.category === 'discord') { catClass = 'discord'; catName = 'Discord'; }
-      else if (p.category === 'games') { catClass = 'games'; catName = 'Игры'; }
-
-      var sellerUser = users.find(function(u) { return u.username === p.seller; }) || { avatar: PRESET_AVATARS[0] };
+      var seller = users.find(function(u) { return u.username === p.seller; }) || { avatar: PRESETS[0] };
 
       card.innerHTML = 
         '<div class="product-image-box">' +
-          '<span class="category-tag-badge ' + catClass + '">' + catName + '</span>' +
-          '<img src="' + (p.img || PRESET_AVATARS[0]) + '" alt="">' +
+          '<span class="category-tag-badge ' + p.category + '">' + p.category + '</span>' +
+          '<img src="' + (p.img || PRESETS[0]) + '">' +
         '</div>' +
         '<div class="product-content">' +
           '<div class="product-title">' + p.title + '</div>' +
           '<div class="product-desc">' + p.desc + '</div>' +
           '<div class="seller-line">' +
-            '<img class="seller-avatar-mini" src="' + sellerUser.avatar + '">' +
-            '<span>Продавец: <b>' + p.seller + '</b></span>' +
+            '<span class="seller-profile-link" onclick="openUserProfile(\'' + p.seller + '\')">👤 ' + p.seller + '</span>' +
+            '<span style="font-size:11px;color:var(--gold);">★ Отзывы</span>' +
           '</div>' +
           '<div class="product-foot-row">' +
             '<div class="product-price">' + p.price + ' ₽</div>' +
@@ -1040,334 +1085,440 @@ button { cursor: pointer; }
     });
   }
 
-  // ФИЛЬТРАЦИЯ
-  window.filterCategory = function(cat) {
-    activeCategory = cat;
-    document.querySelectorAll('.category-btn').forEach(function(b) {
-      b.classList.toggle('active', b.getAttribute('data-cat') === cat);
-    });
-    renderProducts();
-  };
   document.getElementById('searchInput').addEventListener('input', renderProducts);
 
-  // МОДАЛКИ
-  window.openModal = function(id) {
-    document.getElementById(id).classList.add('open');
-  };
-  window.closeModal = function(id) {
-    document.getElementById(id).classList.remove('open');
-  };
-
-  // ПОКУПКА ТОВАРА
+  // ПОКУПКА
   window.openBuyModal = function(id) {
     var p = products.find(function(x) { return x.id === id; });
     if (!p) return;
-
     var cur = getCurrentUser();
-    var content = document.getElementById('buyModalContent');
 
-    content.innerHTML = 
-      '<div style="font-size:17px;font-weight:800;margin-bottom:8px;">' + p.title + '</div>' +
-      '<div style="font-size:13px;color:var(--text-muted);margin-bottom:14px;">' + p.desc + '</div>' +
-      '<div style="background:var(--panel-card);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:14px;">' +
-        '<div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span>Цена:</span><b>' + p.price + ' ₽</b></div>' +
-        '<div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span>Ваш баланс:</span><b>' + cur.balance + ' ₽</b></div>' +
+    var body = document.getElementById('buyModalBody');
+    body.innerHTML = 
+      '<div style="font-size:16px;font-weight:800;margin-bottom:6px;">' + p.title + '</div>' +
+      '<div style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">' + p.desc + '</div>' +
+      '<div style="background:var(--panel-card);padding:12px;border-radius:12px;border:1px solid var(--border);margin-bottom:14px;">' +
+        '<div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Стоимость:</span><b>' + p.price + ' ₽</b></div>' +
+        '<div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Ваш баланс:</span><b>' + cur.balance + ' ₽</b></div>' +
         '<div style="display:flex;justify-content:space-between;"><span>Продавец:</span><b>' + p.seller + '</b></div>' +
       '</div>' +
-      '<button class="btn-submit-action" id="btnConfirmPurchase" style="background:#2ecc71;color:#0b0e14;">Оплатить и получить данные</button>';
+      '<button class="btn-submit-action" id="btnPayGoods" style="background:#2ecc71;color:#0b0e14;">Подтвердить оплату</button>';
 
     openModal('buyModal');
 
-    document.getElementById('btnConfirmPurchase').onclick = function() {
-      if (cur.isBlocked) return alert('Ваш аккаунт заблокирован Службой Безопасности!');
-      if (cur.isFrozen) return alert('Ваш кошелек заморожен, оплата невозможна!');
-
+    document.getElementById('btnPayGoods').onclick = function() {
+      if (cur.isBlocked) return alert('Ваш аккаунт заблокирован за мошенничество!');
+      if (cur.isFrozen) return alert('Ваш баланс заморожен Службой Безопасности!');
       if (cur.balance < p.price) {
-        alert('Недостаточно средств на балансе! Пополните баланс.');
+        alert('Недостаточно средств на балансе! Пополните счёт через ЮMoney.');
         closeModal('buyModal');
         openModal('topupModal');
         return;
       }
 
       cur.balance -= p.price;
-      var seller = users.find(function(u) { return u.username === p.seller; });
-      if (seller) seller.balance += p.price;
+      var sel = users.find(function(u) { return u.username === p.seller; });
+      if (sel) sel.balance += p.price;
 
-      saveStorage();
+      saveState();
       updateUI();
 
-      content.innerHTML = 
+      body.innerHTML = 
         '<div style="text-align:center;padding:10px;">' +
-          '<div style="font-size:42px;margin-bottom:8px;">🎉</div>' +
-          '<div style="font-size:18px;font-weight:800;color:#2ecc71;margin-bottom:8px;">Оплата прошла успешно!</div>' +
-          '<div style="font-size:13px;color:var(--text-muted);margin-bottom:14px;">Данные вашего товара:</div>' +
-          '<div style="background:#0e121b;border:1px solid #2ecc71;padding:12px;border-radius:10px;font-family:monospace;word-break:break-all;user-select:all;margin-bottom:16px;">' +
-            p.secret +
-          '</div>' +
+          '<div style="font-size:38px;margin-bottom:8px;">✅</div>' +
+          '<div style="font-size:17px;font-weight:800;color:#2ecc71;margin-bottom:8px;">Оплата прошла успешно!</div>' +
+          '<div style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">Данные товара от продавца:</div>' +
+          '<div style="background:#0e121b;border:1px solid #2ecc71;padding:12px;border-radius:10px;font-family:monospace;word-break:break-all;user-select:all;margin-bottom:14px;">' + p.secret + '</div>' +
           '<button class="btn-submit-action" onclick="closeModal(\'buyModal\')">Закрыть</button>' +
         '</div>';
     };
   };
 
-  // ВЫСТАВИТЬ ТОВАР
+  // ВЫСТАВЛЕНИЕ ТОВАРА
   document.getElementById('btnOpenCreateItem').addEventListener('click', function() {
     var cur = getCurrentUser();
-    if (cur.isBlocked) return alert('Ваш аккаунт заблокирован Службой Безопасности за мошенничество. Вы не можете выставлять товары.');
+    if (cur.isBlocked) return alert('Вы заблокированы Службой Безопасности за мошенничество!');
     openModal('createItemModal');
   });
 
   document.getElementById('createItemForm').addEventListener('submit', function(e) {
     e.preventDefault();
     var cur = getCurrentUser();
-    if (cur.isBlocked) return alert('Действие запрещено!');
-
-    var newItem = {
+    var item = {
       id: Date.now(),
       category: document.getElementById('itemCategory').value,
       title: document.getElementById('itemTitle').value.trim(),
       price: parseInt(document.getElementById('itemPrice').value, 10),
-      seller: cur.username,
+      img: document.getElementById('itemImg').value.trim() || PRESETS[0],
       desc: document.getElementById('itemDesc').value.trim(),
       secret: document.getElementById('itemSecret').value.trim(),
-      img: document.getElementById('itemImgUrl').value.trim() || PRESET_AVATARS[0]
+      seller: cur.username
     };
 
-    products.unshift(newItem);
-    saveStorage();
+    products.unshift(item);
+    saveState();
     updateUI();
     closeModal('createItemModal');
     document.getElementById('createItemForm').reset();
-    alert('Товар успешно опубликован в маркетплейсе Factura!');
+    alert('Товар опубликован в маркетплейсе!');
   });
 
-  // ПОПОЛНЕНИЕ БАЛАНСА
+  // ПОПОЛНЕНИЕ ЮMONEY
   document.getElementById('userBalanceBtn').addEventListener('click', function() {
+    var cur = getCurrentUser();
+    document.getElementById('ymPaymentLabel').value = 'factura_' + cur.username + '_' + Date.now();
     openModal('topupModal');
   });
 
-  document.getElementById('btnConfirmTopup').addEventListener('click', function() {
+  document.getElementById('btnConfirmPaidManual').addEventListener('click', function() {
     var cur = getCurrentUser();
-    if (cur.isBlocked || cur.isFrozen) return alert('Операции с балансом заблокированы Службой Безопасности!');
-
-    var amt = parseInt(document.getElementById('topupAmountInput').value, 10);
-    if (!amt || amt <= 0) return alert('Введите корректную сумму');
+    var amt = parseInt(document.getElementById('topupSumInput').value, 10);
+    if (!amt || amt <= 0) return alert('Укажите сумму');
 
     cur.balance += amt;
-    saveStorage();
+    saveState();
     updateUI();
     closeModal('topupModal');
-    alert('Баланс успешно пополнен на +' + amt + ' ₽!');
+    alert('Баланс успешно пополнен на +' + amt + ' ₽ через ЮMoney (кошелёк 4100119652998051)!');
   });
 
-  // ПРОФИЛЬ И СМЕНА АВАТАРКИ
-  document.getElementById('navUserAvatar').addEventListener('click', function() {
-    var cur = getCurrentUser();
-    document.getElementById('profileBigAvatar').src = cur.avatar;
-    document.getElementById('profileUsername').textContent = cur.username;
-    document.getElementById('profileBalanceText').textContent = cur.balance;
+  // РЕГИСТРАЦИЯ И ВХОД
+  window.openAuthModal = function(register) {
+    isRegisterMode = register;
+    document.getElementById('authModalTitle').textContent = register ? 'Регистрация в Factura Market' : 'Вход в аккаунт';
+    document.getElementById('emailGroup').style.display = register ? 'block' : 'none';
+    document.getElementById('authEmail').required = register;
+    document.getElementById('authSubmitBtn').textContent = register ? 'Зарегистрироваться' : 'Войти';
+    document.getElementById('authSwitchPrompt').textContent = register ? 'Уже зарегистрированы?' : 'Впервые на сайте?';
+    document.getElementById('authSwitchBtn').textContent = register ? 'Войти' : 'Создать аккаунт';
+    openModal('authModal');
+  };
 
-    var roleBadge = document.getElementById('profileRoleBadge');
-    if (cur.role === 'owner') {
-      roleBadge.innerHTML = '<span class="owner-pill">ВЛАДЕЛЕЦ</span>';
-    } else if (cur.role === 'security') {
-      roleBadge.innerHTML = '<span class="security-badge">СЛУЖБА БЕЗОПАСНОСТИ</span>';
-    } else {
-      roleBadge.innerHTML = '';
+  document.getElementById('authSwitchBtn').addEventListener('click', function() {
+    openAuthModal(!isRegisterMode);
+  });
+
+  document.getElementById('authForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var login = document.getElementById('authLogin').value.trim();
+    var pass = document.getElementById('authPass').value.trim();
+    var email = document.getElementById('authEmail').value.trim();
+
+    // ВХОД ВЛАДЕЛЬЦА SHVED
+    if (login.toLowerCase() === 'shved' && pass === 'shved2007') {
+      currentUsername = 'Shved';
+      saveState();
+      updateUI();
+      closeModal('authModal');
+      alert('Успешный вход: Владелец сайта и Служба Безопасности (Shved)!');
+      return;
     }
 
-    document.getElementById('profileFrozenStatus').style.display = cur.isFrozen ? 'inline' : 'none';
+    if (isRegisterMode) {
+      var exist = users.find(function(u) { return u.username.toLowerCase() === login.toLowerCase(); });
+      if (exist) return alert('Пользователь с таким ником уже существует!');
 
-    // Рендер пресетов аватарок
-    var presetGrid = document.getElementById('avatarPresetGrid');
-    presetGrid.innerHTML = '';
-    PRESET_AVATARS.forEach(function(url) {
+      var newUser = {
+        email: email,
+        username: login,
+        pass: pass,
+        role: 'user',
+        balance: 0, // СТРОГО 0 ₽
+        isFrozen: false,
+        isBlocked: false,
+        avatar: PRESETS[Math.floor(Math.random() * PRESETS.length)]
+      };
+      users.push(newUser);
+      currentUsername = newUser.username;
+      saveState();
+      updateUI();
+      closeModal('authModal');
+      alert('Регистрация успешна! Ваш баланс: 0 ₽.');
+    } else {
+      var u = users.find(function(x) { return x.username.toLowerCase() === login.toLowerCase(); });
+      if (!u || u.pass !== pass) return alert('Неверный логин или пароль!');
+      currentUsername = u.username;
+      saveState();
+      updateUI();
+      closeModal('authModal');
+      alert('С возвращением, ' + currentUsername + '!');
+    }
+  });
+
+  window.logout = function() {
+    closeModal('myProfileModal');
+    openAuthModal(false);
+  };
+
+  // МОЙ ПРОФИЛЬ И СМЕНА АВАТАРКИ
+  document.getElementById('navUserAvatar').addEventListener('click', function() {
+    var cur = getCurrentUser();
+    document.getElementById('myModalAvatar').src = cur.avatar;
+    document.getElementById('myModalName').textContent = cur.username;
+    document.getElementById('myModalBalance').textContent = cur.balance;
+
+    var grid = document.getElementById('avatarPresetGrid');
+    grid.innerHTML = '';
+    PRESETS.forEach(function(url) {
       var img = document.createElement('img');
       img.className = 'avatar-preset-item' + (cur.avatar === url ? ' selected' : '');
       img.src = url;
       img.onclick = function() {
         cur.avatar = url;
-        saveStorage();
+        saveState();
         updateUI();
-        document.getElementById('profileBigAvatar').src = url;
+        document.getElementById('myModalAvatar').src = url;
         document.querySelectorAll('.avatar-preset-item').forEach(function(el) { el.classList.remove('selected'); });
         img.classList.add('selected');
       };
-      presetGrid.appendChild(img);
+      grid.appendChild(img);
     });
 
-    openModal('profileModal');
+    openModal('myProfileModal');
   });
 
-  // ПРИМЕНЕНИЕ КАСТОМНОГО URL АВАТАРКИ
-  document.getElementById('btnApplyCustomAvatar').addEventListener('click', function() {
+  document.getElementById('btnSaveCustomAvatar').addEventListener('click', function() {
+    var url = document.getElementById('customAvatarInput').value.trim();
+    if (!url) return;
     var cur = getCurrentUser();
-    var url = document.getElementById('customAvatarUrlInput').value.trim();
-    if (!url) return alert('Введите корректную ссылку на изображение!');
     cur.avatar = url;
-    saveStorage();
+    saveState();
     updateUI();
-    document.getElementById('profileBigAvatar').src = url;
-    alert('Аватарка успешно обновлена!');
+    document.getElementById('myModalAvatar').src = url;
+    alert('Аватарка обновлена!');
   });
 
-  // ЗАГРУЗКА АВАТАРКИ С УСТРОЙСТВА
-  document.getElementById('avatarFileInput').addEventListener('change', function(e) {
+  document.getElementById('fileAvatarInput').addEventListener('change', function(e) {
     var file = e.target.files[0];
     if (!file) return;
     var reader = new FileReader();
     reader.onload = function(evt) {
       var cur = getCurrentUser();
       cur.avatar = evt.target.result;
-      saveStorage();
+      saveState();
       updateUI();
-      document.getElementById('profileBigAvatar').src = cur.avatar;
-      alert('Новая аватарка успешно загружена!');
+      document.getElementById('myModalAvatar').src = cur.avatar;
+      alert('Аватарка успешно загружена!');
     };
     reader.readAsDataURL(file);
   });
 
-  // АВТОРИЗАЦИЯ
-  document.getElementById('authForm').addEventListener('submit', function(e) {
+  // ТИКЕТЫ В СЛУЖБУ БЕЗОПАСНОСТИ
+  document.getElementById('btnOpenTicketsModal').addEventListener('click', function() {
+    renderUserTickets();
+    openModal('ticketsModal');
+  });
+
+  document.getElementById('createTicketForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    var login = document.getElementById('authLogin').value.trim();
-    var pass = document.getElementById('authPass').value.trim();
-
-    // ПРОВЕРКА ВЛАДЕЛЬЦА САЙТА: Shved / shved2007
-    if (login.toLowerCase() === 'shved' && pass === 'shved2007') {
-      var shvedUser = users.find(function(u) { return u.username.toLowerCase() === 'shved'; });
-      if (!shvedUser) {
-        shvedUser = {
-          username: 'Shved',
-          pass: 'shved2007',
-          role: 'owner',
-          balance: 25000,
-          isFrozen: false,
-          isBlocked: false,
-          avatar: PRESET_AVATARS[0]
-        };
-        users.push(shvedUser);
-      }
-      currentUsername = shvedUser.username;
-      saveStorage();
-      updateUI();
-      closeModal('authModal');
-      alert('Добро пожаловать, Владелец сайта (Shved)! Доступ к Службе Безопасности активирован.');
-      return;
-    }
-
-    // ПОИСК СУЩЕСТВУЮЩЕГО ИЛИ СОЗДАНИЕ НОВОГО
-    var existing = users.find(function(u) { return u.username.toLowerCase() === login.toLowerCase(); });
-    if (existing) {
-      if (existing.pass !== pass) return alert('Неверный пароль!');
-      currentUsername = existing.username;
-    } else {
-      var newUser = {
-        username: login,
-        pass: pass,
-        role: 'user',
-        balance: 1000,
-        isFrozen: false,
-        isBlocked: false,
-        avatar: PRESET_AVATARS[Math.floor(Math.random() * PRESET_AVATARS.length)]
-      };
-      users.push(newUser);
-      currentUsername = newUser.username;
-    }
-
-    saveStorage();
-    updateUI();
-    closeModal('authModal');
-    alert('Успешный вход под ником: ' + currentUsername);
-  });
-
-  window.logoutUser = function() {
-    closeModal('profileModal');
-    openModal('authModal');
-  };
-
-  // ================= СЛУЖБА БЕЗОПАСНОСТИ =================
-  document.getElementById('btnOpenSecurityPanel').addEventListener('click', function() {
     var cur = getCurrentUser();
-    if (cur.role !== 'owner' && cur.role !== 'security' && cur.username !== 'Shved') {
-      return alert('Доступ запрещен. Только Служба Безопасности и Владелец Shved могут совершать административные действия!');
-    }
-    openModal('securityModal');
+    var t = {
+      id: Date.now(),
+      author: cur.username,
+      subject: document.getElementById('ticketSubject').value,
+      suspect: document.getElementById('ticketSuspect').value.trim() || '—',
+      message: document.getElementById('ticketMessage').value.trim(),
+      status: 'Открыт (На рассмотрении СБ)',
+      reply: '',
+      time: new Date().toLocaleString()
+    };
+    tickets.unshift(t);
+    saveState();
+    renderUserTickets();
+    renderSecurityPanel();
+    document.getElementById('createTicketForm').reset();
+    alert('Тикет отправлен в Службу Безопасности!');
   });
 
-  document.getElementById('btnContactSupport').addEventListener('click', function() {
-    alert('🛡️ Служба Безопасности и Поддержки Factura активна 24/7.\nВсе сомнительные сделки замораживаются до выяснения обстоятельств.');
-  });
-
-  function renderSecurityUsers() {
-    var box = document.getElementById('securityUsersList');
+  function renderUserTickets() {
+    var cur = getCurrentUser();
+    var box = document.getElementById('userTicketsList');
     if (!box) return;
     box.innerHTML = '';
 
-    users.forEach(function(u) {
-      var card = document.createElement('div');
-      card.className = 'user-security-card' + (u.isBlocked ? ' is-blocked' : '');
+    var myT = tickets.filter(function(t) { return t.author === cur.username; });
+    if (!myT.length) {
+      box.innerHTML = '<div style="color:var(--text-muted);font-size:13px;">У вас пока нет созданных тикетов.</div>';
+      return;
+    }
 
-      var statusTxt = [];
-      if (u.isBlocked) statusTxt.push('<b style="color:var(--danger)">ЗАБЛОКИРОВАН ЗА СКАМ</b>');
-      if (u.isFrozen) statusTxt.push('<b style="color:var(--warning)">КОШЕЛЕК ЗАМОРОЖЕН</b>');
-      if (!u.isBlocked && !u.isFrozen) statusTxt.push('<span style="color:var(--green)">АКТИВЕН</span>');
-
-      card.innerHTML = 
-        '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">' +
-          '<div style="display:flex;align-items:center;gap:10px;">' +
-            '<img src="' + u.avatar + '" style="width:36px;height:36px;border-radius:50%;object-fit:cover;">' +
-            '<div>' +
-              '<div style="font-weight:800;">' + u.username + ' ' + (u.role === 'owner' ? '<span class="owner-pill">ВЛАДЕЛЕЦ</span>' : '') + '</div>' +
-              '<div style="font-size:12px;color:var(--text-muted);">' + statusTxt.join(' | ') + '</div>' +
-            '</div>' +
-          '</div>' +
-          '<div style="font-size:15px;font-weight:900;">' + u.balance + ' ₽</div>' +
+    myT.forEach(function(t) {
+      var d = document.createElement('div');
+      d.className = 'ticket-card';
+      d.innerHTML = 
+        '<div style="display:flex;justify-content:space-between;margin-bottom:4px;">' +
+          '<b>' + t.subject + '</b>' +
+          '<span class="ticket-status open">' + t.status + '</span>' +
         '</div>' +
-        '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">' +
-          (!u.isFrozen 
-            ? '<button class="btn-sec-action freeze" onclick="secFreezeUser(\'' + u.username + '\', true)">❄️ Заморозить деньги</button>' 
-            : '<button class="btn-sec-action unfreeze" onclick="secFreezeUser(\'' + u.username + '\', false)">☀️ Разморозить деньги</button>') +
-          (!u.isBlocked 
-            ? '<button class="btn-sec-action ban" onclick="secBlockUser(\'' + u.username + '\', true)">⛔ Заблокировать за мошенничество</button>' 
-            : '<button class="btn-sec-action unban" onclick="secBlockUser(\'' + u.username + '\', false)">Разблокировать</button>') +
-        '</div>';
+        '<div style="font-size:12px;color:var(--text-muted);margin-bottom:6px;">Подозреваемый: ' + t.suspect + ' | ' + t.time + '</div>' +
+        '<div style="font-size:13px;background:rgba(0,0,0,0.25);padding:8px;border-radius:8px;">' + t.message + '</div>' +
+        (t.reply ? '<div style="margin-top:6px;font-size:12px;color:#2ecc71;"><b>Ответ СБ:</b> ' + t.reply + '</div>' : '');
+      box.appendChild(d);
+    });
+  }
 
+  // ПРОФИЛЬ ПРОДАВЦА И ОТЗЫВЫ
+  window.openUserProfile = function(username) {
+    selectedProfileTarget = username;
+    var user = users.find(function(u) { return u.username === username; }) || { username: username, avatar: PRESETS[0] };
+
+    document.getElementById('sellerProfileName').textContent = user.username;
+    document.getElementById('sellerProfileAvatar').src = user.avatar;
+
+    renderReviews(username);
+    openModal('userProfileModal');
+  };
+
+  function renderReviews(username) {
+    var box = document.getElementById('sellerReviewsList');
+    box.innerHTML = '';
+
+    var userRev = reviews.filter(function(r) { return r.target === username; });
+    document.getElementById('sellerProfileStats').textContent = 'Отзывов: ' + userRev.length;
+
+    if (!userRev.length) {
+      box.innerHTML = '<div style="color:var(--text-muted);font-size:13px;">Об этом пользователе ещё нет отзывов.</div>';
+      return;
+    }
+
+    userRev.forEach(function(r) {
+      var card = document.createElement('div');
+      card.className = 'review-card';
+      card.innerHTML = 
+        '<div class="review-header">' +
+          '<b>' + r.author + '</b>' +
+          '<span class="review-stars">' + '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating) + '</span>' +
+        '</div>' +
+        '<div style="font-size:13px;">' + r.text + '</div>' +
+        '<div style="font-size:11px;color:var(--text-muted);margin-top:4px;">' + r.time + '</div>';
       box.appendChild(card);
     });
   }
 
-  // АДМИНИСТРАТИВНЫЕ ДЕЙСТВИЯ (ТОЛЬКО СЛУЖБА БЕЗОПАСНОСТИ)
+  document.getElementById('addReviewForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var cur = getCurrentUser();
+    if (!selectedProfileTarget) return;
+
+    var r = {
+      id: Date.now(),
+      target: selectedProfileTarget,
+      author: cur.username,
+      rating: parseInt(document.getElementById('reviewRating').value, 10),
+      text: document.getElementById('reviewText').value.trim(),
+      time: new Date().toLocaleDateString()
+    };
+
+    reviews.unshift(r);
+    saveState();
+    renderReviews(selectedProfileTarget);
+    document.getElementById('reviewText').value = '';
+    alert('Отзыв успешно добавлен!');
+  });
+
+  // ПАНЕЛЬ СЛУЖБЫ БЕЗОПАСНОСТИ (SHVED)
+  document.getElementById('btnOpenSecurityPanel').addEventListener('click', function() {
+    renderSecurityPanel();
+    openModal('securityPanelModal');
+  });
+
+  function renderSecurityPanel() {
+    var cur = getCurrentUser();
+    if (cur.role !== 'owner' && cur.username !== 'Shved') return;
+
+    // Тикеты
+    var tBox = document.getElementById('allTicketsSecurityList');
+    if (tBox) {
+      tBox.innerHTML = '';
+      if (!tickets.length) {
+        tBox.innerHTML = '<div style="color:var(--text-muted);font-size:13px;">Нет активных тикетов.</div>';
+      } else {
+        tickets.forEach(function(t, idx) {
+          var card = document.createElement('div');
+          card.className = 'ticket-card';
+          card.innerHTML = 
+            '<div style="display:flex;justify-content:space-between;margin-bottom:4px;">' +
+              '<b>' + t.subject + ' (от ' + t.author + ')</b>' +
+              '<span class="ticket-status open">' + t.status + '</span>' +
+            '</div>' +
+            '<div style="font-size:12px;color:var(--text-muted);margin-bottom:6px;">Жалоба на: <b>' + t.suspect + '</b> | ' + t.time + '</div>' +
+            '<div style="font-size:13px;background:rgba(0,0,0,0.25);padding:8px;border-radius:8px;margin-bottom:8px;">' + t.message + '</div>' +
+            '<div style="display:flex;gap:8px;">' +
+              '<button class="btn-sec-act freeze" onclick="secFreezeUser(\'' + t.suspect + '\', true)">❄️ Заморозить ' + t.suspect + '</button>' +
+              '<button class="btn-sec-act ban" onclick="secBlockUser(\'' + t.suspect + '\', true)">⛔ Забанить за скам ' + t.suspect + '</button>' +
+              '<button class="btn-sec-act unfreeze" onclick="resolveTicket(' + idx + ')">✓ Закрыть тикет</button>' +
+            '</div>';
+          tBox.appendChild(card);
+        });
+      }
+    }
+
+    // Пользователи
+    var uBox = document.getElementById('securityUsersList');
+    if (uBox) {
+      uBox.innerHTML = '';
+      users.forEach(function(u) {
+        var row = document.createElement('div');
+        row.className = 'sec-user-row';
+        row.innerHTML = 
+          '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+            '<div>' +
+              '<b>' + u.username + '</b> ' + (u.role === 'owner' ? '<span class="owner-badge">ВЛАДЕЛЕЦ</span>' : '') +
+              '<div style="font-size:12px;color:var(--text-muted);">' + u.email + ' | Баланс: ' + u.balance + ' ₽</div>' +
+            '</div>' +
+            '<div>' +
+              (u.isBlocked ? '<span style="color:var(--danger);font-weight:800;">[БАН ЗА МОШЕННИЧЕСТВО]</span> ' : '') +
+              (u.isFrozen ? '<span style="color:var(--warning);font-weight:800;">[КОШЕЛЕК ЗАМОРОЖЕН]</span>' : '') +
+            '</div>' +
+          '</div>' +
+          '<div class="sec-btn-group">' +
+            (!u.isFrozen 
+              ? '<button class="btn-sec-act freeze" onclick="secFreezeUser(\'' + u.username + '\', true)">❄️ Заморозить баланс</button>' 
+              : '<button class="btn-sec-act unfreeze" onclick="secFreezeUser(\'' + u.username + '\', false)">☀️ Разморозить баланс</button>') +
+            (!u.isBlocked 
+              ? '<button class="btn-sec-act ban" onclick="secBlockUser(\'' + u.username + '\', true)">⛔ Блокировать за мошенничество</button>' 
+              : '<button class="btn-sec-act unban" onclick="secBlockUser(\'' + u.username + '\', false)">Разблокировать</button>') +
+          '</div>';
+        uBox.appendChild(row);
+      });
+    }
+  }
+
+  window.resolveTicket = function(idx) {
+    var reply = prompt('Введите ответ пользователю от Службы Безопасности:');
+    if (!reply) return;
+    tickets[idx].status = 'Решён СБ';
+    tickets[idx].reply = reply;
+    saveState();
+    renderSecurityPanel();
+    alert('Тикет решён, ответ записан!');
+  };
+
   window.secFreezeUser = function(username, freeze) {
     var cur = getCurrentUser();
-    if (cur.role !== 'owner' && cur.role !== 'security' && cur.username !== 'Shved') {
-      return alert('Ошибка: Обычный пользователь не имеет доступа к блокировке и заморозке!');
-    }
-    var target = users.find(function(u) { return u.username === username; });
-    if (!target) return;
+    if (cur.role !== 'owner' && cur.username !== 'Shved') return alert('Отказано в доступе!');
+    var target = users.find(function(u) { return u.username.toLowerCase() === username.toLowerCase(); });
+    if (!target) return alert('Пользователь не найден: ' + username);
 
     target.isFrozen = freeze;
-    saveStorage();
+    saveState();
     updateUI();
-    alert('Служба безопасности: баланс пользователя ' + username + (freeze ? ' успешно ЗАМОРОЖЕН!' : ' разморожен.'));
+    alert('Служба Безопасности: Баланс пользователя ' + username + (freeze ? ' ЗАМОРОЖЕН!' : ' разморожен.'));
   };
 
   window.secBlockUser = function(username, block) {
     var cur = getCurrentUser();
-    if (cur.role !== 'owner' && cur.role !== 'security' && cur.username !== 'Shved') {
-      return alert('Ошибка: Административные действия разрешены только Службе Безопасности!');
-    }
-    var target = users.find(function(u) { return u.username === username; });
-    if (!target) return;
+    if (cur.role !== 'owner' && cur.username !== 'Shved') return alert('Отказано в доступе!');
+    var target = users.find(function(u) { return u.username.toLowerCase() === username.toLowerCase(); });
+    if (!target) return alert('Пользователь не найден: ' + username);
 
     target.isBlocked = block;
-    if (block) target.isFrozen = true; // При бане средства тоже морозим
-
-    saveStorage();
+    if (block) target.isFrozen = true;
+    saveState();
     updateUI();
-    alert('Служба безопасности: пользователь ' + username + (block ? ' ЗАБЛОКИРОВАН ЗА МОШЕННИЧЕСТВО!' : ' разблокирован.'));
+    alert('Служба Безопасности: Пользователь ' + username + (block ? ' ЗАБЛОКИРОВАН ЗА МОШЕННИЧЕСТВО!' : ' разблокирован.'));
   };
 
-  // ПЕРВОНАЧАЛЬНЫЙ ЗАПУСК
   updateUI();
 
 })();
