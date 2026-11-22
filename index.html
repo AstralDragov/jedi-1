@@ -5,28 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Jedi — Поддержка ВКонтакте</title>
   
-  <!-- Защищённая и быстрая загрузка библиотек через jsDelivr (без зависаний unpkg) -->
-  <script src="https://cdn.jsdelivr.net/npm/@vkontakte/vk-bridge@2.14.3/dist/browser.min.js"></script>
-  
-  <!-- МГНОВЕННЫЙ ВЫЗОВ VKWebAppInit ДО ЗАГРУЗКИ DOM И ФРЕЙМВОРКА (Убирает вечную загрузку в ВК) -->
-  <script>
-    (function () {
-      function sendInit() {
-        var bridge = window.vkBridge || (typeof vkBridge !== 'undefined' ? vkBridge : null);
-        if (bridge && typeof bridge.send === 'function') {
-          bridge.send('VKWebAppInit')
-            .then(function() { console.log('VKWebAppInit: Успешно инициализирован'); })
-            .catch(function(err) { console.warn('VKWebAppInit ошибка:', err); });
-        }
-      }
-      sendInit();
-      document.addEventListener('DOMContentLoaded', sendInit);
-      window.addEventListener('load', sendInit);
-    })();
-  </script>
-
-  <script src="https://cdn.jsdelivr.net/npm/vue@3.4.21/dist/vue.global.prod.js"></script>
-
   <style>
     :root {
       --vk-blue: #2979ff;
@@ -109,7 +87,7 @@
       background: #ffffff;
     }
 
-    /* 1. TICKETS VIEW & NORM PROGRESS */
+    /* TICKETS VIEW & NORM PROGRESS */
     .banner-norm {
       background: linear-gradient(135deg, #162c52 0%, #0c1830 100%);
       border-radius: 16px;
@@ -180,7 +158,7 @@
       width: 44px;
       height: 44px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #9c27b0, #673ab7);
+      background: linear-gradient(135deg, #1b3563, #2979ff);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -342,7 +320,7 @@
       flex-shrink: 0;
     }
 
-    /* 2. RATING VIEW */
+    /* RATING VIEW */
     .rating-banner {
       display: flex;
       align-items: center;
@@ -375,7 +353,7 @@
       flex-shrink: 0;
     }
 
-    /* 3. SHOP VIEW */
+    /* SHOP VIEW */
     .balance-card-mini {
       display: flex;
       align-items: center;
@@ -430,7 +408,7 @@
       height: 100%;
     }
 
-    /* 4. NOTIFICATIONS (КОЛОКОЛЬЧИК) */
+    /* NOTIFICATIONS */
     .notif-card {
       padding: 14px;
       border-radius: 14px;
@@ -458,7 +436,7 @@
     .notif-info { background: var(--vk-blue); }
     .notif-admin { background: #792ec0; }
 
-    /* 5. PROFILE VIEW */
+    /* PROFILE VIEW */
     .profile-hero {
       display: flex;
       flex-direction: column;
@@ -520,7 +498,6 @@
       margin-bottom: 4px;
     }
 
-    /* КРАСИВАЯ ОФИЦИАЛЬНАЯ ГАЛОЧКА VK */
     .badge-verified-glow {
       display: inline-flex;
       align-items: center;
@@ -573,7 +550,6 @@
       font-weight: 500;
     }
 
-    /* BUTTONS & CONTROLS */
     .btn-solid-blue {
       width: 100%;
       background: var(--vk-blue);
@@ -624,7 +600,6 @@
       margin-bottom: 10px;
     }
 
-    /* 6. ПАНЕЛЬ СПЕЦИАЛЬНОГО СПЕЦИАЛИСТА */
     .specialist-review-card {
       border: 1px solid var(--vk-border);
       border-radius: 14px;
@@ -679,6 +654,39 @@
       box-shadow: 0 0 0 2px #fff;
     }
   </style>
+
+  <!-- БЕЗОПАСНАЯ ЗАГРУЗКА СКРИПТОВ С РЕЗЕРВНЫМИ ЗЕРКАЛАМИ -->
+  <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+  <script>
+    if (!window.vkBridge) {
+      document.write('<script src="https://cdn.jsdelivr.net/npm/@vkontakte/vk-bridge/dist/browser.min.js"><\/script>');
+    }
+  </script>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <script>
+    if (!window.Vue) {
+      document.write('<script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"><\/script>');
+    }
+  </script>
+
+  <!-- СНЯТИЕ ЭКРАНА ЗАГРУЗКИ VK -->
+  <script>
+    (function () {
+      function sendVKInit() {
+        var b = window.vkBridge || (typeof vkBridge !== 'undefined' ? vkBridge : null);
+        if (b && typeof b.send === 'function') {
+          b.send('VKWebAppInit').catch(function () {});
+        }
+      }
+      sendVKInit();
+      document.addEventListener('DOMContentLoaded', sendVKInit);
+      window.addEventListener('load', sendVKInit);
+      setTimeout(sendVKInit, 100);
+      setTimeout(sendVKInit, 500);
+      setTimeout(sendVKInit, 1200);
+    })();
+  </script>
 </head>
 <body>
 <div id="app">
@@ -752,7 +760,6 @@
             <span>Норма: 20 вопросов</span>
           </div>
 
-          <!-- Кнопка создания вопроса ЕСТЬ ТОЛЬКО у высших ролей (Admin, Dev) -->
           <button v-if="currentUser.role === 'admin' || currentUser.role === 'dev'" 
                   class="btn-create-q" 
                   @click="generateNewTicket">
@@ -918,11 +925,11 @@
         </button>
       </div>
 
-      <!-- АВАТАРКИ -->
+      <!-- АВАТАРКИ: ИСКЛЮЧИТЕЛЬНО АГЕНТЫ ПОДДЕРЖКИ -->
       <div class="shop-section-card">
-        <div style="font-weight: 700; font-size: 15px; margin-bottom: 4px;">Фирменные аватары Поддержки</div>
+        <div style="font-weight: 700; font-size: 15px; margin-bottom: 4px;">Фирменные аватары Агентов Поддержки</div>
         <div style="font-size: 12px; color: var(--vk-subtext); margin-bottom: 14px;">
-          Силуэтные аватары в стиле Агентов Поддержки (Монах, Врач, Спецагент).
+          Оригинальные силуэты Агентов Поддержки в костюмах, темных очках и гарнитуре на цветных фонах из макета.
         </div>
 
         <div v-for="(list, catKey) in currentAvatarCategories" :key="catKey">
@@ -938,7 +945,7 @@
         </div>
 
         <button class="btn-action-outline" :disabled="!selectedAvatarSvg" @click="applySelectedAvatar">
-          Установить выбранный аватар
+          Установить выбранный аватар Агента
         </button>
       </div>
     </section>
@@ -1172,7 +1179,6 @@
 </div>
 
 <script>
-// Безопасная работа с хранилищем (защита от ошибок внутри iframe ВК)
 function safeStorageGet(key) {
   try {
     return localStorage.getItem(key);
@@ -1186,519 +1192,545 @@ function safeStorageSet(key, value) {
   } catch (e) {}
 }
 
-// SVG Аватары
-const createMonkSvg = (bg, robe) => `
+// 1. КЛАССИЧЕСКИЙ АГЕНТ В ЧЁРНОМ КОСТЮМЕ (ТОЧНО ПО МАКЕТУ)
+const createClassicAgentSvg = (bg) => `
 <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
   <rect width="100" height="100" fill="${bg}"/>
-  <path d="M22 100 C24 75 36 65 50 65 C64 65 76 75 78 100 Z" fill="${robe}"/>
-  <circle cx="50" cy="35" r="14" fill="#ffffff"/>
-  <path d="M47 50 L50 42 L53 50 L53 65 L47 65 Z" fill="#ffffff"/>
-  <path d="M42 56 L47 48 L48 60 Z" fill="#ffffff"/>
-  <path d="M58 56 L53 48 L52 60 Z" fill="#ffffff"/>
+  <!-- Пиджак -->
+  <path d="M10 100 L25 65 L48 65 L44 100 Z" fill="#111111"/>
+  <path d="M90 100 L75 65 L52 65 L56 100 Z" fill="#111111"/>
+  <!-- Белая рубашка (треугольник воротника) -->
+  <polygon points="50,65 38,76 50,96 62,76" fill="#ffffff"/>
+  <!-- Чёрный галстук -->
+  <polygon points="48,72 52,72 54,88 50,95 46,88" fill="#111111"/>
+  <!-- Тёмные очки Агента -->
+  <rect x="26" y="32" width="20" height="11" rx="2" fill="#111111"/>
+  <rect x="54" y="32" width="20" height="11" rx="2" fill="#111111"/>
+  <rect x="46" y="35" width="8" height="4" fill="#111111"/>
+  <!-- Заушник / Проводная гарнитура поддержки -->
+  <path d="M26 38 C20 44 23 58 28 68" fill="none" stroke="#111111" stroke-width="2.5" stroke-linecap="round"/>
 </svg>`;
 
-const createDoctorSvg = (bg, accent) => `
+// 2. АГЕНТ В КИБЕР / НЕОНОВОМ СТИЛЕ (ТЁМНЫЙ ПИДЖАК + ЦВЕТНОЙ ГАЛСТУК)
+const createNeonAgentSvg = (bg, accentColor) => `
 <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
   <rect width="100" height="100" fill="${bg}"/>
-  <path d="M20 100 C22 70 34 60 50 60 C66 60 78 70 80 100 Z" fill="#ffffff"/>
-  <circle cx="50" cy="35" r="14" fill="#ffffff"/>
-  <path d="M40 45 C40 60 60 60 60 45" fill="none" stroke="${accent}" stroke-width="3" stroke-linecap="round"/>
-  <path d="M50 58 L50 72" fill="none" stroke="${accent}" stroke-width="3"/>
-  <circle cx="50" cy="74" r="5" fill="${accent}"/>
-  <circle cx="40" cy="44" r="2.5" fill="${accent}"/>
-  <circle cx="60" cy="44" r="2.5" fill="${accent}"/>
+  <path d="M10 100 L25 65 L48 65 L44 100 Z" fill="#0d1b2a"/>
+  <path d="M90 100 L75 65 L52 65 L56 100 Z" fill="#0d1b2a"/>
+  <polygon points="50,65 38,76 50,96 62,76" fill="#ffffff"/>
+  <polygon points="48,72 52,72 54,88 50,95 46,88" fill="${accentColor}"/>
+  <!-- Очки с цветным неоновым бликом -->
+  <rect x="26" y="32" width="20" height="11" rx="2" fill="#0d1b2a"/>
+  <rect x="54" y="32" width="20" height="11" rx="2" fill="#0d1b2a"/>
+  <rect x="46" y="35" width="8" height="4" fill="#0d1b2a"/>
+  <line x1="28" y1="36" x2="44" y2="36" stroke="${accentColor}" stroke-width="2"/>
+  <line x1="56" y1="36" x2="72" y2="36" stroke="${accentColor}" stroke-width="2"/>
+  <path d="M26 38 C20 44 23 58 28 68" fill="none" stroke="${accentColor}" stroke-width="2.5" stroke-linecap="round"/>
 </svg>`;
 
-const createAgentSvg = (bg, glasses) => `
+// 3. АГЕНТ СВЕТЛОЙ СТОРОНЫ (БЕЛЫЙ ПИДЖАК + ТЁМНЫЙ ГАЛСТУК)
+const createWhiteSuitAgentSvg = (bg) => `
 <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
   <rect width="100" height="100" fill="${bg}"/>
-  <path d="M15 100 L25 65 L50 65 L75 65 L85 100 Z" fill="#111111"/>
-  <polygon points="50,65 42,88 50,96 58,88" fill="#ffffff"/>
-  <polygon points="48,72 52,72 53,88 50,92 47,88" fill="#111111"/>
-  <circle cx="50" cy="36" r="15" fill="#f8d9b6"/>
-  <rect x="33" y="32" width="15" height="9" rx="2" fill="${glasses}"/>
-  <rect x="52" y="32" width="15" height="9" rx="2" fill="${glasses}"/>
-  <rect x="47" y="34" width="6" height="3" fill="${glasses}"/>
-  <path d="M35 38 C30 42 32 58 35 68" fill="none" stroke="${glasses}" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M10 100 L25 65 L48 65 L44 100 Z" fill="#ffffff"/>
+  <path d="M90 100 L75 65 L52 65 L56 100 Z" fill="#ffffff"/>
+  <polygon points="50,65 38,76 50,96 62,76" fill="#1b2838"/>
+  <polygon points="48,72 52,72 54,88 50,95 46,88" fill="#ffffff"/>
+  <rect x="26" y="32" width="20" height="11" rx="2" fill="#111111"/>
+  <rect x="54" y="32" width="20" height="11" rx="2" fill="#111111"/>
+  <rect x="46" y="35" width="8" height="4" fill="#111111"/>
+  <path d="M26 38 C20 44 23 58 28 68" fill="none" stroke="#111111" stroke-width="2.5" stroke-linecap="round"/>
 </svg>`;
 
-const defaultAvatar = createMonkSvg('#8bc34a', '#f57c00');
+// Дефолтный аватар — классический Агент на салатовом фоне из макета
+const defaultAgentAvatar = createClassicAgentSvg('#9ccc65');
 
-const { createApp } = Vue;
+function initVueApp() {
+  if (!window.Vue) {
+    setTimeout(initVueApp, 50);
+    return;
+  }
+  
+  const { createApp } = Vue;
 
-createApp({
-  data() {
-    return {
-      currentTab: 'home',
-      unreadNotifs: false,
-      isAgentsChatOpen: false,
-      agentsInputText: '',
-      activeTicketChat: null,
-      ticketInputText: '',
-      remainingCount: 20,
-      devPointsToAdd: 100,
+  createApp({
+    data() {
+      return {
+        currentTab: 'home',
+        unreadNotifs: false,
+        isAgentsChatOpen: false,
+        agentsInputText: '',
+        activeTicketChat: null,
+        ticketInputText: '',
+        remainingCount: 20,
+        devPointsToAdd: 100,
 
-      currentUser: {
-        agentNumber: 1,
-        customNick: '',
-        role: 'agent',
-        points: 0,
-        isTeamMember: false,
-        avatarSvg: defaultAvatar
-      },
+        currentUser: {
+          agentNumber: 1,
+          customNick: '',
+          role: 'agent',
+          points: 0,
+          isTeamMember: false,
+          avatarSvg: defaultAgentAvatar
+        },
 
-      stats: {
-        totalAnswers: 0,
-        goodAnswers: 0,
-        idealAnswers: 0,
-        badAnswers: 0
-      },
+        stats: {
+          totalAnswers: 0,
+          goodAnswers: 0,
+          idealAnswers: 0,
+          badAnswers: 0
+        },
 
-      shopForm: {
-        newNumber: null,
-        newCustomNick: ''
-      },
+        shopForm: {
+          newNumber: null,
+          newCustomNick: ''
+        },
 
-      selectedAvatarSvg: defaultAvatar,
+        selectedAvatarSvg: defaultAgentAvatar,
 
-      catTitles: {
-        monk: "Монахи Поддержки (Дзен)",
-        doctor: "Врачи и Реанимация Аккаунтов",
-        agent: "Спецагенты Безопасности"
-      },
+        catTitles: {
+          classic: "Классические Агенты Поддержки (VK Support)",
+          neon: "Спецагенты Ночной Смены (Cyber Agents)",
+          whiteSuit: "Элитные Агенты Безопасности (VIP Agents)"
+        },
 
-      avatarCatalog: {
-        monk: [
-          createMonkSvg('#8bc34a', '#f57c00'),
-          createMonkSvg('#26c6da', '#f57c00'),
-          createMonkSvg('#e53935', '#f57c00')
-        ],
-        doctor: [
-          createDoctorSvg('#9c27b0', '#222222'),
-          createDoctorSvg('#f06292', '#222222'),
-          createDoctorSvg('#ffb74d', '#222222')
-        ],
-        agent: [
-          createAgentSvg('#9ccc65', '#000000'),
-          createAgentSvg('#fff176', '#000000'),
-          createAgentSvg('#64b5f6', '#000000')
-        ]
-      },
-
-      agentsChatMessages: [
-        { id: 1, sender: "Спец. специалист #1", text: "Привет всем! Проверяю ответы по регламенту. Ставьте огоньки на идеальные формулировки!", time: "10:14" },
-        { id: 2, sender: "Специалист #1", text: "Понял, разбираю очередь обращений.", time: "10:15" }
-      ],
-
-      tickets: [
-        {
-          id: 1,
-          authorName: "Мария Волкова",
-          category: "Блокировка",
-          question: "Страница заблокирована до 24 декабря за «Запрещённый товар», я в панике",
-          previewText: "Страница заблокирована до 24 декабря за «Запрещённый товар»...",
-          status: "pending",
-          isIdeal: false,
-          answeredByNick: "",
-          specialistAnswer: "",
-          messages: [
-            { id: 101, sender: "Мария Волкова", text: "Здравствуйте! Моя страница заблокирована за запрещенный товар. Я ничего не продавала! Помогите восстановить пожалуйста!", time: "01:14", isAgent: false }
+        // Все категории теперь строго состоят из Агентов Поддержки
+        avatarCatalog: {
+          classic: [
+            createClassicAgentSvg('#9ccc65'), // Фирменный салатовый
+            createClassicAgentSvg('#fff176'), // Песочно-жёлтый
+            createClassicAgentSvg('#64b5f6')  // Небесно-голубой
+          ],
+          neon: [
+            createNeonAgentSvg('#ab47bc', '#e1bee7'), // Неоновый фиолетовый
+            createNeonAgentSvg('#26a69a', '#80cbc4'), // Бирюзовый
+            createNeonAgentSvg('#ef5350', '#ffcdd2')  // Кораллово-красный
+          ],
+          whiteSuit: [
+            createWhiteSuitAgentSvg('#1e88e5'), // Королевский синий
+            createWhiteSuitAgentSvg('#ff9800'), // Оранжевый
+            createWhiteSuitAgentSvg('#2e7d32')  // Изумрудный
           ]
         },
-        {
-          id: 2,
-          authorName: "Артём Смирнов",
-          category: "Сбои сети",
-          question: "ВК СОВСЕМ НЕ ГРУЗИТСЯ, У ВСЕХ ТАК ИЛИ ТОЛЬКО У МЕНЯ?",
-          previewText: "ВК СОВСЕМ НЕ ГРУЗИТСЯ, У ВСЕХ ТАК ИЛИ ТОЛЬКО У МЕНЯ?",
-          status: "pending",
-          isIdeal: false,
-          answeredByNick: "",
-          specialistAnswer: "",
-          messages: [
-            { id: 102, sender: "Артём Смирнов", text: "Белая страница висит, не открываются диалоги. Что делать?", time: "01:15", isAgent: false }
-          ]
-        },
-        {
-          id: 3,
-          authorName: "Елена Денисова",
-          category: "Умная лента",
-          question: "Раньше в ленте были посты друзей, а теперь что-то непонятное",
-          previewText: "Раньше в ленте были посты друзей, а теперь что-то непонятное",
-          status: "pending",
-          isIdeal: false,
-          answeredByNick: "",
-          specialistAnswer: "",
-          messages: [
-            { id: 103, sender: "Елена Денисова", text: "Добрый вечер! Куда пропали новости друзей? Одни паблики кругом.", time: "01:16", isAgent: false }
-          ]
-        }
-      ],
 
-      adminReviewQueue: [],
+        agentsChatMessages: [
+          { id: 1, sender: "Спец. специалист #1", text: "Привет всем! Проверяю ответы по регламенту. Ставьте огоньки на идеальные формулировки!", time: "10:14" },
+          { id: 2, sender: "Специалист #1", text: "Понял, разбираю очередь обращений.", time: "10:15" }
+        ],
 
-      notifications: [
-        {
-          id: 1,
-          type: "info",
-          title: "Добро пожаловать в Jedi",
-          text: "Вы на позиции Специалиста. Отвечайте на вопросы для продвижения.",
-          time: "Только что"
-        }
-      ]
-    };
-  },
-  computed: {
-    displayNickname() {
-      if (this.currentUser.customNick) {
-        return this.currentUser.customNick;
-      }
-      const num = `#${this.currentUser.agentNumber || 1}`;
-      switch (this.currentUser.role) {
-        case 'special': return `Спец. специалист ${num}`;
-        case 'admin': return `Администратор ${num}`;
-        case 'dev': return `Разработчик ${num}`;
-        case 'agent':
-        default: return `Специалист ${num}`;
-      }
-    },
-    roleTitleShort() {
-      switch (this.currentUser.role) {
-        case 'special': return "Спец. специалист";
-        case 'admin': return "Администратор";
-        case 'dev': return "Разработчик";
-        default: return "Специалист";
-      }
-    },
-    currentAvatarSvg() {
-      return this.currentUser.avatarSvg || defaultAvatar;
-    },
-    currentAvatarCategories() {
-      return this.avatarCatalog;
-    },
-    normProgressPercent() {
-      const p = ((this.stats.totalAnswers || 0) / 20) * 100;
-      return Math.min(p, 100);
-    },
-    lastAgentChatMessage() {
-      if (!this.agentsChatMessages || this.agentsChatMessages.length === 0) return "Нет сообщений";
-      const last = this.agentsChatMessages[this.agentsChatMessages.length - 1];
-      return `${last.sender}: ${last.text}`;
-    },
-    pendingForSpecialist() {
-      return (this.tickets || []).filter(t => t.status === 'special_review');
-    }
-  },
-  mounted() {
-    // Повторно подтверждаем готовность приложения
-    var bridge = window.vkBridge || (typeof vkBridge !== 'undefined' ? vkBridge : null);
-    if (bridge && typeof bridge.send === 'function') {
-      bridge.send('VKWebAppInit').catch(function() {});
-    }
-
-    // Безопасное восстановление данных из хранилища
-    const saved = safeStorageGet('jedi_state_v4');
-    if (saved) {
-      try {
-        const p = JSON.parse(saved);
-        if (p && typeof p === 'object') {
-          if (p.currentUser) this.currentUser = { ...this.currentUser, ...p.currentUser };
-          if (p.stats) this.stats = { ...this.stats, ...p.stats };
-          if (Array.isArray(p.notifications)) this.notifications = p.notifications;
-          if (Array.isArray(p.adminReviewQueue)) this.adminReviewQueue = p.adminReviewQueue;
-        }
-      } catch (e) {
-        console.warn('Ошибка чтения кэша:', e);
-      }
-    }
-    this.selectedAvatarSvg = this.currentUser.avatarSvg || defaultAvatar;
-  },
-  methods: {
-    saveState() {
-      safeStorageSet('jedi_state_v4', JSON.stringify({
-        currentUser: this.currentUser,
-        stats: this.stats,
-        notifications: this.notifications,
-        adminReviewQueue: this.adminReviewQueue
-      }));
-    },
-
-    openAgentsChat() {
-      this.isAgentsChatOpen = true;
-      this.$nextTick(() => {
-        if (this.$refs.agentsChatBody) {
-          this.$refs.agentsChatBody.scrollTop = this.$refs.agentsChatBody.scrollHeight;
-        }
-      });
-    },
-    sendAgentsMessage() {
-      if (!this.agentsInputText.trim()) return;
-      this.agentsChatMessages.push({
-        id: Date.now(),
-        sender: this.displayNickname,
-        text: this.agentsInputText.trim(),
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      });
-      this.agentsInputText = '';
-      this.$nextTick(() => {
-        if (this.$refs.agentsChatBody) {
-          this.$refs.agentsChatBody.scrollTop = this.$refs.agentsChatBody.scrollHeight;
-        }
-      });
-    },
-
-    openTicketChat(ticket) {
-      this.activeTicketChat = ticket;
-      this.ticketInputText = '';
-      this.$nextTick(() => {
-        if (this.$refs.chatBody) {
-          this.$refs.chatBody.scrollTop = this.$refs.chatBody.scrollHeight;
-        }
-      });
-    },
-    closeTicketChat() {
-      this.activeTicketChat = null;
-    },
-    sendTicketMessage() {
-      if (!this.ticketInputText.trim() || !this.activeTicketChat) return;
-
-      const reply = this.ticketInputText.trim();
-      const t = this.activeTicketChat;
-
-      t.messages.push({
-        id: Date.now(),
-        sender: this.displayNickname,
-        text: reply,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        isAgent: true
-      });
-
-      t.status = 'special_review';
-      t.answeredByNick = this.displayNickname;
-      t.specialistAnswer = reply;
-
-      this.ticketInputText = '';
-      if (this.remainingCount > 0) this.remainingCount--;
-
-      this.notifications.unshift({
-        id: Date.now(),
-        type: 'info',
-        title: 'Ответ передан на проверку',
-        text: `Ваш ответ пользователю ${t.authorName} направлен Специальному специалисту.`,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      });
-      this.unreadNotifs = true;
-
-      this.saveState();
-      alert("Ответ отправлен! Он ожидает проверки Специальным специалистом.");
-    },
-
-    specialistApprove(ticket, isIdeal) {
-      ticket.isIdeal = isIdeal;
-      ticket.status = 'admin_review';
-
-      this.adminReviewQueue.unshift({
-        id: Date.now(),
-        ticketId: ticket.id,
-        authorName: ticket.authorName,
-        question: ticket.question,
-        answeredByNick: ticket.answeredByNick,
-        specialistAnswer: ticket.specialistAnswer,
-        isIdeal: isIdeal
-      });
-
-      this.notifications.unshift({
-        id: Date.now() + 1,
-        type: isIdeal ? 'fire' : 'approved',
-        title: isIdeal ? '🔥 Спец. специалист отметил идеальный ответ!' : 'Спец. специалист одобрил ответ',
-        text: `Ответ по тикету «${ticket.authorName}» передан Администратору на повторную проверку.`,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      });
-      this.unreadNotifs = true;
-      this.saveState();
-      alert(isIdeal ? "Ответ помечен огоньком 🔥 и передан Администратору!" : "Ответ одобрен и передан Администратору на повторную проверку!");
-    },
-    specialistReject(ticket) {
-      ticket.status = 'pending';
-      this.notifications.unshift({
-        id: Date.now(),
-        type: 'rejected',
-        title: 'Отказ от Спец. специалиста',
-        text: `Ответ специалиста по тикету ${ticket.authorName} отклонен за несоблюдение регламента.`,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      });
-      this.unreadNotifs = true;
-      this.saveState();
-      alert("Ответ отклонен.");
-    },
-
-    adminFinalApprove(item) {
-      const t = this.tickets.find(x => x.id === item.ticketId);
-      if (t) {
-        t.status = 'approved';
-      }
-
-      const pts = item.isIdeal ? 10 : Math.floor(Math.random() * 4) + 5;
-      this.currentUser.points += pts;
-      this.stats.goodAnswers++;
-      this.stats.totalAnswers++;
-      if (item.isIdeal) this.stats.idealAnswers++;
-
-      this.adminReviewQueue = this.adminReviewQueue.filter(x => x.id !== item.id);
-
-      this.notifications.unshift({
-        id: Date.now(),
-        type: item.isIdeal ? 'fire' : 'approved',
-        title: item.isIdeal ? '🔥 Администратор принял идеальный ответ!' : '✓ Ответ окончательно принят!',
-        text: `Администратор утвердил ответ пользователю ${item.authorName}. Вам начислено +${pts} баллов!`,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      });
-
-      this.check300AnswersMilestone();
-      this.unreadNotifs = true;
-      this.saveState();
-    },
-    adminFinalReject(item) {
-      this.stats.badAnswers++;
-      this.stats.totalAnswers++;
-      this.adminReviewQueue = this.adminReviewQueue.filter(x => x.id !== item.id);
-
-      this.notifications.unshift({
-        id: Date.now(),
-        type: 'rejected',
-        title: 'Администратор отклонил ответ',
-        text: `Ответ по обращению ${item.authorName} не прошёл повторную проверку.`,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      });
-
-      this.unreadNotifs = true;
-      this.saveState();
-    },
-
-    check300AnswersMilestone() {
-      if (this.stats.goodAnswers >= 300 && !this.currentUser.isTeamMember) {
-        this.currentUser.isTeamMember = true;
-        this.notifications.unshift({
-          id: Date.now() + 99,
-          type: 'promo',
-          action: 'become_special',
-          title: '🏆 Поздравляем! 300 положительных ответов!',
-          text: 'Вам автоматически присвоена официальная галочка Команды Поддержки. Руководство предлагает вам перейти на должность Специального специалиста!',
-          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        });
-      }
-    },
-    acceptSpecialPromotion(notif) {
-      this.currentUser.role = 'special';
-      this.notifications = this.notifications.filter(n => n.id !== notif.id);
-      this.notifications.unshift({
-        id: Date.now(),
-        type: 'approved',
-        title: 'Должность повышена!',
-        text: 'Вы теперь Специальный специалист! Теперь вы модерируете ответы других агентов.',
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      });
-      this.saveState();
-      alert("Поздравляем! Вы переведены на должность Специального специалиста!");
-    },
-    simulate300Answers() {
-      this.stats.goodAnswers = 300;
-      this.stats.totalAnswers = 300;
-      this.stats.idealAnswers = 120;
-      this.check300AnswersMilestone();
-      this.saveState();
-      alert("Начислено 300 ответов! Проверьте профиль и колокольчик 🔔.");
-    },
-
-    buyNumberChange() {
-      if (this.currentUser.points < 100 || !this.shopForm.newNumber) return;
-      this.currentUser.points -= 100;
-      this.currentUser.agentNumber = this.shopForm.newNumber;
-      this.currentUser.customNick = '';
-      this.shopForm.newNumber = null;
-      this.saveState();
-      alert(`Номер успешно обновлен на #${this.currentUser.agentNumber}!`);
-    },
-
-    buyCustomNickChange() {
-      if (this.currentUser.points < 150 || !this.shopForm.newCustomNick.trim()) return;
-      this.currentUser.points -= 150;
-      this.currentUser.customNick = this.shopForm.newCustomNick.trim();
-      this.shopForm.newCustomNick = '';
-      this.saveState();
-      alert(`Новый ник «${this.currentUser.customNick}» успешно установлен!`);
-    },
-
-    applySelectedAvatar() {
-      if (!this.selectedAvatarSvg) return;
-      this.currentUser.avatarSvg = this.selectedAvatarSvg;
-      this.saveState();
-      alert("Аватар успешно обновлен!");
-    },
-
-    devAddPoints() {
-      if (this.currentUser.role !== 'dev' || !this.devPointsToAdd) return;
-      this.currentUser.points += parseInt(this.devPointsToAdd, 10);
-      this.saveState();
-      alert(`Начислено +${this.devPointsToAdd} баллов разработчика!`);
-    },
-
-    setRole(role) {
-      this.currentUser.role = role;
-      this.saveState();
-    },
-
-    openNotificationsTab() {
-      this.currentTab = 'notifications';
-      this.unreadNotifs = false;
-    },
-    clearNotifications() {
-      this.notifications = [];
-      this.saveState();
-    },
-    getNotifClass(type) {
-      if (type === 'approved') return 'notif-approved';
-      if (type === 'fire') return 'notif-fire';
-      if (type === 'rejected') return 'notif-rejected';
-      if (type === 'admin') return 'notif-admin';
-      return 'notif-info';
-    },
-
-    generateNewTicket() {
-      const qPool = [
-        "Как скрыть список групп от друзей в новом интерфейсе?",
-        "Списались голоса за подарок, но он не дошел до получателя!",
-        "Почему видео в историях обрезается до 15 секунд?",
-        "Как пожаловаться на фейковый аккаунт с моими фотографиями?"
-      ];
-      const names = ["Денис", "Полина", "Владислав", "Анна"];
-      const rQ = qPool[Math.floor(Math.random() * qPool.length)];
-      const rN = names[Math.floor(Math.random() * names.length)];
-
-      this.tickets.unshift({
-        id: Date.now(),
-        authorName: rN,
-        category: "Поддержка",
-        question: rQ,
-        previewText: rQ,
-        status: "pending",
-        isIdeal: false,
-        answeredByNick: "",
-        specialistAnswer: "",
-        messages: [
+        tickets: [
           {
-            id: Date.now() + 1,
-            sender: rN,
-            text: rQ,
-            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-            isAgent: false
+            id: 1,
+            authorName: "Мария Волкова",
+            category: "Блокировка",
+            question: "Страница заблокирована до 24 декабря за «Запрещённый товар», я в панике",
+            previewText: "Страница заблокирована до 24 декабря за «Запрещённый товар»...",
+            status: "pending",
+            isIdeal: false,
+            answeredByNick: "",
+            specialistAnswer: "",
+            messages: [
+              { id: 101, sender: "Мария Волкова", text: "Здравствуйте! Моя страница заблокирована за запрещенный товар. Я ничего не продавала! Помогите восстановить пожалуйста!", time: "01:14", isAgent: false }
+            ]
+          },
+          {
+            id: 2,
+            authorName: "Артём Смирнов",
+            category: "Сбои сети",
+            question: "ВК СОВСЕМ НЕ ГРУЗИТСЯ, У ВСЕХ ТАК ИЛИ ТОЛЬКО У МЕНЯ?",
+            previewText: "ВК СОВСЕМ НЕ ГРУЗИТСЯ, У ВСЕХ ТАК ИЛИ ТОЛЬКО У МЕНЯ?",
+            status: "pending",
+            isIdeal: false,
+            answeredByNick: "",
+            specialistAnswer: "",
+            messages: [
+              { id: 102, sender: "Артём Смирнов", text: "Белая страница висит, не открываются диалоги. Что делать?", time: "01:15", isAgent: false }
+            ]
+          },
+          {
+            id: 3,
+            authorName: "Елена Денисова",
+            category: "Умная лента",
+            question: "Раньше в ленте были посты друзей, а теперь что-то непонятное",
+            previewText: "Раньше в ленте были посты друзей, а теперь что-то непонятное",
+            status: "pending",
+            isIdeal: false,
+            answeredByNick: "",
+            specialistAnswer: "",
+            messages: [
+              { id: 103, sender: "Елена Денисова", text: "Добрый вечер! Куда пропали новости друзей? Одни паблики кругом.", time: "01:16", isAgent: false }
+            ]
+          }
+        ],
+
+        adminReviewQueue: [],
+
+        notifications: [
+          {
+            id: 1,
+            type: "info",
+            title: "Добро пожаловать в Jedi",
+            text: "Вы на позиции Специалиста. Отвечайте на вопросы для продвижения.",
+            time: "Только что"
           }
         ]
-      });
-      alert("Новый вопрос добавлен в очередь!");
+      };
+    },
+    computed: {
+      displayNickname() {
+        if (this.currentUser.customNick) {
+          return this.currentUser.customNick;
+        }
+        const num = `#${this.currentUser.agentNumber || 1}`;
+        switch (this.currentUser.role) {
+          case 'special': return `Спец. специалист ${num}`;
+          case 'admin': return `Администратор ${num}`;
+          case 'dev': return `Разработчик ${num}`;
+          case 'agent':
+          default: return `Специалист ${num}`;
+        }
+      },
+      roleTitleShort() {
+        switch (this.currentUser.role) {
+          case 'special': return "Спец. специалист";
+          case 'admin': return "Администратор";
+          case 'dev': return "Разработчик";
+          default: return "Специалист";
+        }
+      },
+      currentAvatarSvg() {
+        return this.currentUser.avatarSvg || defaultAgentAvatar;
+      },
+      currentAvatarCategories() {
+        return this.avatarCatalog;
+      },
+      normProgressPercent() {
+        const p = ((this.stats.totalAnswers || 0) / 20) * 100;
+        return Math.min(p, 100);
+      },
+      lastAgentChatMessage() {
+        if (!this.agentsChatMessages || this.agentsChatMessages.length === 0) return "Нет сообщений";
+        const last = this.agentsChatMessages[this.agentsChatMessages.length - 1];
+        return `${last.sender}: ${last.text}`;
+      },
+      pendingForSpecialist() {
+        return (this.tickets || []).filter(t => t.status === 'special_review');
+      }
+    },
+    mounted() {
+      const saved = safeStorageGet('jedi_state_v4');
+      if (saved) {
+        try {
+          const p = JSON.parse(saved);
+          if (p && typeof p === 'object') {
+            if (p.currentUser) {
+              // Если сохранён старый не-агентский аватар (монах/врач), заменяем на агентский
+              if (!p.currentUser.avatarSvg || p.currentUser.avatarSvg.includes('circle cx="50" cy="35"')) {
+                p.currentUser.avatarSvg = defaultAgentAvatar;
+              }
+              this.currentUser = { ...this.currentUser, ...p.currentUser };
+            }
+            if (p.stats) this.stats = { ...this.stats, ...p.stats };
+            if (Array.isArray(p.notifications)) this.notifications = p.notifications;
+            if (Array.isArray(p.adminReviewQueue)) this.adminReviewQueue = p.adminReviewQueue;
+          }
+        } catch (e) {}
+      }
+      this.selectedAvatarSvg = this.currentUser.avatarSvg || defaultAgentAvatar;
+    },
+    methods: {
+      saveState() {
+        safeStorageSet('jedi_state_v4', JSON.stringify({
+          currentUser: this.currentUser,
+          stats: this.stats,
+          notifications: this.notifications,
+          adminReviewQueue: this.adminReviewQueue
+        }));
+      },
+
+      openAgentsChat() {
+        this.isAgentsChatOpen = true;
+        this.$nextTick(() => {
+          if (this.$refs.agentsChatBody) {
+            this.$refs.agentsChatBody.scrollTop = this.$refs.agentsChatBody.scrollHeight;
+          }
+        });
+      },
+      sendAgentsMessage() {
+        if (!this.agentsInputText.trim()) return;
+        this.agentsChatMessages.push({
+          id: Date.now(),
+          sender: this.displayNickname,
+          text: this.agentsInputText.trim(),
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        });
+        this.agentsInputText = '';
+        this.$nextTick(() => {
+          if (this.$refs.agentsChatBody) {
+            this.$refs.agentsChatBody.scrollTop = this.$refs.agentsChatBody.scrollHeight;
+          }
+        });
+      },
+
+      openTicketChat(ticket) {
+        this.activeTicketChat = ticket;
+        this.ticketInputText = '';
+        this.$nextTick(() => {
+          if (this.$refs.chatBody) {
+            this.$refs.chatBody.scrollTop = this.$refs.chatBody.scrollHeight;
+          }
+        });
+      },
+      closeTicketChat() {
+        this.activeTicketChat = null;
+      },
+      sendTicketMessage() {
+        if (!this.ticketInputText.trim() || !this.activeTicketChat) return;
+
+        const reply = this.ticketInputText.trim();
+        const t = this.activeTicketChat;
+
+        t.messages.push({
+          id: Date.now(),
+          sender: this.displayNickname,
+          text: reply,
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          isAgent: true
+        });
+
+        t.status = 'special_review';
+        t.answeredByNick = this.displayNickname;
+        t.specialistAnswer = reply;
+
+        this.ticketInputText = '';
+        if (this.remainingCount > 0) this.remainingCount--;
+
+        this.notifications.unshift({
+          id: Date.now(),
+          type: 'info',
+          title: 'Ответ передан на проверку',
+          text: `Ваш ответ пользователю ${t.authorName} направлен Специальному специалисту.`,
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        });
+        this.unreadNotifs = true;
+
+        this.saveState();
+        alert("Ответ отправлен! Он ожидает проверки Специальным специалистом.");
+      },
+
+      specialistApprove(ticket, isIdeal) {
+        ticket.isIdeal = isIdeal;
+        ticket.status = 'admin_review';
+
+        this.adminReviewQueue.unshift({
+          id: Date.now(),
+          ticketId: ticket.id,
+          authorName: ticket.authorName,
+          question: ticket.question,
+          answeredByNick: ticket.answeredByNick,
+          specialistAnswer: ticket.specialistAnswer,
+          isIdeal: isIdeal
+        });
+
+        this.notifications.unshift({
+          id: Date.now() + 1,
+          type: isIdeal ? 'fire' : 'approved',
+          title: isIdeal ? '🔥 Спец. специалист отметил идеальный ответ!' : 'Спец. специалист одобрил ответ',
+          text: `Ответ по тикету «${ticket.authorName}» передан Администратору на повторную проверку.`,
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        });
+        this.unreadNotifs = true;
+        this.saveState();
+        alert(isIdeal ? "Ответ помечен огоньком 🔥 и передан Администратору!" : "Ответ одобрен и передан Администратору на повторную проверку!");
+      },
+      specialistReject(ticket) {
+        ticket.status = 'pending';
+        this.notifications.unshift({
+          id: Date.now(),
+          type: 'rejected',
+          title: 'Отказ от Спец. специалиста',
+          text: `Ответ специалиста по тикету ${ticket.authorName} отклонен за несоблюдение регламента.`,
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        });
+        this.unreadNotifs = true;
+        this.saveState();
+        alert("Ответ отклонен.");
+      },
+
+      adminFinalApprove(item) {
+        const t = this.tickets.find(x => x.id === item.ticketId);
+        if (t) {
+          t.status = 'approved';
+        }
+
+        const pts = item.isIdeal ? 10 : Math.floor(Math.random() * 4) + 5;
+        this.currentUser.points += pts;
+        this.stats.goodAnswers++;
+        this.stats.totalAnswers++;
+        if (item.isIdeal) this.stats.idealAnswers++;
+
+        this.adminReviewQueue = this.adminReviewQueue.filter(x => x.id !== item.id);
+
+        this.notifications.unshift({
+          id: Date.now(),
+          type: item.isIdeal ? 'fire' : 'approved',
+          title: item.isIdeal ? '🔥 Администратор принял идеальный ответ!' : '✓ Ответ окончательно принят!',
+          text: `Администратор утвердил ответ пользователю ${item.authorName}. Вам начислено +${pts} баллов!`,
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        });
+
+        this.check300AnswersMilestone();
+        this.unreadNotifs = true;
+        this.saveState();
+      },
+      adminFinalReject(item) {
+        this.stats.badAnswers++;
+        this.stats.totalAnswers++;
+        this.adminReviewQueue = this.adminReviewQueue.filter(x => x.id !== item.id);
+
+        this.notifications.unshift({
+          id: Date.now(),
+          type: 'rejected',
+          title: 'Администратор отклонил ответ',
+          text: `Ответ по обращению ${item.authorName} не прошёл повторную проверку.`,
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        });
+
+        this.unreadNotifs = true;
+        this.saveState();
+      },
+
+      check300AnswersMilestone() {
+        if (this.stats.goodAnswers >= 300 && !this.currentUser.isTeamMember) {
+          this.currentUser.isTeamMember = true;
+          this.notifications.unshift({
+            id: Date.now() + 99,
+            type: 'promo',
+            action: 'become_special',
+            title: '🏆 Поздравляем! 300 положительных ответов!',
+            text: 'Вам автоматически присвоена официальная галочка Команды Поддержки. Руководство предлагает вам перейти на должность Специального специалиста!',
+            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          });
+        }
+      },
+      acceptSpecialPromotion(notif) {
+        this.currentUser.role = 'special';
+        this.notifications = this.notifications.filter(n => n.id !== notif.id);
+        this.notifications.unshift({
+          id: Date.now(),
+          type: 'approved',
+          title: 'Должность повышена!',
+          text: 'Вы теперь Специальный специалист! Теперь вы модерируете ответы других агентов.',
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        });
+        this.saveState();
+        alert("Поздравляем! Вы переведены на должность Специального специалиста!");
+      },
+      simulate300Answers() {
+        this.stats.goodAnswers = 300;
+        this.stats.totalAnswers = 300;
+        this.stats.idealAnswers = 120;
+        this.check300AnswersMilestone();
+        this.saveState();
+        alert("Начислено 300 ответов! Проверьте профиль и колокольчик 🔔.");
+      },
+
+      buyNumberChange() {
+        if (this.currentUser.points < 100 || !this.shopForm.newNumber) return;
+        this.currentUser.points -= 100;
+        this.currentUser.agentNumber = this.shopForm.newNumber;
+        this.currentUser.customNick = '';
+        this.shopForm.newNumber = null;
+        this.saveState();
+        alert(`Номер успешно обновлен на #${this.currentUser.agentNumber}!`);
+      },
+
+      buyCustomNickChange() {
+        if (this.currentUser.points < 150 || !this.shopForm.newCustomNick.trim()) return;
+        this.currentUser.points -= 150;
+        this.currentUser.customNick = this.shopForm.newCustomNick.trim();
+        this.shopForm.newCustomNick = '';
+        this.saveState();
+        alert(`Новый ник «${this.currentUser.customNick}» успешно установлен!`);
+      },
+
+      applySelectedAvatar() {
+        if (!this.selectedAvatarSvg) return;
+        this.currentUser.avatarSvg = this.selectedAvatarSvg;
+        this.saveState();
+        alert("Аватар Агента успешно обновлен!");
+      },
+
+      devAddPoints() {
+        if (this.currentUser.role !== 'dev' || !this.devPointsToAdd) return;
+        this.currentUser.points += parseInt(this.devPointsToAdd, 10);
+        this.saveState();
+        alert(`Начислено +${this.devPointsToAdd} баллов разработчика!`);
+      },
+
+      setRole(role) {
+        this.currentUser.role = role;
+        this.saveState();
+      },
+
+      openNotificationsTab() {
+        this.currentTab = 'notifications';
+        this.unreadNotifs = false;
+      },
+      clearNotifications() {
+        this.notifications = [];
+        this.saveState();
+      },
+      getNotifClass(type) {
+        if (type === 'approved') return 'notif-approved';
+        if (type === 'fire') return 'notif-fire';
+        if (type === 'rejected') return 'notif-rejected';
+        if (type === 'admin') return 'notif-admin';
+        return 'notif-info';
+      },
+
+      generateNewTicket() {
+        const qPool = [
+          "Как скрыть список групп от друзей в новом интерфейсе?",
+          "Списались голоса за подарок, но он не дошел до получателя!",
+          "Почему видео в историях обрезается до 15 секунд?",
+          "Как пожаловаться на фейковый аккаунт с моими фотографиями?"
+        ];
+        const names = ["Денис", "Полина", "Владислав", "Анна"];
+        const rQ = qPool[Math.floor(Math.random() * qPool.length)];
+        const rN = names[Math.floor(Math.random() * names.length)];
+
+        this.tickets.unshift({
+          id: Date.now(),
+          authorName: rN,
+          category: "Поддержка",
+          question: rQ,
+          previewText: rQ,
+          status: "pending",
+          isIdeal: false,
+          answeredByNick: "",
+          specialistAnswer: "",
+          messages: [
+            {
+              id: Date.now() + 1,
+              sender: rN,
+              text: rQ,
+              time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+              isAgent: false
+            }
+          ]
+        });
+        alert("Новый вопрос добавлен в очередь!");
+      }
     }
-  }
-}).mount('#app');
+  }).mount('#app');
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initVueApp);
+} else {
+  initVueApp();
+}
 </script>
 </body>
 </html>
